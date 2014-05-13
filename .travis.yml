@@ -21,13 +21,15 @@ before_script:
   - composer install
   - chmod -R 777 app/tmp
   - mkdir -p build/logs
+  - pear config-set auto_discover 1
+  - pear channel-discover pear.phpunit.de
   - pear channel-discover pear.cakephp.org
-  - pear install --alldeps cakephp/CakePHP_CodeSniffer
   - pear channel-discover pear.phpmd.org
   - pear channel-discover pear.pdepend.org
+  - pear install --alldeps phpunit/PHPUnit-3.7.32
+  - pear install --alldeps cakephp/CakePHP_CodeSniffer
   - pear install phpmd/PHP_PMD
-  - pear config-set auto_discover 1
-  - pear install pear.phpunit.de/phpcpd
+  - pear install phpunit/phpcpd
   - phpenv rehash
   - set +H
   - cp app/Config/database.php.test app/Config/database.php
