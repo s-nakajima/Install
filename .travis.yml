@@ -17,6 +17,7 @@ before_script:
   - cd $NETCOMMONS_BUILD_DIR
   - git checkout $NETCOMMONS_VERSION
   - cp $TRAVIS_BUILD_DIR/composer.json .
+  - rm composer.lock
   - cp -r ../$PLUGIN_NAME plugins
   - cat composer.json
   - composer install
