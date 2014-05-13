@@ -32,6 +32,7 @@
         "components/jquery":       "~2.1"
     },
     "require-dev": {
+        "netcommons/users":        "dev-master",
         "satooshi/php-coveralls":  "dev-master"
     },
     "config": {
