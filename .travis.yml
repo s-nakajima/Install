@@ -18,6 +18,7 @@ before_script:
   - git checkout $NETCOMMONS_VERSION
   - cp $TRAVIS_BUILD_DIR/composer.json .
   - cp -r ../$PLUGIN_NAME plugins
+  - cat composer.json
   - composer install
   - chmod -R 777 app/tmp
   - mkdir -p build/logs
