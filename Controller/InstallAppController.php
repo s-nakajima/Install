@@ -1,6 +1,6 @@
 <?php
 
-App::uses('InstallController', 'Install.Controller');
+App::uses('AppController', 'Controller');
 
-class InstallAppController extends InstallController {
+class InstallAppController extends AppController {
 }
