@@ -103,13 +103,12 @@ class InstallController extends InstallAppController {
 			if ($this->request->is('post')) {
 				$this->User->create();
 				if ($this->User->save($this->request->data)) {
-					return $this->redirect(array('action' => 'index'));
+					return $this->redirect(array('action' => 'finish'));
 				} else {
 					$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
 				}
 			}
-
-			$this->redirect(array('action' => 'finish'));
+			$this->redirect(array('action' => __FUNCTION__));
 		}
 	}
 
