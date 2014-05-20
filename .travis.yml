@@ -13,14 +13,13 @@ before_script:
   - git clone git://github.com/NetCommons3/NetCommons3 $NETCOMMONS_BUILD_DIR
   - cd $NETCOMMONS_BUILD_DIR
   - git checkout $NETCOMMONS_VERSION
-  - env
   - . tools/build/plugins/cakephp/travis/pre.sh
 
 script:
   - . tools/build/plugins/cakephp/travis/main.sh
 
 after_script:
-  - . tools/build/plugins/cakephp/travis/main.sh
+  - . tools/build/plugins/cakephp/travis/post.sh
 
 notifications:
   email:
