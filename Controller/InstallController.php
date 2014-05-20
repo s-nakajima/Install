@@ -123,7 +123,6 @@ class InstallController extends InstallAppController {
 		$packages = array(
 			'netcommons/auth:dev-master',
 			'netcommons/auth-general:dev-master',
-			'netcommons/users:dev-master',
 			'netcommons/pages:dev-master',
 			'netcommons/revision:dev-master',
 			'netcommons/announcements:dev-master',
