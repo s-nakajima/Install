@@ -27,10 +27,10 @@
         "cakedc/migrations":       "~2.2",
         "chronon/mobile_detect":   "*",
         "twbs/bootstrap":          "~3.1",
+        "netcommons/users":        "@dev",
         "components/jquery":       "~2.1"
     },
     "require-dev": {
-        "netcommons/users":        "dev-master",
         "satooshi/php-coveralls":  "dev-master"
     },
     "config": {
