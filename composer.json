@@ -27,7 +27,7 @@
         "cakedc/migrations":       "~2.2",
         "chronon/mobile_detect":   "*",
         "twbs/bootstrap":          "~3.1",
-        "netcommons/users":        "*",
+        "netcommons/users":        "~0.0",
         "components/jquery":       "~2.1"
     },
     "require-dev": {
