@@ -33,6 +33,10 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function beforeFilter() {
+		if (Configure::read('NetCommons.installed')) {
+			throw new NotFoundException;
+		}
+
 		$this->Auth->allow();
 		/* $this->layout = false; */
 		parent::beforeFilter();
@@ -133,9 +137,12 @@ class InstallController extends InstallAppController {
 			'netcommons/theme-settings:dev-master',
 			'netcommons/sandbox:dev-master',
 		);
-		echo str_replace(array("\r\n","\r","\n"), '<br />', system('export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1'));
+		echo system('export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1', $ret);
 
-		$this->__saveAppConf();
+		if ($ret === 0) {
+			Configure::write('NetCommons.installed', true);
+			$this->__saveAppConf();
+		}
 	}
 
 /**
@@ -145,11 +152,6 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	private function __saveAppConf() {
-		Configure::write('Security.salt', Security::generateAuthKey());
-		Configure::write('Security.cipherSeed', mt_rand(32, 32));
-		Configure::write('NetCommons.installed', true);
-		/* Configure::write('NetCommons.installed', false); */
-
 		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'application.yml', true);
 		$file->write(Spyc::YAMLDump(Configure::read()));
