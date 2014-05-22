@@ -124,7 +124,6 @@ class InstallController extends InstallAppController {
 			'netcommons/auth:dev-master',
 			'netcommons/auth-general:dev-master',
 			'netcommons/pages:dev-master',
-			'netcommons/revision:dev-master',
 			'netcommons/announcements:dev-master',
 			'netcommons/boxes:dev-master',
 			'netcommons/containers:dev-master',
