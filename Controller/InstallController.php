@@ -20,7 +20,7 @@ class InstallController extends InstallAppController {
 		'host' => 'localhost',
 		'port' => 3306,
 		'login' => 'root',
-		'password' => 'root',
+		'password' => '',
 		'database' => '',
 		'prefix' => '',
 		'encoding' => 'utf8',
@@ -63,14 +63,21 @@ class InstallController extends InstallAppController {
 	public function init_db() {
 		$this->set('defaultDB', $this->defaultDB);
 		if ($this->request->is('post')) {
-			$this->__saveDBConf();
+			// Initialize database connection w/o database name
+			$this->__saveDBConf(array(
+				'host' => $this->request->data['host'],
+				'port' => $this->request->data['port'],
+				'login' => $this->request->data['login'],
+				'password' => $this->request->data['password'],
+			));
 
 			App::uses('ConnectionManager', 'Model');
 			try {
 				$db = ConnectionManager::getDataSource('default');
 
 				// Remove malicious chars
-				$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'nc3');
+				$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['database']);
+				/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['encoding']); */
 				$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
 				$db->rawQuery(
 					sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
@@ -80,6 +87,9 @@ class InstallController extends InstallAppController {
 //				$this->Session->setFlash(__('Failed to connect database. Please, try again.'));
 				$this->redirect(array('action' => 'init_db'));
 			}
+
+			// Update database connection w/ database name
+			$this->__saveDBConf();
 
 			// Invoke all available migrations
 			$plugins = App::objects('plugins');
@@ -160,9 +170,11 @@ class InstallController extends InstallAppController {
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return void
  **/
-	private function __saveDBConf() {
+	private function __saveDBConf($configs = array()) {
+		$configs = $configs ? : $this->request->data;
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
-		$params = array_merge($this->defaultDB, $this->request->data);
+		$params = array_merge($this->defaultDB, $configs);
+
 		foreach ($params as $key => $value) {
 			$value = ($value === null) ? 'null' : $value;
 			$value = ($value === true) ? 'true' : $value;
