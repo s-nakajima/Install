@@ -9,6 +9,8 @@ App::uses('InstallAppController', 'Install.Controller');
  */
 class InstallController extends InstallAppController {
 
+	public $helpers = array('M17n.M17n');
+
 /**
  * Default configuration
  *
@@ -34,7 +36,7 @@ class InstallController extends InstallAppController {
  **/
 	public function beforeFilter() {
 		$this->Auth->allow();
-		/* $this->layout = false; */
+		$this->layout = 'Install.default';
 		parent::beforeFilter();
 	}
 
@@ -47,14 +49,54 @@ class InstallController extends InstallAppController {
  **/
 	public function index() {
 		// Initialize default database connection
-		$this->__saveDBConf();
+		if (!$this->__saveDBConf()) {
+			$this->Session->setFlash(
+				__('Failed to write %s. Please check permission.',
+				array(APP . 'Config' . DS . 'database.php'))
+			);
+		}
 		if ($this->request->is('post')) {
-			$this->redirect(array('action' => 'init_db'));
+			$this->redirect(array('action' => 'init_permission'));
 		}
 	}
 
 /**
  * Step 2
+ * Initialize permission
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @throws Exception Permission Error
+ * @return void
+ **/
+	public function init_permission() {
+		$permissions = array();
+
+		$ret = true;
+		if (is_writable(APP . 'Config')) {
+			$permissions[] = __('OK: %s', array(APP . 'Config'));
+		} else {
+			$ret = false;
+			$permissions[] = __('%s not writable. Please check permission.', array(APP . 'Config'));
+		}
+		if (is_writable(APP . 'tmp')) {
+			$permissions[] = __('OK: %s', array(APP . 'tmp'));
+		} else {
+			$ret = false;
+			$permissions[] = __('%s not writable. Please check permission.', array(APP . 'tmp'));
+		}
+
+		if (!$ret) {
+			$this->redirect(array('action' => 'init_permission'));
+		}
+
+		if ($this->request->is('post')) {
+			$this->redirect(array('action' => 'init_db'));
+		}
+		$this->set('permissions', $permissions);
+	}
+
+/**
+ * Step 3
  * Initialize db
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
@@ -84,7 +126,7 @@ class InstallController extends InstallAppController {
 				);
 			} catch (Exception $e) {
 				$this->Session->setFlash($e->getMessage());
-//				$this->Session->setFlash(__('Failed to connect database. Please, try again.'));
+				/* $this->Session->setFlash(__('Failed to connect database. Please, try again.')); */
 				$this->redirect(array('action' => 'init_db'));
 			}
 
@@ -101,7 +143,7 @@ class InstallController extends InstallAppController {
 	}
 
 /**
- * Step 3
+ * Step 4
  * Initialize administrator account
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
@@ -123,7 +165,7 @@ class InstallController extends InstallAppController {
 	}
 
 /**
- * Step 4
+ * Step 5
  * Last page of installation
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
@@ -142,7 +184,7 @@ class InstallController extends InstallAppController {
 			'netcommons/theme-settings:dev-master',
 			'netcommons/sandbox:dev-master',
 		);
-		echo str_replace(array("\r\n","\r","\n"), '<br />', system('export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1'));
+		echo system('export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1');
 
 		$this->__saveAppConf();
 	}
@@ -151,7 +193,7 @@ class InstallController extends InstallAppController {
  * Save application configurations
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return void
+ * @return boolean File written or not
  **/
 	private function __saveAppConf() {
 		Configure::write('Security.salt', Security::generateAuthKey());
@@ -161,14 +203,14 @@ class InstallController extends InstallAppController {
 
 		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'application.yml', true);
-		$file->write(Spyc::YAMLDump(Configure::read()));
+		return $file->write(Spyc::YAMLDump(Configure::read()));
 	}
 
 /**
  * Save database configurations
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return void
+ * @return boolean File written or not
  **/
 	private function __saveDBConf($configs = array()) {
 		$configs = $configs ? : $this->request->data;
@@ -184,6 +226,6 @@ class InstallController extends InstallAppController {
 
 		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'database.php', true);
-		$file->write($conf);
+		return $file->write($conf);
 	}
 }

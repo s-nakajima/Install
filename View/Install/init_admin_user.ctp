@@ -11,11 +11,21 @@
 						array(
 							'default' => 'admin',
 							'class' => 'form-control',
-							'placeholder' => _('Username'))) ?>
+							'placeholder' => _('User name'))) ?>
+			<?php echo $this->Form->input('handlename',
+						array(
+							'default' => 'admin',
+							'class' => 'form-control',
+							'placeholder' => _('Handle name'))) ?>
 			<?php echo $this->Form->input('password',
 						array(
 							'class' => 'form-control',
 							'placeholder' => _('Password')
+						)) ?>
+			<?php echo $this->Form->input('password_again',
+						array(
+							'class' => 'form-control',
+							'placeholder' => _('Password again')
 						)) ?>
 		</div>
 	</div>
