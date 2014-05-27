@@ -1,3 +1,7 @@
 #term {
   height: 38em;
 }
+
+label.datasource {
+  margin-bottom: 0;
+}

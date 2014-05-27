@@ -14,6 +14,7 @@
 							'placeholder' => __('Username'))) ?>
 			<?php echo $this->Form->input('handlename',
 						array(
+							'label' => __('Handle Name'),
 							'default' => 'admin',
 							'class' => 'form-control',
 							'placeholder' => __('Handle Name'))) ?>
@@ -25,6 +26,7 @@
 			<?php echo $this->Form->input('password_again',
 						array(
 							'class' => 'form-control',
+							'placeholder' => __('Password')
 						)) ?>
 		</div>
 	</div>
