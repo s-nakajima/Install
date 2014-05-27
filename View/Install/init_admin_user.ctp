@@ -5,27 +5,26 @@
 					'controller' => 'install',
 					'action' => 'init_admin_user'))) ?>
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo _('Create an Administrator') ?></div>
+		<div class="panel-heading"><?php echo __('Create an Administrator') ?></div>
 		<div class="panel-body">
 			<?php echo $this->Form->input('username',
 						array(
 							'default' => 'admin',
 							'class' => 'form-control',
-							'placeholder' => _('User name'))) ?>
+							'placeholder' => __('Username'))) ?>
 			<?php echo $this->Form->input('handlename',
 						array(
 							'default' => 'admin',
 							'class' => 'form-control',
-							'placeholder' => _('Handle name'))) ?>
+							'placeholder' => __('Handle Name'))) ?>
 			<?php echo $this->Form->input('password',
 						array(
 							'class' => 'form-control',
-							'placeholder' => _('Password')
+							'placeholder' => __('Password')
 						)) ?>
 			<?php echo $this->Form->input('password_again',
 						array(
 							'class' => 'form-control',
-							'placeholder' => _('Password again')
 						)) ?>
 		</div>
 	</div>

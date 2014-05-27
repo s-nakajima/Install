@@ -5,7 +5,7 @@
 					'controller' => 'install',
 					'action' => 'init_permission'))) ?>
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo _('Permissions') ?></div>
+		<div class="panel-heading"><?php echo __('Permissions') ?></div>
 		<?php foreach ($permissions as $permission): ?>
 			<div><?php echo h($permission) ?></div>
 		<?php endforeach ?>

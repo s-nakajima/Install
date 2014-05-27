@@ -76,13 +76,13 @@ class InstallController extends InstallAppController {
 			$permissions[] = __('OK: %s', array(APP . 'Config'));
 		} else {
 			$ret = false;
-			$permissions[] = __('%s not writable. Please check permission.', array(APP . 'Config'));
+			$permissions[] = __('Failed to write %s. Please check permission.', array(APP . 'Config'));
 		}
 		if (is_writable(APP . 'tmp')) {
 			$permissions[] = __('OK: %s', array(APP . 'tmp'));
 		} else {
 			$ret = false;
-			$permissions[] = __('%s not writable. Please check permission.', array(APP . 'tmp'));
+			$permissions[] = __('Failed to write %s. Please check permission.', array(APP . 'tmp'));
 		}
 
 		if (!$ret) {
@@ -157,7 +157,7 @@ class InstallController extends InstallAppController {
 				if ($this->User->save($this->request->data)) {
 					return $this->redirect(array('action' => 'finish'));
 				} else {
-					$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+					$this->Session->setFlash(__('The user could not be saved. Please try again.'));
 				}
 			}
 			$this->redirect(array('action' => __FUNCTION__));

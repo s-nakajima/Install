@@ -5,7 +5,7 @@
 					'controller' => 'install',
 					'action' => 'init_db'))) ?>
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo _('Database Settings') ?></div>
+		<div class="panel-heading"><?php echo __('Database Settings') ?></div>
 		<div class="panel-body">
 			<?php echo $this->Form->input('host',
 						array(
@@ -24,11 +24,11 @@
 						array(
 							'class' => 'form-control',
 							'default' => $defaultDB['login'],
-							'placeholder' => _('Username'))) ?>
+							'placeholder' => __('Username'))) ?>
 			<?php echo $this->Form->input('password',
 						array(
 							'class' => 'form-control',
-							'placeholder' => _('Password')
+							'placeholder' => __('Password')
 						)) ?>
 		</div>
 	</div>

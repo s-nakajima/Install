@@ -6,15 +6,14 @@
 						'controller' => 'install',
 						'action' => 'index'))) ?>
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo _('Term') ?></div>
+		<div class="panel-heading"><?php echo __('Term') ?></div>
 		<div class="panel-body">
-<?php echo $this->M17n->languages('language',
+			<?php echo $this->M17n->languages('language',
 						array(
-							'div' => array('class' => 'text-right'),
-							'placeholder' => _('User name'))) ?>
+							'div' => array('class' => 'text-right'))) ?>
 			<?php echo $this->Form->textarea('term',
 						array(
-							'default' => _('The terms & conditions for using the contents of this site is governed
+							'default' => __('The terms & conditions for using the contents of this site is governed
 by this agreement. Please read carefully the following conditions, and
 register only if you agree to them.
 
@@ -42,6 +41,6 @@ from this site, etc.'),
 							'class' => 'form-control')) ?>
 		</div>
 	</div>
-	<?php echo _('By clicking the button, you agree to the terms above')?>
+	<?php echo __('By clicking the button, you agree to the terms above')?>
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>
 <?php echo $this->Form->end() ?>
