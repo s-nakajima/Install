@@ -40,7 +40,13 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<body>
 
 	<div class="container">
-		<?php echo $this->Session->flash(); ?>
+		<?php if ($flashMss = $this->Session->flash()) { ?>
+			<!-- flash -->
+			<div class="alert alert-danger alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<?php echo $flashMss ?>
+			</div>
+		<?php } ?>
 		<?php echo $this->fetch('content'); ?>
 	</div>
 
