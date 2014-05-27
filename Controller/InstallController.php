@@ -69,8 +69,8 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function init_permission() {
+		// Check permissions
 		$permissions = array();
-
 		$ret = true;
 		if (is_writable(APP . 'Config')) {
 			$permissions[] = __('OK: %s', array(APP . 'Config'));
@@ -85,6 +85,7 @@ class InstallController extends InstallAppController {
 			$permissions[] = __('Failed to write %s. Please check permission.', array(APP . 'tmp'));
 		}
 
+		// Show current page on failure
 		if (!$ret) {
 			$this->redirect(array('action' => 'init_permission'));
 		}
@@ -116,6 +117,7 @@ class InstallController extends InstallAppController {
 			App::uses('ConnectionManager', 'Model');
 			try {
 				$db = ConnectionManager::getDataSource('default');
+				CakeLog::info(sprintf('DB Connected'), true);
 
 				// Remove malicious chars
 				$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['database']);
@@ -124,9 +126,9 @@ class InstallController extends InstallAppController {
 				$db->rawQuery(
 					sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
 				);
+				CakeLog::info(sprintf('Database %s created successfully', $database), true);
 			} catch (Exception $e) {
 				$this->Session->setFlash($e->getMessage());
-				/* $this->Session->setFlash(__('Failed to connect database. Please, try again.')); */
 				$this->redirect(array('action' => 'init_db'));
 			}
 
@@ -137,6 +139,7 @@ class InstallController extends InstallAppController {
 			$plugins = App::objects('plugins');
 			foreach ($plugins as $plugin) {
 				exec(sprintf('cd /var/www/app && app/Console/cake Migrations.migration run all -p %s', $plugin));
+				CakeLog::info(sprintf('Migrated %s', $plugin), true);
 			}
 			$this->redirect(array('action' => 'init_admin_user'));
 		}
