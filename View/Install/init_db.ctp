@@ -9,43 +9,60 @@
 		<div class="panel-heading"><?php echo __('Database Settings') ?></div>
 		<div class="panel-body">
 			<label class="datasource"><?php echo __('Datasource') ?></label>
-			<div>
-			<?php echo $this->Form->select('datasource',
-						array(
-							'Database/Mysql' => 'Mysql',
-							'Database/Postgres' => 'Postgresql'),
-						array(
-							'default' => $defaultDB['datasource'],
-							'empty' => false,
-							'class' => '')) ?>
+			<div class="form-group">
+				<?php echo $this->Form->select('datasource',
+							array(
+								'Database/Mysql' => 'Mysql',
+								'Database/Postgres' => 'Postgresql'),
+							array(
+								'empty' => false,
+								'class' => '')) ?>
 			</div>
-			<?php echo $this->Form->input('host',
-						array(
-							'default' => $defaultDB['host'],
-							'class' => 'form-control')) ?>
-			<?php echo $this->Form->input('port',
-						array(
-							'default' => $defaultDB['port'],
-							'class' => 'form-control')) ?>
-			<?php echo $this->Form->input('database',
-						array(
-							'default' => 'nc3',
-							'class' => 'form-control')) ?>
-			<?php echo $this->Form->input('prefix',
-						array(
-							'placeholder' => 'nc3_',
-							'class' => 'form-control')) ?>
-			<?php echo $this->Form->input('login',
-						array(
-							'label' => __('ID'),
-							'class' => 'form-control',
-							'default' => $defaultDB['login'],
-							'placeholder' => __('Username'))) ?>
-			<?php echo $this->Form->input('password',
-						array(
-							'class' => 'form-control',
-							'placeholder' => __('Password')
-						)) ?>
+			<div class="form-group">
+				<?php echo $this->Form->input('host',
+							array(
+								'default' => $defaultDB['host'],
+								'class' => 'form-control')) ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->Form->input('port',
+							array(
+								'default' => $defaultDB['port'],
+								'class' => 'form-control')) ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->Form->input('database',
+							array(
+								'default' => 'nc3',
+								'class' => 'form-control')) ?>
+			</div>
+			<div class="form-group <?php echo isset($this->request->data['datasource']) && $this->request->data['datasource'] === 'Database/Postgres' ? '' : 'none' ?>">
+				<?php echo $this->Form->input('schema',
+							array(
+								'default' => 'public',
+								'class' => 'form-control')) ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->Form->input('prefix',
+							array(
+								'placeholder' => 'nc3_',
+								'class' => 'form-control')) ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->Form->input('login',
+							array(
+								'label' => __('ID'),
+								'class' => 'form-control',
+								'default' => $defaultDB['login'],
+								'placeholder' => __('Username'))) ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->Form->input('password',
+							array(
+								'class' => 'form-control',
+								'placeholder' => __('Password')
+							)) ?>
+			</div>
 		</div>
 	</div>
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>

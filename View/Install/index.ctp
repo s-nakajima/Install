@@ -8,9 +8,13 @@
 	<div class="panel panel-default">
 		<div class="panel-heading"><?php echo __('Term') ?></div>
 		<div class="panel-body">
-			<?php echo $this->M17n->languages('language',
-						array(
-							'div' => array('class' => 'text-right'))) ?>
+			<div class="form-group">
+				<?php echo $this->M17n->languages('language',
+							array(
+								'label' => '',
+								'div' => array('class' => 'text-right'))) ?>
+			</div>
+			<div class="form-group">
 			<?php echo $this->Form->textarea('term',
 						array(
 							'default' => __('The terms & conditions for using the contents of this site is governed
@@ -39,8 +43,9 @@ that is caused by, is resulted from the connection of, the usage of
 this site, contents related to this site, services from links stemming
 from this site, etc.'),
 							'class' => 'form-control')) ?>
+			</div>
 		</div>
 	</div>
-	<?php echo __('By clicking the button, you agree to the terms above')?>
+	<p><?php echo __('By clicking the button, you agree to the terms above')?></p>
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>
 <?php echo $this->Form->end() ?>

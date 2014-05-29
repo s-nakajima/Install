@@ -32,9 +32,13 @@ class InstallController extends InstallAppController {
  * beforeFilter
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @throws NotFoundException
  * @return void
  **/
 	public function beforeFilter() {
+		if (Configure::read('NetCommons.installed')) {
+			throw new NotFoundException;
+		}
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
 		parent::beforeFilter();
@@ -65,7 +69,6 @@ class InstallController extends InstallAppController {
  * Initialize permission
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @throws Exception Permission Error
  * @return void
  **/
 	public function init_permission() {
@@ -73,20 +76,35 @@ class InstallController extends InstallAppController {
 		$permissions = array();
 		$ret = true;
 		if (is_writable(APP . 'Config')) {
-			$permissions[] = __('OK: %s', array(APP . 'Config'));
+			$permissions[] = array(
+				'message' => __('%s is writable', array(APP . 'Config')),
+				'error' => false,
+			);
 		} else {
 			$ret = false;
-			$permissions[] = __('Failed to write %s. Please check permission.', array(APP . 'Config'));
+			$permissions[] = array(
+				'message' => __('Failed to write %s. Please check permission.', array(APP . 'Config')),
+				'error' => true,
+			);
 		}
 		if (is_writable(APP . 'tmp')) {
-			$permissions[] = __('OK: %s', array(APP . 'tmp'));
+			$permissions[] = array(
+				'message' => __('%s is writable', array(APP . 'tmp')),
+				'error' => false,
+			);
 		} else {
 			$ret = false;
-			$permissions[] = __('Failed to write %s. Please check permission.', array(APP . 'tmp'));
+			$permissions[] = array(
+				'message' => __('Failed to write %s. Please check permission.', array(APP . 'tmp')),
+				'error' => true,
+			);
 		}
 
 		// Show current page on failure
 		if (!$ret) {
+			foreach ($permissions as $permission) {
+				CakeLog::error($permission, true);
+			}
 			$this->redirect(array('action' => 'init_permission'));
 		}
 
@@ -106,41 +124,21 @@ class InstallController extends InstallAppController {
 	public function init_db() {
 		$this->set('defaultDB', $this->defaultDB);
 		if ($this->request->is('post')) {
-			// Initialize database connection w/o database name
-			$this->__saveDBConf(array(
-				'host' => $this->request->data['host'],
-				'port' => $this->request->data['port'],
-				'login' => $this->request->data['login'],
-				'password' => $this->request->data['password'],
-			));
-
-			App::uses('ConnectionManager', 'Model');
-			try {
-				$db = ConnectionManager::getDataSource('default');
-				CakeLog::info(sprintf('DB Connected'), true);
-
-				// Remove malicious chars
-				$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['database']);
-				/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['encoding']); */
-				$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
-				$db->rawQuery(
-					sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
-				);
-				CakeLog::info(sprintf('Database %s created successfully', $database), true);
-			} catch (Exception $e) {
-				$this->Session->setFlash($e->getMessage());
-				$this->redirect(array('action' => 'init_db'));
+			if (!$this->__createDB()) {
+				return;
 			}
 
 			// Update database connection w/ database name
 			$this->__saveDBConf();
 
 			// Invoke all available migrations
+			CakeLog::info('[Migrations.migration] Start migrating all plugins', true);
 			$plugins = App::objects('plugins');
 			foreach ($plugins as $plugin) {
 				exec(sprintf('cd /var/www/app && app/Console/cake Migrations.migration run all -p %s', $plugin));
-				CakeLog::info(sprintf('Migrated %s', $plugin), true);
+				CakeLog::info(sprintf('[Migrations.migration] Migrated %s', $plugin), true);
 			}
+			CakeLog::info('[Migrations.migration] Successfully migrated all plugins', true);
 			$this->redirect(array('action' => 'init_admin_user'));
 		}
 	}
@@ -175,6 +173,7 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function finish() {
+		// Dependencies
 		$packages = array(
 			'netcommons/auth:dev-master',
 			'netcommons/auth-general:dev-master',
@@ -187,9 +186,24 @@ class InstallController extends InstallAppController {
 			'netcommons/theme-settings:dev-master',
 			'netcommons/sandbox:dev-master',
 		);
-		echo system('export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1');
 
-		$this->__saveAppConf();
+		// Install packages
+		$cmd = 'export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1';
+		exec($cmd, $messages, $ret);
+
+		// Write logs
+		foreach ($messages as $line) {
+			CakeLog::info(sprintf('[composer] %s', $line), true);
+		}
+
+		if ($ret === 0) {
+			// Write application.yml on success
+			$this->__saveAppConf();
+		} else {
+			CakeLog::error('Failed to install dependencies', true);
+		}
+		$this->set('succeed', $ret === 0);
+		$this->set('messages', $messages);
 	}
 
 /**
@@ -200,7 +214,7 @@ class InstallController extends InstallAppController {
  **/
 	private function __saveAppConf() {
 		Configure::write('Security.salt', Security::generateAuthKey());
-		Configure::write('Security.cipherSeed', mt_rand(32, 32));
+		Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
 		Configure::write('NetCommons.installed', true);
 		/* Configure::write('NetCommons.installed', false); */
 
@@ -230,5 +244,61 @@ class InstallController extends InstallAppController {
 		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'database.php', true);
 		return $file->write($conf);
+	}
+
+/**
+ * Create database
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return boolean DB created or not
+ **/
+	private function __createDB() {
+		try {
+			switch ($this->request->data['datasource']) {
+					case 'Database/Mysql':
+							$driver = 'mysql';
+							break;
+					case 'Database/Postgres':
+							$driver = 'pgsql';
+							break;
+					default:
+							CakeLog::error(sprintf('Unknown datasource %s', $this->request->data['datasource']));
+							return false;
+			}
+			$db = new PDO(
+				"{$driver}:host={$this->request->data['host']};port={$this->request->data['port']}",
+				$this->request->data['login'],
+				$this->request->data['password']
+			);
+			CakeLog::info(sprintf('DB Connected'), true);
+
+			// Remove malicious chars
+			$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['database']);
+			/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['encoding']); */
+			$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
+			switch ($this->request->data['datasource']) {
+					case 'Database/Mysql':
+							$db->query(
+								sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
+							);
+							break;
+					case 'Database/Postgres':
+							$db->query(
+								sprintf('CREATE DATABASE %s WITH ENCODING=\'%s\'', $database, strtoupper($encoding))
+								/* sprintf('CREATE DATABASE %s', $database, strtoupper($encoding)) */
+							);
+							break;
+					default:
+							CakeLog::error(sprintf('Unknown datasource %s', $this->request->data['datasource']));
+							return false;
+			}
+			CakeLog::info(sprintf('Database %s created successfully', $database));
+		} catch (Exception $e) {
+			CakeLog::error($e->getMessage());
+			$this->Session->setFlash($e->getMessage());
+			return false;
+		}
+
+		return true;
 	}
 }

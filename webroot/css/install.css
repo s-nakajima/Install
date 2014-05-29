@@ -1,5 +1,14 @@
 #term {
-  height: 38em;
+  height: 32em;
+}
+
+.none {
+  display: none;
+}
+
+p.message {
+  margin: 15px;
+  padding: 15px;
 }
 
 label.datasource {
