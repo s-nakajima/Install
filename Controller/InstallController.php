@@ -124,12 +124,20 @@ class InstallController extends InstallAppController {
 	public function init_db() {
 		$this->set('defaultDB', $this->defaultDB);
 		if ($this->request->is('post')) {
-			if (!$this->__createDB()) {
+			$this->loadModel('DatabaseConfiguration');
+			$this->DatabaseConfiguration->set($this->request->data);
+			if ($this->DatabaseConfiguration->validates()) {
+				// Update database connection
+				$this->__saveDBConf();
+			} else {
+				CakeLog::info('Validation error');
 				return;
 			}
 
-			// Update database connection w/ database name
-			$this->__saveDBConf();
+			if (!$this->__createDB()) {
+				CakeLog::info('Failed to create database');
+				return;
+			}
 
 			// Invoke all available migrations
 			CakeLog::info('[Migrations.migration] Start migrating all plugins', true);
@@ -230,7 +238,7 @@ class InstallController extends InstallAppController {
  * @return boolean File written or not
  **/
 	private function __saveDBConf($configs = array()) {
-		$configs = $configs ? : $this->request->data;
+		$configs = $configs ? : $this->request->data['DatabaseConfiguration'];
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
 		$params = array_merge($this->defaultDB, $configs);
 
@@ -254,7 +262,8 @@ class InstallController extends InstallAppController {
  **/
 	private function __createDB() {
 		try {
-			switch ($this->request->data['datasource']) {
+			$configuration = $this->request->data['DatabaseConfiguration'];
+			switch ($configuration['datasource']) {
 					case 'Database/Mysql':
 							$driver = 'mysql';
 							break;
@@ -262,21 +271,21 @@ class InstallController extends InstallAppController {
 							$driver = 'pgsql';
 							break;
 					default:
-							CakeLog::error(sprintf('Unknown datasource %s', $this->request->data['datasource']));
+							CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
 							return false;
 			}
 			$db = new PDO(
-				"{$driver}:host={$this->request->data['host']};port={$this->request->data['port']}",
-				$this->request->data['login'],
-				$this->request->data['password']
+				"{$driver}:host={$configuration['host']};port={$configuration['port']}",
+				$configuration['login'],
+				$configuration['password']
 			);
 			CakeLog::info(sprintf('DB Connected'), true);
 
 			// Remove malicious chars
-			$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['database']);
-			/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->data['encoding']); */
+			$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
+			/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
 			$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
-			switch ($this->request->data['datasource']) {
+			switch ($configuration['datasource']) {
 					case 'Database/Mysql':
 							$db->query(
 								sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
@@ -285,11 +294,10 @@ class InstallController extends InstallAppController {
 					case 'Database/Postgres':
 							$db->query(
 								sprintf('CREATE DATABASE %s WITH ENCODING=\'%s\'', $database, strtoupper($encoding))
-								/* sprintf('CREATE DATABASE %s', $database, strtoupper($encoding)) */
 							);
 							break;
 					default:
-							CakeLog::error(sprintf('Unknown datasource %s', $this->request->data['datasource']));
+							CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
 							return false;
 			}
 			CakeLog::info(sprintf('Database %s created successfully', $database));

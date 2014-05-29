@@ -1,5 +1,5 @@
 <?php echo $this->element('scripts'); ?>
-<?php echo $this->Form->create(false,
+<?php echo $this->Form->create('DatabaseConfiguration',
 			array(
 				'url' => array(
 					'plugin' => 'install',
