@@ -52,13 +52,6 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function index() {
-		// Initialize default database connection
-		if (!$this->__saveDBConf()) {
-			$this->Session->setFlash(
-				__('Failed to write %s. Please check permission.',
-				array(APP . 'Config' . DS . 'database.php'))
-			);
-		}
 		if ($this->request->is('post')) {
 			$this->redirect(array('action' => 'init_permission'));
 		}
@@ -239,10 +232,9 @@ class InstallController extends InstallAppController {
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return boolean File written or not
  **/
-	private function __saveDBConf($configs = array()) {
-		$configs = $configs ? : $this->request->data['DatabaseConfiguration'];
+	private function __saveDBConf() {
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
-		$params = array_merge($this->defaultDB, $configs);
+		$params = array_merge($this->defaultDB, $this->request->data['DatabaseConfiguration']);
 
 		foreach ($params as $key => $value) {
 			$value = ($value === null) ? 'null' : $value;
