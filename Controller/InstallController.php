@@ -143,7 +143,7 @@ class InstallController extends InstallAppController {
 			CakeLog::info('[Migrations.migration] Start migrating all plugins', true);
 			$plugins = App::objects('plugins');
 			foreach ($plugins as $plugin) {
-				exec(sprintf('cd /var/www/app && app/Console/cake Migrations.migration run all -p %s', $plugin));
+				exec(sprintf('cd %s && app/Console/cake Migrations.migration run all -p %s', ROOT, $plugin));
 				CakeLog::info(sprintf('[Migrations.migration] Migrated %s', $plugin), true);
 			}
 			CakeLog::info('[Migrations.migration] Successfully migrated all plugins', true);
@@ -182,21 +182,23 @@ class InstallController extends InstallAppController {
  **/
 	public function finish() {
 		// Dependencies
-		$packages = array(
-			'netcommons/auth:dev-master',
-			'netcommons/auth-general:dev-master',
-			'netcommons/pages:dev-master',
-			'netcommons/announcements:dev-master',
-			'netcommons/boxes:dev-master',
-			'netcommons/containers:dev-master',
-			'netcommons/frames:dev-master',
-			'netcommons/public-space:dev-master',
-			'netcommons/theme-settings:dev-master',
-			'netcommons/sandbox:dev-master',
-		);
+		/* $packages = array( */
+		/* 	'netcommons/auth:dev-master', */
+		/* 	'netcommons/auth-general:dev-master', */
+		/* 	'netcommons/pages:dev-master', */
+		/* 	'netcommons/announcements:dev-master', */
+		/* 	'netcommons/boxes:dev-master', */
+		/* 	'netcommons/containers:dev-master', */
+		/* 	'netcommons/frames:dev-master', */
+		/* 	'netcommons/public-space:dev-master', */
+		/* 	'netcommons/theme-settings:dev-master', */
+		/* 	'netcommons/sandbox:dev-master', */
+		/* ); */
 
 		// Install packages
-		$cmd = 'export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1';
+		/* $cmd = 'export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1'; */
+		/* $cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && composer require %s --dev 2>&1', ROOT, implode(' ', $packages)); */
+		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && composer update 2>&1', ROOT, implode(' ', $packages));
 		exec($cmd, $messages, $ret);
 
 		// Write logs

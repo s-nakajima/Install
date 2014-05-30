@@ -4,6 +4,7 @@ $(document).ready(function() {
     url += url.indexOf("?") > -1 ? "&" : "?"
     window.location.href = url + "language=" + $(this).val();
   });
+
   var model = "DatabaseConfiguration";
   $("#" + model + "Datasource").change(function() {
     var type = $("option:selected", this).text();
