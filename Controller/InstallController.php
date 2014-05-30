@@ -52,6 +52,13 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function index() {
+		// Initialize default database connection
+		if (!$this->__saveDBConf()) {
+			$this->Session>setFlash(
+				__('Failed to write %s. Please check permission.',
+				array(APP . 'Config' . DS . 'database.php'))
+			);
+		}
 		if ($this->request->is('post')) {
 			$this->redirect(array('action' => 'init_permission'));
 		}
@@ -121,7 +128,7 @@ class InstallController extends InstallAppController {
 			$this->DatabaseConfiguration->set($this->request->data);
 			if ($this->DatabaseConfiguration->validates()) {
 				// Update database connection
-				$this->__saveDBConf();
+				$this->__saveDBConf($this->request->data['DatabaseConfiguration']);
 			} else {
 				CakeLog::info('Validation error');
 				return;
@@ -191,7 +198,7 @@ class InstallController extends InstallAppController {
 		// Install packages
 		/* $cmd = 'export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1'; */
 		/* $cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && composer require %s --dev 2>&1', ROOT, implode(' ', $packages)); */
-		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && composer update 2>&1', ROOT, implode(' ', $packages));
+		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT);
 		exec($cmd, $messages, $ret);
 
 		// Write logs
@@ -232,9 +239,9 @@ class InstallController extends InstallAppController {
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return boolean File written or not
  **/
-	private function __saveDBConf() {
+	private function __saveDBConf($configs = array()) {
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
-		$params = array_merge($this->defaultDB, $this->request->data['DatabaseConfiguration']);
+		$params = array_merge($this->defaultDB, $configs);
 
 		foreach ($params as $key => $value) {
 			$value = ($value === null) ? 'null' : $value;
