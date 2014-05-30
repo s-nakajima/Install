@@ -18,7 +18,7 @@ class InstallController extends InstallAppController {
  */
 	public $defaultDB = array(
 		'datasource' => 'Database/Mysql',
-		'persistent' => true,
+		'persistent' => false,
 		'host' => 'localhost',
 		'port' => 3306,
 		'login' => 'root',
@@ -54,7 +54,7 @@ class InstallController extends InstallAppController {
 	public function index() {
 		// Initialize default database connection
 		if (!$this->__saveDBConf()) {
-			$this->Session>setFlash(
+			$this->Session->setFlash(
 				__('Failed to write %s. Please check permission.',
 				array(APP . 'Config' . DS . 'database.php'))
 			);
@@ -103,7 +103,7 @@ class InstallController extends InstallAppController {
 		// Show current page on failure
 		if (!$ret) {
 			foreach ($permissions as $permission) {
-				CakeLog::error($permission, true);
+				CakeLog::error($permission);
 			}
 			$this->redirect(array('action' => 'init_permission'));
 		}
@@ -181,36 +181,20 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function finish() {
-		// Dependencies
-		/* $packages = array( */
-		/* 	'netcommons/auth:dev-master', */
-		/* 	'netcommons/auth-general:dev-master', */
-		/* 	'netcommons/pages:dev-master', */
-		/* 	'netcommons/announcements:dev-master', */
-		/* 	'netcommons/boxes:dev-master', */
-		/* 	'netcommons/containers:dev-master', */
-		/* 	'netcommons/frames:dev-master', */
-		/* 	'netcommons/public-space:dev-master', */
-		/* 	'netcommons/theme-settings:dev-master', */
-		/* 	'netcommons/sandbox:dev-master', */
-		/* ); */
-
 		// Install packages
-		/* $cmd = 'export COMPOSER_HOME=/tmp && cd /var/www/app && composer require ' . implode(' ', $packages) . ' --dev 2>&1'; */
-		/* $cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && composer require %s --dev 2>&1', ROOT, implode(' ', $packages)); */
 		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT);
 		exec($cmd, $messages, $ret);
 
 		// Write logs
 		foreach ($messages as $line) {
-			CakeLog::info(sprintf('[composer] %s', $line), true);
+			CakeLog::info(sprintf('[composer] %s', $line));
 		}
 
 		if ($ret === 0) {
 			// Write application.yml on success
 			$this->__saveAppConf();
 		} else {
-			CakeLog::error('Failed to install dependencies', true);
+			CakeLog::error('Failed to install dependencies');
 		}
 		$this->set('succeed', $ret === 0);
 		$this->set('messages', $messages);
@@ -226,7 +210,6 @@ class InstallController extends InstallAppController {
 		Configure::write('Security.salt', Security::generateAuthKey());
 		Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
 		Configure::write('NetCommons.installed', true);
-		/* Configure::write('NetCommons.installed', false); */
 
 		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'application.yml', true);
@@ -280,7 +263,7 @@ class InstallController extends InstallAppController {
 				$configuration['login'],
 				$configuration['password']
 			);
-			CakeLog::info(sprintf('DB Connected'), true);
+			CakeLog::info(sprintf('DB Connected'));
 
 			// Remove malicious chars
 			$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
