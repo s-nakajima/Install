@@ -7,9 +7,21 @@ App::uses('InstallAppController', 'Install.Controller');
  * @link     http://www.netcommons.org NetCommons Project
  * @license  http://www.netcommons.org/license.txt NetCommons License
  */
+
+function __arrayFilterRecursive($input, $callback = null) {
+	foreach ($input as &$value) {
+		if (is_array($value)) {
+			$value = __arrayFilterRecursive($value, $callback);
+		}
+	}
+	return array_filter($input, $callback);
+}
+
 class InstallController extends InstallAppController {
 
 	public $helpers = array('M17n.M17n');
+
+	/* public $uses = array('Users.User'); */
 
 /**
  * Default configuration
@@ -58,7 +70,21 @@ class InstallController extends InstallAppController {
 				__('Failed to write %s. Please check permission.',
 				array(APP . 'Config' . DS . 'database.php'))
 			);
+			return;
 		}
+
+		// Initialize application.yml
+		Configure::write('Security.salt', Security::generateAuthKey());
+		Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
+		Configure::write('NetCommons.installed', false);
+		if (!$this->__saveAppConf()) {
+			$this->Session->setFlash(
+				__('Failed to write %s. Please check permission.',
+				array(APP . 'Config' . DS . 'application.yml'))
+			);
+			return;
+		}
+
 		if ($this->request->is('post')) {
 			$this->redirect(array('action' => 'init_permission'));
 		}
@@ -70,11 +96,15 @@ class InstallController extends InstallAppController {
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return void
+ * @codeCoverageIgnore
  **/
 	public function init_permission() {
 		// Check permissions
 		$permissions = array();
 		$ret = true;
+		// Actually we don't have to check app/Config and app/tmp here,
+		// since cakephp itself cannot handle requests w/o these directories with proper permission.
+		// Just a stub action for future release.
 		if (is_writable(APP . 'Config')) {
 			$permissions[] = array(
 				'message' => __('%s is writable', array(APP . 'Config')),
@@ -103,7 +133,7 @@ class InstallController extends InstallAppController {
 		// Show current page on failure
 		if (!$ret) {
 			foreach ($permissions as $permission) {
-				CakeLog::error($permission);
+				CakeLog::error($permission['message']);
 			}
 			$this->redirect(array('action' => 'init_permission'));
 		}
@@ -159,18 +189,24 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function init_admin_user() {
+		/* App::uses('ConnectionManager', 'Model'); */
+		/* $db = ConnectionManager::drop('default'); */
+		/* $db->_init = false; */
+		/* ConnectionManager::$_init = false; */
+		/* $db = ConnectionManager::create('default'); */
+		/* unset($db); */
+		/* $conf = file_get_contents(APP . 'Config' . DS . 'database.php'); */
+		/* CakeLog::info($conf); */
 		if ($this->request->is('post')) {
 			$this->loadModel('Users.User');
-			if ($this->request->is('post')) {
-				$this->User->create();
-				if ($this->User->save($this->request->data)) {
-					return $this->redirect(array('action' => 'finish'));
-				} else {
-					$this->Session->setFlash(__('The user could not be saved. Please try again.'));
-				}
+			/* $this->User->create(); */
+			if ($this->User->save($this->request->data)) {
+				return $this->redirect(array('action' => 'finish'));
+			} else {
+				$this->Session->setFlash(__('The user could not be saved. Please try again.'));
 			}
-			$this->redirect(array('action' => __FUNCTION__));
 		}
+		$this->redirect(array('action' => __FUNCTION__));
 	}
 
 /**
@@ -191,7 +227,8 @@ class InstallController extends InstallAppController {
 		}
 
 		if ($ret === 0) {
-			// Write application.yml on success
+			// Update application.yml on success
+			Configure::write('NetCommons.installed', true);
 			$this->__saveAppConf();
 		} else {
 			CakeLog::error('Failed to install dependencies');
@@ -207,13 +244,12 @@ class InstallController extends InstallAppController {
  * @return boolean File written or not
  **/
 	private function __saveAppConf() {
-		Configure::write('Security.salt', Security::generateAuthKey());
-		Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
-		Configure::write('NetCommons.installed', true);
-
 		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'application.yml', true);
-		return $file->write(Spyc::YAMLDump(Configure::read()));
+		$conf = __arrayFilterRecursive(Configure::read(), function($val){
+			return !is_object($val);
+		});
+		return $file->write(Spyc::YAMLDump($conf));
 	}
 
 /**
