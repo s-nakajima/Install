@@ -8,6 +8,16 @@ App::uses('InstallAppController', 'Install.Controller');
  * @license  http://www.netcommons.org/license.txt NetCommons License
  */
 
+/**
+ * Apply array_filter() recursively
+ *
+ * @param mixed $input input value
+ * @param callback $callback callback
+ * @return void
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @codeCoverageIgnore
+ **/
 function __arrayFilterRecursive($input, $callback = null) {
 	foreach ($input as &$value) {
 		if (is_array($value)) {
