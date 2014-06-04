@@ -5,7 +5,7 @@
 <?php endif; ?>
 
 <?php if ($succeed): ?>
-<p><?php echo __('By clicking the button, you can jump to the home')?></p>
+<p><?php echo __('By clicking the button, you can jump to the home.')?></p>
 <?php echo $this->Form->create('User',
 			array(
 				'url' => '/')) ?>

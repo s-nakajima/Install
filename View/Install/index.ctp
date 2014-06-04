@@ -46,6 +46,6 @@ from this site, etc.'),
 			</div>
 		</div>
 	</div>
-	<p><?php echo __('By clicking the button, you agree to the terms above')?></p>
+	<p><?php echo __('By clicking the button, you agree to the terms above.')?></p>
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>
 <?php echo $this->Form->end() ?>
