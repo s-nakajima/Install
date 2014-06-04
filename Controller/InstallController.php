@@ -265,8 +265,10 @@ class InstallController extends InstallAppController {
 /**
  * Save database configurations
  *
- * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @param array $configs configs
  * @return boolean File written or not
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
 	private function __saveDBConf($configs = array()) {
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
