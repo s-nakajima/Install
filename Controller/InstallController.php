@@ -96,7 +96,7 @@ class InstallController extends InstallAppController {
 		}
 
 		if ($this->request->is('post')) {
-			$this->redirect(array('action' => 'init_permission'));
+			return $this->redirect(array('action' => 'init_permission'));
 		}
 	}
 
@@ -145,11 +145,11 @@ class InstallController extends InstallAppController {
 			foreach ($permissions as $permission) {
 				CakeLog::error($permission['message']);
 			}
-			$this->redirect(array('action' => 'init_permission'));
+			return $this->redirect(array('action' => 'init_permission'));
 		}
 
 		if ($this->request->is('post')) {
-			$this->redirect(array('action' => 'init_db'));
+			return $this->redirect(array('action' => 'init_db'));
 		}
 		$this->set('permissions', $permissions);
 	}
@@ -187,7 +187,7 @@ class InstallController extends InstallAppController {
 				CakeLog::info(sprintf('[Migrations.migration] Migrated %s', $plugin), true);
 			}
 			CakeLog::info('[Migrations.migration] Successfully migrated all plugins', true);
-			$this->redirect(array('action' => 'init_admin_user'));
+			return $this->redirect(array('action' => 'init_admin_user'));
 		}
 	}
 
@@ -199,14 +199,19 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function init_admin_user() {
+		/* $db =& ConnectionManager::getDataSource('default'); */
+		/* $db->setConfig(array('password' => 'root', 'database' => 'nc3', 'persistent' => false)); */
+		/* $db =& ConnectionManager::getDataSource('test'); */
+		/* $db->setConfig(array('password' => 'root', 'database' => 'nc3', 'persistent' => false)); */
+		/* CakeLog::info(var_export($db, true)); */
+		/* $db->setConfig(array('password' => 'root', 'database' => $config['database'], 'persistent' => false)); */
+		/* ClassRegistry::init('ConnectionManager'); */
 		/* App::uses('ConnectionManager', 'Model'); */
 		/* $db = ConnectionManager::drop('default'); */
 		/* $db->_init = false; */
-		/* ConnectionManager::$_init = false; */
+		/* ConnectionManager::_init(); */
 		/* $db = ConnectionManager::create('default'); */
 		/* unset($db); */
-		/* $conf = file_get_contents(APP . 'Config' . DS . 'database.php'); */
-		/* CakeLog::info($conf); */
 		if ($this->request->is('post')) {
 			$this->loadModel('Users.User');
 			$this->User->create();
@@ -231,8 +236,8 @@ class InstallController extends InstallAppController {
 		exec($cmd, $messages, $ret);
 
 		// Write logs
-		foreach ($messages as $line) {
-			CakeLog::info(sprintf('[composer] %s', $line));
+		foreach ($messages as $message) {
+			CakeLog::info(sprintf('[composer] %s', $message));
 		}
 
 		if ($ret === 0) {

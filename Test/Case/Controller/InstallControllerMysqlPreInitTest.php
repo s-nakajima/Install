@@ -12,7 +12,7 @@ App::uses('InstallController', 'Controller');
 /**
  * Summary for InstallController Test Case
  */
-class InstallControllerTest extends ControllerTestCase {
+class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 
 /**
  * Fixtures
@@ -24,7 +24,7 @@ class InstallControllerTest extends ControllerTestCase {
 		/* 'plugin.users.user', */
 	);
 
-	/* private static $__actions = array('index', 'init_permission', 'init_db', 'init_admin_user', 'finish'); */
+	private static $__actions = array('index', 'init_permission', 'init_db', 'init_admin_user', 'finish');
 
 /**
  * setUp
@@ -40,11 +40,32 @@ class InstallControllerTest extends ControllerTestCase {
 			),
 		));
 		$this->controller->plugin = 'Install';
+
+		foreach (array('app/Config/database.php', 'app/Config/application.yml') as $conf) {
+			if (file_exists($conf)) {
+				unlink($conf);
+			}
+		}
 		/* $this->controller->Install */
 		/* 	->staticExpects($this->any()) */
 		/* 	->method('user') */
 		/* 	->will($this->returnCallback(array($this, 'installUserCallback'))); */
 	}
+
+/**
+ * tearDown
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
+	/* public function tearDown() { */
+	/* 	parent::tearDown(); */
+	/* 	foreach (array('app/Config/database.php', 'app/Config/application.yml') as $conf) { */
+	/* 		if (file_exists($conf)) { */
+	/* 			unlink($conf); */
+	/* 		} */
+	/* 	} */
+	/* } */
 
 /**
  * testIndex GET
@@ -58,6 +79,20 @@ class InstallControllerTest extends ControllerTestCase {
 	/* 		$this->assertTextEquals($action, $this->InstallController->view); */
 	/* 	} */
 	/* } */
+
+/**
+ * test index redirects to init_permission
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
+	public function testIndexGet() {
+		$ret = $this->testAction('/install/install/index', array('method' => 'get'));
+		var_dump($ret);
+		var_dump($this->view);
+		var_dump($this->headers);
+		/* $this->assertEqual($this->view, 'view'); */
+	}
 
 /**
  * test index redirects to init_permission
@@ -149,39 +184,5 @@ class InstallControllerTest extends ControllerTestCase {
 	/* 		), */
 	/* 	)); */
 	/* 	$this->assertEqual($this->headers['Location'], Router::url('/install/init_admin_user', true)); */
-	/* } */
-
-/**
- * test index redirects to init_permission
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return   void
- */
-	public function testInitAdminUserRedirectsToFinish() {
-		$this->testAction('/install/init_admin_user', array(
-			'data' => array(
-				'User' => array(
-					'username' => 'admin',
-					'handlename' => 'admin',
-					'password' => 'admin',
-					'password_again' => 'admin',
-				),
-			),
-		));
-		$this->assertEqual($this->headers['Location'], Router::url('/install/finish', true));
-	}
-
-/**
- * test index redirects to init_permission
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return   void
- */
-	/* public function testInitDBRedirectsBackToSelfOnFailure() { */
-	/* 	$this->testAction('/install/init_permission', array( */
-	/* 		'data' => array( */
-	/* 		), */
-	/* 	)); */
-	/* 	$this->assertEqual($this->headers['Location'], Router::url('/install/init_db', true)); */
 	/* } */
 }
