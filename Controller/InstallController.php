@@ -125,6 +125,7 @@ class InstallController extends InstallAppController {
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return void
+ * @codeCoverageIgnore
  **/
 	public function index() {
 		// Initialize default database connection
@@ -274,6 +275,7 @@ class InstallController extends InstallAppController {
 	public function finish() {
 		// Install packages
 		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT);
+		/* $cmd = sprintf('echo 1'); */
 		exec($cmd, $messages, $ret);
 
 		// Write logs
