@@ -89,6 +89,7 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 		/* $this->setExpectedException('NotFoundException'); */
 		/* $this->testAction('/install/index', array('method' => 'get')); */
 		/* $Install = new InstallController(new CakeRequest(null, false), new CakeResponse()); */
+		Configure::write('NetCommons.installed', true);
 		$this->controller->beforeFilter();
 	}
 
