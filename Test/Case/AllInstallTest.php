@@ -13,8 +13,8 @@ class AllInstallTest extends CakeTestSuite {
 		$tasks = array(
 			'InstallControllerMysqlPreInit',
 			'InstallControllerMysqlPostInit',
-			/* 'InstallControllerPostgresqlPreInit', */
-			/* 'InstallControllerPostgresqlPostInit', */
+			'InstallControllerPostgresqlPreInit',
+			'InstallControllerPostgresqlPostInit',
 		);
 		foreach ($tasks as $task) {
 			$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . DS . 'Controller' . DS . $task . 'Test.php');

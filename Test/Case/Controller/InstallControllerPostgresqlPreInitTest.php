@@ -12,7 +12,7 @@ App::uses('InstallController', 'Controller');
 /**
  * Summary for InstallController Test Case
  */
-class InstallControllerMysqlPreInitTest extends ControllerTestCase {
+class InstallControllerPostgresqlPreInitTest extends ControllerTestCase {
 
 /**
  * Fixtures
@@ -125,45 +125,19 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void
  */
-	/* public function testInitDBRedirectsToInitAdminUserWithValidPostgresql() { */
-	/* 	$_ENV['TRAVIS'] = true; */
-	/* 	$_ENV['DB'] = 'pgsql'; */
-	/* 	$this->testAction('/install/init_db', array( */
-	/* 		'data' => array( */
-	/* 			/\* 'DatabaseConfiguration' => array( *\/ */
-	/* 			/\* 	'datasource' => 'Database/Postgres', *\/ */
-	/* 			/\* 	'persistent' => false, *\/ */
-	/* 			/\* 	'port' => '5432', *\/ */
-	/* 			/\* 	'host' => 'localhost', *\/ */
-	/* 			/\* 	'login' => 'postgres', *\/ */
-	/* 			/\* 	'password' => '', *\/ */
-	/* 			/\* 	'database' => 'nc3', *\/ */
-	/* 			/\* 	'prefix' => '', *\/ */
-	/* 			/\* 	'encoding' => 'utf8', *\/ */
-	/* 			/\* ), *\/ */
-	/* 			'DatabaseConfiguration' => $this->controller->chooseDBByEnvironment(), */
-	/* 		), */
-	/* 	)); */
-	/* 	$this->assertEqual($this->headers['Location'], Router::url('/install/init_admin_user', true)); */
-	/* } */
-
-/**
- * test index redirects to init_permission
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return   void
- */
-	public function testInitDBRedirectsToInitAdminUserWithValidMysql() {
-		/* var_dump($this->controller->chooseDBByEnvironment()); */
+	public function testInitDBRedirectsToInitAdminUserWithValidPostgresql() {
+		$_ENV['TRAVIS'] = true;
+		$_ENV['DB'] = 'pgsql';
+		var_dump($this->controller->chooseDBByEnvironment());
 		$this->testAction('/install/init_db', array(
 			'data' => array(
 				/* 'DatabaseConfiguration' => array( */
-				/* 	'datasource' => 'Database/Mysql', */
+				/* 	'datasource' => 'Database/Postgres', */
 				/* 	'persistent' => false, */
-				/* 	'port' => '3306', */
+				/* 	'port' => '5432', */
 				/* 	'host' => 'localhost', */
-				/* 	'login' => 'root', */
-				/* 	'password' => 'root', */
+				/* 	'login' => 'postgres', */
+				/* 	'password' => '', */
 				/* 	'database' => 'nc3', */
 				/* 	'prefix' => '', */
 				/* 	'encoding' => 'utf8', */

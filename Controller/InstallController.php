@@ -38,15 +38,68 @@ class InstallController extends InstallAppController {
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  */
-	public $defaultDB = array(
+	public $defaultDBMysql = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
 		'port' => 3306,
 		'login' => 'root',
-		'password' => '',
-		'database' => '',
+		'password' => 'root',
+		'database' => 'nc3',
 		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+
+/**
+ * Default configuration
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ */
+	public $defaultDBPostgresql = array(
+		'datasource' => 'Database/Postgres',
+		'persistent' => false,
+		'host' => 'localhost',
+		'port' => 5432,
+		'login' => 'postgres',
+		'password' => '',
+		'database' => 'nc3',
+		'prefix' => '',
+		'schema' => 'public',
+		'encoding' => 'utf8',
+	);
+
+/**
+ * DB configuration for travis
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ */
+	public $travisDBMysql = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => '0.0.0.0',
+		'port' => 3306,
+		'login' => 'travis',
+		'password' => '',
+		'database' => 'cakephp_test',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+
+/**
+ * DB configuration for travis
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ */
+	public $travisDBPostgresql = array(
+		'datasource' => 'Database/Postgres',
+		'persistent' => false,
+		'host' => 'localhost',
+		'port' => 5432,
+		'login' => 'postgres',
+		'password' => 'postgres',
+		'database' => 'cakephp_test',
+		'prefix' => '',
+		'schema' => 'public',
 		'encoding' => 'utf8',
 	);
 
@@ -162,7 +215,7 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function init_db() {
-		$this->set('defaultDB', $this->defaultDB);
+		$this->set('defaultDB', $this->chooseDBByEnvironment());
 		if ($this->request->is('post')) {
 			$this->loadModel('DatabaseConfiguration');
 			$this->DatabaseConfiguration->set($this->request->data);
@@ -171,6 +224,7 @@ class InstallController extends InstallAppController {
 				$this->__saveDBConf($this->request->data['DatabaseConfiguration']);
 			} else {
 				CakeLog::info('Validation error');
+				CakeLog::info(var_export($this->DatabaseConfiguration->validationErrors, true));
 				return;
 			}
 
@@ -252,6 +306,29 @@ class InstallController extends InstallAppController {
 	}
 
 /**
+ * Choose database configuration by environment
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return array Database configuration
+ * @codeCoverageIgnore
+ **/
+	public function chooseDBByEnvironment() {
+		$db = isset($_ENV['TRAVIS']) ? 'travisDB' : 'defaultDB';
+
+		if (isset($_ENV['DB'])) {
+			if ($_ENV['DB'] === 'pgsql') {
+				$db .= 'Postgresql';
+			} else {
+				$db .= 'Mysql';
+			}
+		} else {
+			$db .= 'Mysql';
+		}
+
+		return $this->$db;
+	}
+
+/**
  * Save application configurations
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
@@ -276,7 +353,7 @@ class InstallController extends InstallAppController {
  **/
 	private function __saveDBConf($configs = array()) {
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
-		$params = array_merge($this->defaultDB, $configs);
+		$params = array_merge($this->defaultDBMysql, $configs);
 
 		foreach ($params as $key => $value) {
 			$value = ($value === null) ? 'null' : $value;

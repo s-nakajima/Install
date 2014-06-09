@@ -12,7 +12,7 @@ App::uses('InstallController', 'Controller');
 /**
  * Summary for InstallController Test Case
  */
-class InstallControllerPostInitTest extends ControllerTestCase {
+class InstallControllerPostgresqlPostInitTest extends ControllerTestCase {
 
 /**
  * Fixtures
