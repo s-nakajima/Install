@@ -24,8 +24,6 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 		/* 'plugin.users.user', */
 	);
 
-	private static $__actions = array('index', 'init_permission', 'init_db', 'init_admin_user', 'finish');
-
 /**
  * setUp
  *
