@@ -34,7 +34,8 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->controller = $this->generate('Install.Install', array(
+		$this->InstallController = $this->generate('Install.Install', array(
+		/* $this->controller = $this->generate('Install.Install', array( */
 			'components' => array(
 				'Auth' => array('user'),
 				'Session',
