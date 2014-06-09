@@ -111,6 +111,7 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function testInitPermissionRedirectsToInitDB() {
+		var_dump($this->controller->chooseDBByEnvironment());
 		$this->testAction('/install/init_permission', array(
 			'data' => array(
 			),
@@ -154,7 +155,6 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function testInitDBRedirectsToInitAdminUserWithValidMysql() {
-		/* var_dump($this->controller->chooseDBByEnvironment()); */
 		$this->testAction('/install/init_db', array(
 			'data' => array(
 				/* 'DatabaseConfiguration' => array( */

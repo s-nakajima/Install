@@ -111,6 +111,7 @@ class InstallControllerPostgresqlPreInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function testInitPermissionRedirectsToInitDB() {
+		var_dump($this->controller->chooseDBByEnvironment());
 		$this->testAction('/install/init_permission', array(
 			'data' => array(
 			),
@@ -126,9 +127,8 @@ class InstallControllerPostgresqlPreInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function testInitDBRedirectsToInitAdminUserWithValidPostgresql() {
-		$_ENV['TRAVIS'] = true;
-		$_ENV['DB'] = 'pgsql';
-		var_dump($this->controller->chooseDBByEnvironment());
+		/* $_ENV['TRAVIS'] = true; */
+		/* $_ENV['DB'] = 'pgsql'; */
 		$this->testAction('/install/init_db', array(
 			'data' => array(
 				/* 'DatabaseConfiguration' => array( */
