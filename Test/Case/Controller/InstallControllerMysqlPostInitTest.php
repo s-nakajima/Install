@@ -64,6 +64,20 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 	}
 
 /**
+ * testFinishRedirectsToHome
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
+	public function testFinishRedirectsToHome() {
+		$this->testAction('/install/finish', array(
+			'data' => array(
+			),
+		));
+		$this->assertEqual($this->headers['Location'], Router::url('/', true));
+	}
+
+/**
  * testIndexInvisibleAfterInstallation
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
