@@ -34,7 +34,7 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->controller = $this->generate('Install.Install', array(
+		$this->InstallController = $this->generate('Install.Install', array(
 			'components' => array(
 				'Auth' => array('user'),
 				'Session',
@@ -70,6 +70,7 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function testFinishRedirectsToHome() {
+		var_dump('fin');
 		$this->testAction('/install/finish', array(
 			'data' => array(
 			),
@@ -86,10 +87,9 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
  * @expectedExceptionCode 404
  */
 	public function testIndexInvisibleAfterInstallation() {
-		/* $this->setExpectedException('NotFoundException'); */
-		/* $this->testAction('/install/index', array('method' => 'get')); */
-		/* $Install = new InstallController(new CakeRequest(null, false), new CakeResponse()); */
-		$this->controller->beforeFilter();
+		Configure::write('NetCommons.installed', true);
+		$Install = new InstallController(new CakeRequest('/install/index', false), new CakeResponse());
+		$Install->beforeFilter();
 	}
 
 /* /\** */
