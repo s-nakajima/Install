@@ -47,6 +47,26 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void
  */
+	public function testInitAdminValidationError() {
+		$this->testAction('/install/init_admin_user', array(
+			'data' => array(
+				'User' => array(
+					'username' => '',
+					'handlename' => 'admin',
+					'password' => 'admin',
+					'password_again' => 'admin',
+				),
+			),
+		));
+		$this->assertTrue(isset($this->controller->User->validationErrors['username']));
+	}
+
+/**
+ * test init_admin_user redirects to finish
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
 	public function testInitAdminUserRedirectsToFinish() {
 		$this->testAction('/install/init_admin_user', array(
 			'data' => array(
@@ -59,6 +79,19 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 			),
 		));
 		$this->assertEqual($this->headers['Location'], Router::url('/install/finish', true));
+	}
+
+/**
+ * testComposerFailure
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
+	public function testComposerFailure() {
+		exec('chmod ug-w composer.json');
+		$this->testAction('/install/finish', array('method' => 'get'));
+		$this->assertEqual($this->InstallController->view, 'finish');
+		exec('chmod ug+w composer.json');
 	}
 
 /**
