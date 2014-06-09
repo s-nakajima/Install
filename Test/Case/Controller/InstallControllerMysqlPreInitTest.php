@@ -36,6 +36,7 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 		parent::setUp();
 		$this->controller = $this->generate('Install.Install', array(
 			'components' => array(
+				'Auth' => array('user'),
 				'Session',
 			),
 		));
@@ -111,7 +112,6 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function testInitPermissionRedirectsToInitDB() {
-		var_dump($this->controller->chooseDBByEnvironment());
 		$this->testAction('/install/init_permission', array(
 			'data' => array(
 			),
