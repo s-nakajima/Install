@@ -313,6 +313,9 @@ class InstallController extends InstallAppController {
  * @codeCoverageIgnore
  **/
 	public function chooseDBByEnvironment() {
+		var_dump($_SERVER);
+		var_dump($_ENV);
+		var_dump(getenv('TRAVIS'));
 		$db = isset($_ENV['TRAVIS']) ? 'travisDB' : 'defaultDB';
 
 		if (isset($_ENV['DB'])) {
