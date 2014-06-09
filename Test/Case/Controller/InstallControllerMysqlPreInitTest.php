@@ -120,7 +120,6 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 		$this->assertEqual($this->headers['Location'], Router::url('/install/init_db', true));
 	}
 
-
 /**
  * test index redirects to init_permission
  *

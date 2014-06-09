@@ -63,20 +63,6 @@ class InstallControllerPostgresqlPostInitTest extends ControllerTestCase {
 	}
 
 /**
- * testFinishRedirectsToHome
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return   void
- */
-	/* public function testFinishRedirectsToHome() { */
-	/* 	$this->testAction('/install/finish', array( */
-	/* 		'data' => array( */
-	/* 		), */
-	/* 	)); */
-	/* 	$this->assertEqual($this->headers['Location'], Router::url('/', true)); */
-	/* } */
-
-/**
  * testIndexInvisibleAfterInstallation
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
@@ -84,68 +70,9 @@ class InstallControllerPostgresqlPostInitTest extends ControllerTestCase {
  * @expectedException NotFoundException
  * @expectedExceptionCode 404
  */
-	/* public function testIndexInvisibleAfterInstallation() { */
-	/* 	/\* $this->setExpectedException('NotFoundException'); *\/ */
-	/* 	/\* $this->testAction('/install/index', array('method' => 'get')); *\/ */
-	/* 	$Install = new InstallController(new CakeRequest(null, false), new CakeResponse()); */
-	/* 	$Install->beforeFilter(); */
-	/* } */
-
-/* /\** */
-/*  * testInitPermissionInvisibleAfterInstallation */
-/*  * */
-/*  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com> */
-/*  * @return   void */
-/*  *\/ */
-/* 	public function testInitPermissionInvisibleAfterInstallation() { */
-/* 		$this->setExpectedException('NotFoundException'); */
-/* 		$this->testAction('/install/init_permission', array('method' => 'get')); */
-/* 	} */
-
-/* /\** */
-/*  * testIndexInvisibleAfterInstallation */
-/*  * */
-/*  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com> */
-/*  * @return   void */
-/*  *\/ */
-/* 	public function testInitDBInvisibleAfterInstallation() { */
-/* 		$this->setExpectedException('NotFoundException'); */
-/* 		$this->testAction('/install/init_db', array('method' => 'get')); */
-/* 	} */
-
-/* /\** */
-/*  * testInitAdminUserInvisibleAfterInstallation */
-/*  * */
-/*  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com> */
-/*  * @return   void */
-/*  *\/ */
-/* 	public function testInitAdminUserInvisibleAfterInstallation() { */
-/* 		$this->setExpectedException('NotFoundException'); */
-/* 		$this->testAction('/install/init_admin_user', array('method' => 'get')); */
-/* 	} */
-
-/* /\** */
-/*  * testFinishInvisibleAfterInstallation */
-/*  * */
-/*  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com> */
-/*  * @return   void */
-/*  *\/ */
-/* 	public function testFinishInvisibleAfterInstallation() { */
-/* 		$this->setExpectedException('NotFoundException'); */
-/* 		$this->testAction('/install/finish', array('method' => 'get')); */
-/* 	} */
-
-/**
- * test index redirects to init_permission
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return   void
- */
-	/* public function testInitDBRedirectsBackToSelfOnFailure() { */
-	/* 	$this->testAction('/install/init_permission', array( */
-	/* 		'data' => array( */
-	/* 		), */
-	/* 	)); */
-	/* 	$this->assertEqual($this->headers['Location'], Router::url('/install/init_db', true)); */
-	/* } */
+	public function testIndexInvisibleAfterInstallation() {
+		Configure::write('NetCommons.installed', true);
+		$Install = new InstallController(new CakeRequest('/install/index', false), new CakeResponse());
+		$Install->beforeFilter();
+	}
 }
