@@ -69,13 +69,13 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void
  */
-	public function testFinishRedirectsToHome() {
-		$this->testAction('/install/finish', array(
-			'data' => array(
-			),
-		));
-		$this->assertEqual($this->headers['Location'], Router::url('/', true));
-	}
+	/* public function testFinishRedirectsToHome() { */
+	/* 	$this->testAction('/install/finish', array( */
+	/* 		'data' => array( */
+	/* 		), */
+	/* 	)); */
+	/* 	$this->assertEqual($this->headers['Location'], Router::url('/', true)); */
+	/* } */
 
 /**
  * testIndexInvisibleAfterInstallation
@@ -86,11 +86,9 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
  * @expectedExceptionCode 404
  */
 	public function testIndexInvisibleAfterInstallation() {
-		/* $this->setExpectedException('NotFoundException'); */
-		/* $this->testAction('/install/index', array('method' => 'get')); */
-		/* $Install = new InstallController(new CakeRequest(null, false), new CakeResponse()); */
 		Configure::write('NetCommons.installed', true);
-		$this->controller->beforeFilter();
+		$Install = new InstallController(new CakeRequest('/install/index', false), new CakeResponse());
+		$Install->beforeFilter();
 	}
 
 /* /\** */

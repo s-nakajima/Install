@@ -84,12 +84,12 @@ class InstallControllerPostgresqlPostInitTest extends ControllerTestCase {
  * @expectedException NotFoundException
  * @expectedExceptionCode 404
  */
-	public function testIndexInvisibleAfterInstallation() {
-		/* $this->setExpectedException('NotFoundException'); */
-		/* $this->testAction('/install/index', array('method' => 'get')); */
-		$Install = new InstallController(new CakeRequest(null, false), new CakeResponse());
-		$Install->beforeFilter();
-	}
+	/* public function testIndexInvisibleAfterInstallation() { */
+	/* 	/\* $this->setExpectedException('NotFoundException'); *\/ */
+	/* 	/\* $this->testAction('/install/index', array('method' => 'get')); *\/ */
+	/* 	$Install = new InstallController(new CakeRequest(null, false), new CakeResponse()); */
+	/* 	$Install->beforeFilter(); */
+	/* } */
 
 /* /\** */
 /*  * testInitPermissionInvisibleAfterInstallation */
