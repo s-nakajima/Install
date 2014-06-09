@@ -128,7 +128,7 @@ class InstallController extends InstallAppController {
  **/
 	public function index() {
 		// Initialize default database connection
-		if (!$this->__saveDBConf()) {
+		if (!$this->__saveDBConf($this->chooseDBByEnvironment())) {
 			$this->Session->setFlash(
 				__('Failed to write %s. Please check permission.',
 				array(APP . 'Config' . DS . 'database.php'))
