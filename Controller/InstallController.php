@@ -223,8 +223,8 @@ class InstallController extends InstallAppController {
 				// Update database connection
 				$this->__saveDBConf($this->request->data['DatabaseConfiguration']);
 			} else {
-				CakeLog::info('Validation error');
-				CakeLog::info(var_export($this->DatabaseConfiguration->validationErrors, true));
+				CakeLog::info(sprintf('Validation error: %s',
+				implode(', ', array_keys($this->DatabaseConfiguration->validationErrors))));
 				return;
 			}
 
@@ -253,19 +253,6 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function init_admin_user() {
-		/* $db =& ConnectionManager::getDataSource('default'); */
-		/* $db->setConfig(array('password' => 'root', 'database' => 'nc3', 'persistent' => false)); */
-		/* $db =& ConnectionManager::getDataSource('test'); */
-		/* $db->setConfig(array('password' => 'root', 'database' => 'nc3', 'persistent' => false)); */
-		/* CakeLog::info(var_export($db, true)); */
-		/* $db->setConfig(array('password' => 'root', 'database' => $config['database'], 'persistent' => false)); */
-		/* ClassRegistry::init('ConnectionManager'); */
-		/* App::uses('ConnectionManager', 'Model'); */
-		/* $db = ConnectionManager::drop('default'); */
-		/* $db->_init = false; */
-		/* ConnectionManager::_init(); */
-		/* $db = ConnectionManager::create('default'); */
-		/* unset($db); */
 		if ($this->request->is('post')) {
 			$this->loadModel('Users.User');
 			$this->User->create();

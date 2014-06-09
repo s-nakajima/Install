@@ -140,7 +140,7 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 				),
 			),
 		));
-		$this->assertEquals(1, count($this->controller->DatabaseConfiguration->validationErrors));
+		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['datasource']));
 	}
 
 /**
