@@ -24,8 +24,6 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 		/* 'plugin.users.user', */
 	);
 
-	/* private static $__actions = array('index', 'init_permission', 'init_db', 'init_admin_user', 'finish'); */
-
 /**
  * setUp
  *
@@ -70,11 +68,8 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function testFinishRedirectsToHome() {
-		$this->testAction('/install/finish', array(
-			'data' => array(
-			),
-		));
-		$this->assertEqual($this->headers['Location'], Router::url('/', true));
+		$this->testAction('/install/finish', array('method' => 'get'));
+		$this->assertEqual($this->InstallController->view, 'finish');
 	}
 
 /**
