@@ -313,13 +313,10 @@ class InstallController extends InstallAppController {
  * @codeCoverageIgnore
  **/
 	public function chooseDBByEnvironment() {
-		var_dump($_SERVER);
-		var_dump($_ENV);
-		var_dump(getenv('TRAVIS'));
-		$db = isset($_ENV['TRAVIS']) ? 'travisDB' : 'defaultDB';
+		$db = isset($_SERVER['TRAVIS']) ? 'travisDB' : 'defaultDB';
 
-		if (isset($_ENV['DB'])) {
-			if ($_ENV['DB'] === 'pgsql') {
+		if (isset($_SERVER['DB'])) {
+			if ($_SERVER['DB'] === 'pgsql') {
 				$db .= 'Postgresql';
 			} else {
 				$db .= 'Mysql';
