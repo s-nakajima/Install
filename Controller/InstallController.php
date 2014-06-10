@@ -288,7 +288,7 @@ class InstallController extends InstallAppController {
 			Configure::write('NetCommons.installed', true);
 			$this->__saveAppConf();
 		} else {
-			CakeLog::error('Failed to install dependencies');
+			CakeLog::warning('Failed to install dependencies');
 		}
 		$this->set('succeed', $ret === 0);
 		$this->set('messages', $messages);
