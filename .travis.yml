@@ -23,7 +23,7 @@ after_script:
 
 notifications:
   email:
-    recipients: false
-      # - netcommons3@googlegroups.com
+    recipients:
+      - netcommons3@googlegroups.com
     on_success: never  # default: change
     on_failure: always # default: always
