@@ -44,6 +44,7 @@ class InstallControllerPostgresqlPreInitTest extends ControllerTestCase {
 				unlink($conf);
 			}
 		}
+		$_SERVER['DB'] = 'pgsql';
 	}
 
 /**
