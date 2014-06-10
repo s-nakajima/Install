@@ -124,6 +124,17 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void
  */
+	public function testInitDBGet() {
+		$this->testAction('/install/init_db', array('method' => 'get'));
+		$this->assertEqual($this->InstallController->view, 'init_db');
+	}
+
+/**
+ * test index redirects to init_permission
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
 	public function testInitDBValidationWithInvalidRequest() {
 		$this->testAction('/install/init_db', array(
 			'data' => array(
