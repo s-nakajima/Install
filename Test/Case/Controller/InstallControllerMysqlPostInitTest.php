@@ -15,16 +15,6 @@ App::uses('InstallController', 'Controller');
 class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 
 /**
- * Fixtures
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @var      array
- */
-	public $fixtures = array(
-		/* 'plugin.users.user', */
-	);
-
-/**
  * setUp
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
@@ -42,7 +32,7 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 	}
 
 /**
- * test init_admin_user redirects to finish
+ * test init_admin_user fails w/ invalid request
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void

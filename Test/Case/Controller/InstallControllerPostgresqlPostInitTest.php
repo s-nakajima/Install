@@ -15,18 +15,6 @@ App::uses('InstallController', 'Controller');
 class InstallControllerPostgresqlPostInitTest extends ControllerTestCase {
 
 /**
- * Fixtures
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @var      array
- */
-	public $fixtures = array(
-		/* 'plugin.users.user', */
-	);
-
-	/* private static $__actions = array('index', 'init_permission', 'init_db', 'init_admin_user', 'finish'); */
-
-/**
  * setUp
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
