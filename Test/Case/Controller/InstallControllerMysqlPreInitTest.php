@@ -124,6 +124,31 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void
  */
+	public function testInitDBValidationWithInvalidRequest() {
+		$this->testAction('/install/init_db', array(
+			'data' => array(
+				'DatabaseConfiguration' => array(
+					'datasource' => 'Database/Sqlite',
+					'persistent' => false,
+					'port' => '3306',
+					'host' => 'localhost',
+					'login' => 'root',
+					'password' => 'root',
+					'database' => 'nc3',
+					'prefix' => '',
+					'encoding' => 'utf8',
+				),
+			),
+		));
+		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['datasource']));
+	}
+
+/**
+ * test index redirects to init_permission
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
 	public function testInitDBRedirectsToInitAdminUserWithValidMysql() {
 		$this->testAction('/install/init_db', array(
 			'data' => array(
