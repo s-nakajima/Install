@@ -61,7 +61,7 @@ class InstallController extends InstallAppController {
 		'host' => 'localhost',
 		'port' => 5432,
 		'login' => 'postgres',
-		'password' => '',
+		'password' => 'postgres',
 		'database' => 'nc3',
 		'prefix' => '',
 		'schema' => 'public',
@@ -372,9 +372,12 @@ class InstallController extends InstallAppController {
 					case 'Database/Postgres':
 							$driver = 'pgsql';
 							break;
+							// Validation blocks following lines to be executed
+							// @codeCoverageIgnoreStart
 					default:
 							CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
 							return false;
+							// @codeCoverageIgnoreEnd
 			}
 			$db = new PDO(
 				"{$driver}:host={$configuration['host']};port={$configuration['port']}",
@@ -398,9 +401,12 @@ class InstallController extends InstallAppController {
 								sprintf('CREATE DATABASE %s WITH ENCODING=\'%s\'', $database, strtoupper($encoding))
 							);
 							break;
+							// Validation blocks following lines to be executed
+							// @codeCoverageIgnoreStart
 					default:
 							CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
 							return false;
+							// @codeCoverageIgnoreEnd
 			}
 			CakeLog::info(sprintf('Database %s created successfully', $database));
 		} catch (Exception $e) {
