@@ -31,8 +31,6 @@ class InstallController extends InstallAppController {
 
 	public $helpers = array('M17n.M17n');
 
-	/* public $uses = array('Users.User'); */
-
 /**
  * Default configuration
  *
@@ -91,6 +89,76 @@ class InstallController extends InstallAppController {
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  */
 	public $travisDBPostgresql = array(
+		'datasource' => 'Database/Postgres',
+		'persistent' => false,
+		'host' => 'localhost',
+		'port' => 5432,
+		'login' => 'postgres',
+		'password' => 'postgres',
+		'database' => 'cakephp_test',
+		'prefix' => '',
+		'schema' => 'public',
+		'encoding' => 'utf8',
+	);
+
+/**
+ * Default configuration
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ */
+	public $defaultTestDBMysql = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'port' => 3306,
+		'login' => 'test',
+		'password' => 'test',
+		'database' => 'test_nc3',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+
+/**
+ * Default configuration
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ */
+	public $defaultTestDBPostgresql = array(
+		'datasource' => 'Database/Postgres',
+		'persistent' => false,
+		'host' => 'localhost',
+		'port' => 5432,
+		'login' => 'postgres',
+		'password' => 'postgres',
+		'database' => 'test_nc3',
+		'prefix' => '',
+		'schema' => 'public',
+		'encoding' => 'utf8',
+	);
+
+/**
+ * DB configuration for travis
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ */
+	public $travisTestDBMysql = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => '0.0.0.0',
+		'port' => 3306,
+		'login' => 'travis',
+		'password' => '',
+		'database' => 'cakephp_test',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+
+/**
+ * DB configuration for travis
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ */
+	public $travisTestDBPostgresql = array(
 		'datasource' => 'Database/Postgres',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -239,7 +307,11 @@ class InstallController extends InstallAppController {
 			$plugins = App::objects('plugins');
 			foreach ($plugins as $plugin) {
 				exec(sprintf('cd %s && app/Console/cake Migrations.migration run all -p %s', ROOT, $plugin));
-				CakeLog::info(sprintf('[Migrations.migration] Migrated %s', $plugin), true);
+				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for default connection', $plugin), true);
+			}
+			foreach ($plugins as $plugin) {
+				exec(sprintf('cd %s && app/Console/cake Migrations.migration run all -p %s -c test -i test', ROOT, $plugin));
+				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for test connection', $plugin), true);
 			}
 			CakeLog::info('[Migrations.migration] Successfully migrated all plugins', true);
 			return $this->redirect(array('action' => 'init_admin_user'));
@@ -297,12 +369,14 @@ class InstallController extends InstallAppController {
 /**
  * Choose database configuration by environment
  *
- * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @param $env environment
  * @return array Database configuration
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @codeCoverageIgnore
  **/
-	public function chooseDBByEnvironment() {
-		$db = isset($_SERVER['TRAVIS']) ? 'travisDB' : 'defaultDB';
+	public function chooseDBByEnvironment($env = '') {
+		$db = isset($_SERVER['TRAVIS']) ? 'travis' . ucfirst($env) . 'DB' : 'default' . ucfirst($env) . 'DB';
 
 		if (isset($_SERVER['DB'])) {
 			if ($_SERVER['DB'] === 'pgsql') {
@@ -342,13 +416,21 @@ class InstallController extends InstallAppController {
  **/
 	private function __saveDBConf($configs = array()) {
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
-		$params = array_merge($this->defaultDBMysql, $configs);
 
+		$params = array_merge($this->defaultDBMysql, $configs);
 		foreach ($params as $key => $value) {
 			$value = ($value === null) ? 'null' : $value;
 			$value = ($value === true) ? 'true' : $value;
 			$value = ($value === false) ? 'false' : $value;
-			$conf = str_replace(sprintf('{%s}', $key), $value, $conf);
+			$conf = str_replace(sprintf('{default_%s}', $key), $value, $conf);
+		}
+
+		$params = $this->chooseDBByEnvironment();
+		foreach ($params as $key => $value) {
+			$value = ($value === null) ? 'null' : $value;
+			$value = ($value === true) ? 'true' : $value;
+			$value = ($value === false) ? 'false' : $value;
+			$conf = str_replace(sprintf('{test_%s}', $key), $value, $conf);
 		}
 
 		App::uses('File', 'Utility');
@@ -386,29 +468,37 @@ class InstallController extends InstallAppController {
 			);
 			CakeLog::info(sprintf('DB Connected'));
 
-			// Remove malicious chars
-			$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
-			/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
-			$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
-			switch ($configuration['datasource']) {
-					case 'Database/Mysql':
-							$db->query(
-								sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
-							);
-							break;
-					case 'Database/Postgres':
-							$db->query(
-								sprintf('CREATE DATABASE %s WITH ENCODING=\'%s\'', $database, strtoupper($encoding))
-							);
-							break;
-							// Validation blocks following lines to be executed
-							// @codeCoverageIgnoreStart
-					default:
-							CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
-							return false;
-							// @codeCoverageIgnoreEnd
+			foreach (array('default', 'test') as $env) {
+				if ($env === 'test') {
+					$params = $this->chooseDBByEnvironment('test');
+					$database = $params['database'];
+					$encoding = $params['encoding'];
+				} else {
+					// Remove malicious chars
+					$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
+					/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
+					$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
+				}
+				switch ($configuration['datasource']) {
+						case 'Database/Mysql':
+								$db->query(
+									sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
+								);
+								break;
+						case 'Database/Postgres':
+								$db->query(
+									sprintf('CREATE DATABASE %s WITH ENCODING=\'%s\'', $database, strtoupper($encoding))
+								);
+								break;
+								// Validation blocks following lines to be executed
+								// @codeCoverageIgnoreStart
+						default:
+								CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
+								return false;
+								// @codeCoverageIgnoreEnd
+				}
+				CakeLog::info(sprintf('Database %s created successfully', $database));
 			}
-			CakeLog::info(sprintf('Database %s created successfully', $database));
 		} catch (Exception $e) {
 			CakeLog::error($e->getMessage());
 			$this->Session->setFlash($e->getMessage());
