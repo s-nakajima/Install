@@ -1,14 +1,6 @@
 <?php
 App::uses('InstallAppController', 'Install.Controller');
 /**
- * Install Controller
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @link     http://www.netcommons.org NetCommons Project
- * @license  http://www.netcommons.org/license.txt NetCommons License
- */
-
-/**
  * Apply array_filter() recursively
  *
  * @param mixed $input input value
@@ -18,6 +10,7 @@ App::uses('InstallAppController', 'Install.Controller');
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @codeCoverageIgnore
  **/
+
 function __arrayFilterRecursive($input, $callback = null) {
 	foreach ($input as &$value) {
 		if (is_array($value)) {
@@ -27,6 +20,14 @@ function __arrayFilterRecursive($input, $callback = null) {
 	return array_filter($input, $callback);
 }
 
+/**
+ * Install Controller
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @link     http://www.netcommons.org NetCommons Project
+ * @license  http://www.netcommons.org/license.txt NetCommons License
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
 class InstallController extends InstallAppController {
 
 	public $helpers = array('M17n.M17n');
@@ -413,6 +414,7 @@ class InstallController extends InstallAppController {
  * @return boolean File written or not
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  **/
 	private function __saveDBConf($configs = array()) {
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
