@@ -369,7 +369,7 @@ class InstallController extends InstallAppController {
 /**
  * Choose database configuration by environment
  *
- * @param $env environment
+ * @param string $env environment
  * @return array Database configuration
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
