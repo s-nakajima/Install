@@ -8,7 +8,6 @@ App::uses('InstallAppController', 'Install.Controller');
  * @return void
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @codeCoverageIgnore
  **/
 
 function __arrayFilterRecursive($input, $callback = null) {
