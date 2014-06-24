@@ -1,3 +1,4 @@
+<?php echo $this->element('scripts'); ?>
 <?php echo $this->Form->create('User',
 			array(
 				'url' => array(

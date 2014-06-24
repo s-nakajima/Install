@@ -207,7 +207,8 @@ class InstallController extends InstallAppController {
 
 		// Initialize application.yml
 		Configure::write('Security.salt', Security::generateAuthKey());
-		Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
+		Configure::write('Security.cipherSeed', mt_rand() . mt_rand() . mt_rand() . mt_rand());
+		Configure::write('Config.languageEnabled', array('en', 'ja', 'zh'));
 		Configure::write('NetCommons.installed', false);
 		if (!$this->__saveAppConf()) {
 			$this->Session->setFlash(
@@ -284,7 +285,11 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function init_db() {
+		// Destroy session in order to handle ping request
+		$this->Session->destroy();
+
 		$this->set('defaultDB', $this->chooseDBByEnvironment());
+		$this->set('errors', array());
 		if ($this->request->is('post')) {
 			$this->loadModel('DatabaseConfiguration');
 			$this->DatabaseConfiguration->set($this->request->data);
@@ -292,28 +297,43 @@ class InstallController extends InstallAppController {
 				// Update database connection
 				$this->__saveDBConf($this->request->data['DatabaseConfiguration']);
 			} else {
+				$this->response->statusCode(400);
 				CakeLog::info(sprintf('Validation error: %s',
 				implode(', ', array_keys($this->DatabaseConfiguration->validationErrors))));
 				return;
 			}
 
 			if (!$this->__createDB()) {
+				$this->response->statusCode(400);
 				CakeLog::info('Failed to create database');
 				return;
 			}
 
+			// Install packages
+			$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT);
+			/* $cmd = sprintf('echo 1'); */
+			exec($cmd, $messages, $ret);
+
+			// Write logs
+			foreach ($messages as $message) {
+				CakeLog::info(sprintf('[composer] %s', $message));
+			}
+			if ($ret !== 0) {
+				CakeLog::error('Failed to install dependencies');
+			}
+
 			// Invoke all available migrations
-			CakeLog::info('[Migrations.migration] Start migrating all plugins', true);
+			CakeLog::info('[Migrations.migration] Start migrating all plugins');
 			$plugins = App::objects('plugins');
 			foreach ($plugins as $plugin) {
 				exec(sprintf('cd %s && app/Console/cake Migrations.migration run all -p %s', ROOT, $plugin));
-				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for default connection', $plugin), true);
+				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for default connection', $plugin));
 			}
 			foreach ($plugins as $plugin) {
 				exec(sprintf('cd %s && app/Console/cake Migrations.migration run all -p %s -c test -i test', ROOT, $plugin));
-				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for test connection', $plugin), true);
+				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for test connection', $plugin));
 			}
-			CakeLog::info('[Migrations.migration] Successfully migrated all plugins', true);
+			CakeLog::info('[Migrations.migration] Successfully migrated all plugins');
 			return $this->redirect(array('action' => 'init_admin_user'));
 		}
 	}
@@ -328,8 +348,8 @@ class InstallController extends InstallAppController {
 	public function init_admin_user() {
 		if ($this->request->is('post')) {
 			$this->loadModel('Users.User');
-			$this->User->create();
-			if ($this->User->save($this->request->data)) {
+			$this->User->create($this->request->data);
+			if ($this->User->validates() && $this->User->saveAdmin($this->request->data)) {
 				return $this->redirect(array('action' => 'finish'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please try again.'));
@@ -345,25 +365,9 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function finish() {
-		// Install packages
-		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT);
-		/* $cmd = sprintf('echo 1'); */
-		exec($cmd, $messages, $ret);
-
-		// Write logs
-		foreach ($messages as $message) {
-			CakeLog::info(sprintf('[composer] %s', $message));
-		}
-
-		if ($ret === 0) {
-			// Update application.yml on success
-			Configure::write('NetCommons.installed', true);
-			$this->__saveAppConf();
-		} else {
-			CakeLog::error('Failed to install dependencies');
-		}
-		$this->set('succeed', $ret === 0);
-		$this->set('messages', $messages);
+		Configure::write('NetCommons.installed', true);
+		/* Configure::write('NetCommons.installed', false); */
+		$this->__saveAppConf();
 	}
 
 /**
@@ -502,7 +506,7 @@ class InstallController extends InstallAppController {
 			}
 		} catch (Exception $e) {
 			CakeLog::error($e->getMessage());
-			$this->Session->setFlash($e->getMessage());
+			$this->set('errors', array($e->getMessage()));
 			return false;
 		}
 

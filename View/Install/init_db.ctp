@@ -1,4 +1,13 @@
-<?php echo $this->element('scripts'); ?>
+<?php echo $this->element('scripts') ?>
+<div class="loader hidden text-center">
+	<img src="/net_commons/base/img/loader.gif" />
+</div>
+<?php foreach ($errors as $error): ?>
+<div class="alert alert-danger alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<?php echo $error ?>
+</div>
+<?php endforeach; ?>
 <?php echo $this->Form->create('DatabaseConfiguration',
 			array(
 				'url' => array(
