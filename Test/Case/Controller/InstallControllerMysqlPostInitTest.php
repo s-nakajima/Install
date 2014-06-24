@@ -72,19 +72,6 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 	}
 
 /**
- * testComposerFailure
- *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return   void
- */
-	public function testComposerFailure() {
-		exec('chmod ug-w composer.json');
-		$this->testAction('/install/finish', array('method' => 'get'));
-		$this->assertEqual($this->InstallController->view, 'finish');
-		exec('chmod ug+w composer.json');
-	}
-
-/**
  * testFinishRedirectsToHome
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>

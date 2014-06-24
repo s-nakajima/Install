@@ -99,42 +99,46 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 	}
 
 /**
- * test init_db validation w/ invalid datasource
+ * test init_db validation w/ invalid request
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void
  */
 	public function testInitDBValidationWithInvalidRequest() {
+		$invalid = array(
+			'datasource' => 'Database/Sqlite',
+			'persistent' => -1,
+			'port' => -1,
+			'host' => false,
+			'login' => false,
+			'password' => '',
+			'database' => false,
+			'prefix' => false,
+			'encoding' => false,
+		);
 		$this->testAction('/install/init_db', array(
 			'data' => array(
-				'DatabaseConfiguration' => array(
-					'datasource' => 'Database/Sqlite',
-					'persistent' => false,
-					'port' => '3306',
-					'host' => 'localhost',
-					'login' => 'root',
-					'password' => 'root',
-					'database' => 'nc3',
-					'prefix' => '',
-					'encoding' => 'utf8',
-				),
+				'DatabaseConfiguration' => $invalid,
 			),
 		));
 		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['datasource']));
+		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['database']));
+		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['host']));
+		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['login']));
 	}
 
 /**
- * test __createDB() fail w/ invalid port number
+ * test InstallController::__createDB() fails w/ invalid port number
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return   void
  */
-	public function testCreateDBFailWithInvalidRequest() {
+	public function testCreateDBFailsWithInvalidRequest() {
 		$this->testAction('/install/init_db', array(
 			'data' => array(
 				'DatabaseConfiguration' => array(
 					'datasource' => 'Database/Mysql',
-					'persistent' => false,
+					'persistent' => '0',
 					'port' => '0',
 					'host' => 'localhost',
 					'login' => 'root',
@@ -149,6 +153,26 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 	}
 
 /**
+ * testComposerFailure
+ *
+ * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return   void
+ */
+	public function testComposerFailure() {
+		exec('chmod ug-w composer.json');
+		$this->testAction('/install/init_db', array(
+			'data' => array(
+				'DatabaseConfiguration' => array_merge(
+					$this->controller->chooseDBByEnvironment(),
+					array('persistent' => '0')
+				),
+			),
+		));
+		$this->assertEqual($this->InstallController->view, 'init_db');
+		exec('chmod ug+w composer.json');
+	}
+
+/**
  * test init_db redirects to init_admin_user w/ valid request
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
@@ -157,7 +181,10 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 	public function testInitDBRedirectsToInitAdminUserWithValidMysql() {
 		$this->testAction('/install/init_db', array(
 			'data' => array(
-				'DatabaseConfiguration' => $this->controller->chooseDBByEnvironment(),
+				'DatabaseConfiguration' => array_merge(
+					$this->controller->chooseDBByEnvironment(),
+					array('persistent' => '0')
+				),
 			),
 		));
 		$this->assertEqual($this->headers['Location'], Router::url('/install/init_admin_user', true));

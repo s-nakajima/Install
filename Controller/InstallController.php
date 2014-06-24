@@ -26,6 +26,8 @@ function __arrayFilterRecursive($input, $callback = null) {
  * @link     http://www.netcommons.org NetCommons Project
  * @license  http://www.netcommons.org/license.txt NetCommons License
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class InstallController extends InstallAppController {
 
@@ -310,16 +312,9 @@ class InstallController extends InstallAppController {
 			}
 
 			// Install packages
-			$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT);
-			/* $cmd = sprintf('echo 1'); */
-			exec($cmd, $messages, $ret);
-
-			// Write logs
-			foreach ($messages as $message) {
-				CakeLog::info(sprintf('[composer] %s', $message));
-			}
-			if ($ret !== 0) {
+			if (!$this->__installPackages()) {
 				CakeLog::error('Failed to install dependencies');
+				return;
 			}
 
 			// Invoke all available migrations
@@ -422,7 +417,7 @@ class InstallController extends InstallAppController {
 	private function __saveDBConf($configs = array()) {
 		$conf = file_get_contents(APP . 'Config' . DS . 'database.php.install');
 
-		$params = array_merge($this->defaultDBMysql, $configs);
+		$params = array_merge($this->chooseDBByEnvironment(), $configs);
 		foreach ($params as $key => $value) {
 			$value = ($value === null) ? 'null' : $value;
 			$value = ($value === true) ? 'true' : $value;
@@ -430,7 +425,7 @@ class InstallController extends InstallAppController {
 			$conf = str_replace(sprintf('{default_%s}', $key), $value, $conf);
 		}
 
-		$params = $this->chooseDBByEnvironment();
+		$params = $this->chooseDBByEnvironment('test');
 		foreach ($params as $key => $value) {
 			$value = ($value === null) ? 'null' : $value;
 			$value = ($value === true) ? 'true' : $value;
@@ -502,11 +497,37 @@ class InstallController extends InstallAppController {
 								return false;
 								// @codeCoverageIgnoreEnd
 				}
-				CakeLog::info(sprintf('Database %s created successfully', $database));
+				CakeLog::info(sprintf('Database %s for %s created successfully', $database, $configuration['datasource']));
 			}
 		} catch (Exception $e) {
 			CakeLog::error($e->getMessage());
 			$this->set('errors', array($e->getMessage()));
+			return false;
+		}
+
+		return true;
+	}
+
+/**
+ * Install packages
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return boolean Install succeed or not
+ **/
+	private function __installPackages() {
+		$hhvm = (exec('which hhvm', $messages, $ret) && $ret === 0) ? 'hhvm -vRepo.Central.Path=/var/run/hhvm/hhvm.hhbc' : '';
+		/* $cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT); */
+		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && %s `which composer` update 2>&1', ROOT, $hhvm);
+		/* $cmd = sprintf('echo 1'); */
+		exec($cmd, $messages, $ret);
+
+		// Write logs
+		foreach ($messages as $message) {
+			CakeLog::info(sprintf('[composer] %s', $message));
+		}
+		if ($ret !== 0) {
+			$this->response->statusCode(500);
+			$this->set('errors', array_merge($this->viewVars['errors'], $messages));
 			return false;
 		}
 

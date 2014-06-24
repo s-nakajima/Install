@@ -21,6 +21,7 @@ class InstallControllerPostgresqlPreInitTest extends ControllerTestCase {
  * @return   void
  */
 	public function setUp() {
+		Configure::write('debug', 0);
 		parent::setUp();
 		$this->controller = $this->generate('Install.Install', array(
 			'components' => array(
@@ -74,7 +75,10 @@ class InstallControllerPostgresqlPreInitTest extends ControllerTestCase {
 	public function testInitDBRedirectsToInitAdminUserWithValidPostgresql() {
 		$this->testAction('/install/init_db', array(
 			'data' => array(
-				'DatabaseConfiguration' => $this->controller->chooseDBByEnvironment(),
+				'DatabaseConfiguration' => array_merge(
+					$this->controller->chooseDBByEnvironment(),
+					array('persistent' => '0')
+				),
 			),
 		));
 		$this->assertEqual($this->headers['Location'], Router::url('/install/init_admin_user', true));
