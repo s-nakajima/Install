@@ -6,7 +6,7 @@ $(document).ready(function() {
   });
 
   var model = "DatabaseConfiguration";
-  $("#" + model + "Datasource").change(function() {
+  $("#" + model + "Datasource").on("change", function() {
     var type = $("option:selected", this).text();
     if (type === "Mysql") {
       $("#" + model + "Port").val(3306);
@@ -20,9 +20,12 @@ $(document).ready(function() {
     }
   });
 
+  // Hook submit
   var timer;
-  $("#DatabaseConfigurationInitDbForm").submit(function() {
-    // Show loader dialog
+  $("#DatabaseConfigurationInitDbForm").on("submit", function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.debug('submit');
     var dialog = $("div.loader").dialog({
       modal: true,
       resizable: false,
@@ -35,7 +38,8 @@ $(document).ready(function() {
           clearInterval(timer);
         }
       }
-    }).dialog("open");
+    });
+    dialog.dialog("open");
     dialog.removeClass("hidden");
     $(".ui-dialog-titlebar-close").remove();
 
@@ -45,14 +49,24 @@ $(document).ready(function() {
       type: "post",
       data: $(this).serialize(),
       timeout: 3600000, // 1 hour
-      beforeSubmit: function(json) {
+      beforeSubmit: function() {
       },
       success: function() {
+        console.debug('success');
         clearInterval(timer);
         location.href = "/install/init_admin_user";
       },
-      error: function(xhr, textStatus, errorThrown) {
-        $("div.container").html(xhr.responseText);
+      error: function(xhr) {
+        var dom = $.parseHTML(xhr.responseText);
+        if ($("div.alert").length) {
+          $("div.alert").html($(dom).filter("div.alert").html());
+        } else {
+          $("#DatabaseConfigurationInitDbForm").before(
+            '<div class="alert alert-danger alert-dismissable">' +
+                $(dom).filter("div.alert").html() +
+                '/<div> '
+          );
+        }
         dialog.dialog("close");
         clearInterval(timer);
       }
