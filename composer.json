@@ -22,7 +22,7 @@
         "cakedc/migrations":       "~2.2",
         "chronon/mobile_detect":   "*",
         "twbs/bootstrap":          "~3.1",
-        "netcommons/users":        "~0.0",
+        "netcommons/users":        "@dev",
         "netcommons/m17n":         "@dev",
         "netcommons/net-commons":  "@dev",
         "components/jquery":       "~2.1"
