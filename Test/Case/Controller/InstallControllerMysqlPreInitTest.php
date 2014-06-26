@@ -122,6 +122,7 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 			),
 		));
 		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['datasource']));
+		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['persistent']));
 		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['database']));
 		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['host']));
 		$this->assertTrue(isset($this->controller->DatabaseConfiguration->validationErrors['login']));
