@@ -9,7 +9,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="/net_commons/jquery/jquery.js"></script>
 	<script src="/net_commons/jquery.cookie.js"></script>
-	<script src="/net_commons/jqueryui/ui/minified/jquery-ui.min.js"></script>
+	<script src="/net_commons/jqueryui/jquery-ui.min.js"></script>
 	<script src="/net_commons/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="/net_commons/twbs/bootstrap/assets/js/docs.min.js"></script>
 	<title><?php
@@ -29,7 +29,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<link href="/net_commons/twbs/bootstrap/assets/css/docs.min.css" rel="stylesheet">
 	<!-- base  -->
 	<link href="/net_commons/base/css/style.css" rel="stylesheet">
-	<link href="/net_commons/jqueryui/themes/base/minified/jquery-ui.min.css" rel="stylesheet">
+	<link href="/net_commons/jqueryui/themes/overcast/jquery-ui.min.css" rel="stylesheet">
 
 	<!-- themed  -->
 	<?php echo $this->Html->css("style"); ?>
