@@ -30,13 +30,13 @@
 			<div class="form-group">
 				<?php echo $this->Form->input('host',
 							array(
-								'default' => $defaultDB['host'],
+								'default' => $masterDB['host'],
 								'class' => 'form-control')) ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('port',
 							array(
-								'default' => $defaultDB['port'],
+								'default' => $masterDB['port'],
 								'class' => 'form-control')) ?>
 			</div>
 			<div class="form-group">
@@ -62,7 +62,7 @@
 							array(
 								'label' => __('ID'),
 								'class' => 'form-control',
-								'default' => $defaultDB['login'],
+								'default' => $masterDB['login'],
 								'placeholder' => __('Username'))) ?>
 			</div>
 			<div class="form-group">

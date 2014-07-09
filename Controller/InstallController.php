@@ -34,11 +34,11 @@ class InstallController extends InstallAppController {
 	public $helpers = array('M17n.M17n');
 
 /**
- * Default configuration
+ * Master configuration
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  */
-	public $defaultDBMysql = array(
+	public $masterDBMysql = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -47,15 +47,16 @@ class InstallController extends InstallAppController {
 		'password' => 'root',
 		'database' => 'nc3',
 		'prefix' => '',
+		'schema' => '',
 		'encoding' => 'utf8',
 	);
 
 /**
- * Default configuration
+ * Master configuration
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  */
-	public $defaultDBPostgresql = array(
+	public $masterDBPostgresql = array(
 		'datasource' => 'Database/Postgres',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -82,6 +83,7 @@ class InstallController extends InstallAppController {
 		'password' => '',
 		'database' => 'cakephp_test',
 		'prefix' => '',
+		'schema' => '',
 		'encoding' => 'utf8',
 	);
 
@@ -104,11 +106,11 @@ class InstallController extends InstallAppController {
 	);
 
 /**
- * Default configuration
+ * Master configuration
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  */
-	public $defaultTestDBMysql = array(
+	public $masterTestDBMysql = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -117,15 +119,16 @@ class InstallController extends InstallAppController {
 		'password' => 'test',
 		'database' => 'test_nc3',
 		'prefix' => '',
+		'schema' => '',
 		'encoding' => 'utf8',
 	);
 
 /**
- * Default configuration
+ * Master configuration
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  */
-	public $defaultTestDBPostgresql = array(
+	public $masterTestDBPostgresql = array(
 		'datasource' => 'Database/Postgres',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -152,6 +155,7 @@ class InstallController extends InstallAppController {
 		'password' => '',
 		'database' => 'cakephp_test',
 		'prefix' => '',
+		'schema' => '',
 		'encoding' => 'utf8',
 	);
 
@@ -198,7 +202,7 @@ class InstallController extends InstallAppController {
  * @codeCoverageIgnore
  **/
 	public function index() {
-		// Initialize default database connection
+		// Initialize master database connection
 		if (!$this->__saveDBConf($this->chooseDBByEnvironment())) {
 			$this->Session->setFlash(
 				__('Failed to write %s. Please check permission.',
@@ -290,7 +294,7 @@ class InstallController extends InstallAppController {
 		// Destroy session in order to handle ping request
 		$this->Session->destroy();
 
-		$this->set('defaultDB', $this->chooseDBByEnvironment());
+		$this->set('masterDB', $this->chooseDBByEnvironment());
 		$this->set('errors', array());
 		if ($this->request->is('post')) {
 			$this->loadModel('DatabaseConfiguration');
@@ -320,13 +324,15 @@ class InstallController extends InstallAppController {
 			// Invoke all available migrations
 			CakeLog::info('[Migrations.migration] Start migrating all plugins');
 			$plugins = App::objects('plugins');
-			foreach ($plugins as $plugin) {
-				exec(sprintf('cd %s && app/Console/cake Migrations.migration run all -p %s', ROOT, $plugin));
-				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for default connection', $plugin));
-			}
-			foreach ($plugins as $plugin) {
-				exec(sprintf('cd %s && app/Console/cake Migrations.migration run all -p %s -c test -i test', ROOT, $plugin));
-				CakeLog::info(sprintf('[Migrations.migration] Migrated %s for test connection', $plugin));
+			$connections = array('master', 'test');
+			foreach ($connections as $connection) {
+				foreach ($plugins as $plugin) {
+					exec(sprintf(
+						'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s',
+						ROOT, $plugin, $connection, $connection
+					));
+					CakeLog::info(sprintf('[Migrations.migration] Migrated %s for %s connection', $plugin, $connection));
+				}
 			}
 			CakeLog::info('[Migrations.migration] Successfully migrated all plugins');
 			return $this->redirect(array('action' => 'init_admin_user'));
@@ -375,7 +381,7 @@ class InstallController extends InstallAppController {
  * @codeCoverageIgnore
  **/
 	public function chooseDBByEnvironment($env = '') {
-		$db = isset($_SERVER['TRAVIS']) ? 'travis' . ucfirst($env) . 'DB' : 'default' . ucfirst($env) . 'DB';
+		$db = isset($_SERVER['TRAVIS']) ? 'travis' . ucfirst($env) . 'DB' : 'master' . ucfirst($env) . 'DB';
 
 		if (isset($_SERVER['DB'])) {
 			if ($_SERVER['DB'] === 'pgsql') {
@@ -422,7 +428,7 @@ class InstallController extends InstallAppController {
 			$value = ($value === null) ? 'null' : $value;
 			$value = ($value === true) ? 'true' : $value;
 			$value = ($value === false) ? 'false' : $value;
-			$conf = str_replace(sprintf('{default_%s}', $key), $value, $conf);
+			$conf = str_replace(sprintf('{master_%s}', $key), $value, $conf);
 		}
 
 		$params = $this->chooseDBByEnvironment('test');
@@ -468,7 +474,7 @@ class InstallController extends InstallAppController {
 			);
 			CakeLog::info(sprintf('DB Connected'));
 
-			foreach (array('default', 'test') as $env) {
+			foreach (array('master', 'test') as $env) {
 				if ($env === 'test') {
 					$params = $this->chooseDBByEnvironment('test');
 					$database = $params['database'];

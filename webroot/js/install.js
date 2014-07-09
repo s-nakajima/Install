@@ -25,7 +25,6 @@ $(document).ready(function() {
   $("#DatabaseConfigurationInitDbForm").on("submit", function(event) {
     event.preventDefault();
     event.stopPropagation();
-    console.debug('submit');
     var dialog = $("div.loader").dialog({
       modal: true,
       resizable: false,
@@ -52,7 +51,6 @@ $(document).ready(function() {
       beforeSubmit: function() {
       },
       success: function() {
-        console.debug('success');
         clearInterval(timer);
         location.href = "/install/init_admin_user";
       },
