@@ -521,10 +521,13 @@ class InstallController extends InstallAppController {
  * @return boolean Install succeed or not
  **/
 	private function __installPackages() {
-		$hhvm = (exec('which hhvm', $messages, $ret) && $ret === 0) ? 'hhvm -vRepo.Central.Path=/var/run/hhvm/hhvm.hhbc' : '';
-		/* $cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && composer update 2>&1', ROOT); */
+		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
+		// @see https://github.com/facebook/hhvm/wiki/OSS-PHP-Frameworks-Unit-Testing
+		$gt55 = version_compare(phpversion(), '5.5.0', '>=');
+		exec('which hhvm', $messages, $ret);
+		$hhvm = ($gt55 && $ret === 0) ? 'hhvm -vRepo.Central.Path=/var/run/hhvm/hhvm.hhbc' : '';
+
 		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && %s `which composer` update 2>&1', ROOT, $hhvm);
-		/* $cmd = sprintf('echo 1'); */
 		exec($cmd, $messages, $ret);
 
 		// Write logs
