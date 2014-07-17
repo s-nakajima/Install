@@ -324,7 +324,7 @@ class InstallController extends InstallAppController {
 			// Invoke all available migrations
 			CakeLog::info('[Migrations.migration] Start migrating all plugins');
 			$plugins = App::objects('plugins');
-			$connections = array('master', 'test');
+			$connections = array('master');
 			foreach ($connections as $connection) {
 				foreach ($plugins as $plugin) {
 					exec(sprintf(
