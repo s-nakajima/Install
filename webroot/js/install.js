@@ -1,35 +1,36 @@
 $(document).ready(function() {
-  $("#language").change(function() {
-    var url = window.location.href.split("?")[0];
-    url += url.indexOf("?") > -1 ? "&" : "?";
-    window.location.href = url + "language=" + $(this).val();
+  $('#language').change(function() {
+    var url = window.location.href.split('?')[0];
+    url += url.indexOf('?') > -1 ? '&' : '?';
+    window.location.href = url + 'language=' + $(this).val();
   });
 
-  var model = "DatabaseConfiguration";
-  $("#" + model + "Datasource").on("change", function() {
-    var type = $("option:selected", this).text();
-    if (type === "Mysql") {
-      $("#" + model + "Port").val(3306);
-      $("#" + model + "Login").val("root");
-      $("#" + model + "Schema").parent().parent().slideUp();
-      $("#" + model + "Schema").prop("disabled", true);
-    } else if (type === "Postgresql") {
-      $("#" + model + "Port").val(5432);
-      $("#" + model + "Login").val("postgres");
-      $("#" + model + "Schema").prop("disabled", false).parent().parent().slideDown();
+  var model = 'DatabaseConfiguration';
+  $('#' + model + 'Datasource').on('change', function() {
+    var type = $('option:selected', this).text();
+    if (type === 'Mysql') {
+      $('#' + model + 'Port').val(3306);
+      $('#' + model + 'Login').val('root');
+      $('#' + model + 'Schema').parent().parent().slideUp();
+      $('#' + model + 'Schema').prop('disabled', true);
+    } else if (type === 'Postgresql') {
+      $('#' + model + 'Port').val(5432);
+      $('#' + model + 'Login').val('postgres');
+      $('#' + model + 'Schema').prop('disabled', false).
+          parent().parent().slideDown();
     }
   });
 
   // Hook submit
   var timer;
-  $("#DatabaseConfigurationInitDbForm").on("submit", function(event) {
+  $('#DatabaseConfigurationInitDbForm').on('submit', function(event) {
     event.preventDefault();
     event.stopPropagation();
-    var dialog = $("div.loader").dialog({
+    var dialog = $('div.loader').dialog({
       modal: true,
       resizable: false,
       draggable: false,
-      title: "Installing ...",
+      title: 'Installing ...',
       minHeight: 100,
       minWidth: 150,
       close: function() {
@@ -38,34 +39,34 @@ $(document).ready(function() {
         }
       }
     });
-    dialog.dialog("open");
-    dialog.removeClass("hidden");
-    $(".ui-dialog-titlebar-close").remove();
+    dialog.dialog('open');
+    dialog.removeClass('hidden');
+    $('.ui-dialog-titlebar-close').remove();
 
     // Submit form
     $.ajax({
-      url: "/install/init_db",
-      type: "post",
+      url: '/install/init_db',
+      type: 'post',
       data: $(this).serialize(),
       timeout: 3600000, // 1 hour
       beforeSubmit: function() {
       },
       success: function() {
         clearInterval(timer);
-        location.href = "/install/init_admin_user";
+        location.href = '/install/init_admin_user';
       },
       error: function(xhr) {
         var dom = $.parseHTML(xhr.responseText);
-        if ($("div.alert").length) {
-          $("div.alert").html($(dom).filter("div.alert").html());
+        if ($('div.alert').length) {
+          $('div.alert').html($(dom).filter('div.alert').html());
         } else {
-          $("#DatabaseConfigurationInitDbForm").before(
-            '<div class="alert alert-danger alert-dismissable">' +
-                $(dom).filter("div.alert").html() +
-                '/<div> '
+          $('#DatabaseConfigurationInitDbForm').before(
+              '<div class="alert alert-danger alert-dismissable">' +
+              $(dom).filter('div.alert').html() +
+              '/<div> '
           );
         }
-        dialog.dialog("close");
+        dialog.dialog('close');
         clearInterval(timer);
       }
     });
@@ -73,8 +74,8 @@ $(document).ready(function() {
     // Register ping timer
     timer = setInterval(function() {
       $.ajax({
-        url: "/install/ping.json",
-        type: "get",
+        url: '/install/ping.json',
+        type: 'get',
         cache: false
       });
     }, 10000);
