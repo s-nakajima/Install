@@ -1,4 +1,7 @@
 <?php
+/**
+ * Install Controller
+ */
 App::uses('InstallAppController', 'Install.Controller');
 /**
  * Apply array_filter() recursively
@@ -31,6 +34,9 @@ function __arrayFilterRecursive($input, $callback = null) {
  */
 class InstallController extends InstallAppController {
 
+/**
+ * Helpers
+ */
 	public $helpers = array('M17n.M17n');
 
 /**
