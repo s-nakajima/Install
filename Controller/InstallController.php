@@ -2,7 +2,9 @@
 /**
  * Install Controller
  */
+
 App::uses('InstallAppController', 'Install.Controller');
+
 /**
  * Apply array_filter() recursively
  *
@@ -12,7 +14,6 @@ App::uses('InstallAppController', 'Install.Controller');
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
-
 function __arrayFilterRecursive($input, $callback = null) {
 	foreach ($input as &$value) {
 		if (is_array($value)) {
