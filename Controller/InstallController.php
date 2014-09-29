@@ -411,7 +411,7 @@ class InstallController extends InstallAppController {
  * Save application configurations
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return boolean File written or not
+ * @return bool File written or not
  **/
 	private function __saveAppConf() {
 		App::uses('File', 'Utility');
@@ -426,7 +426,7 @@ class InstallController extends InstallAppController {
  * Save database configurations
  *
  * @param array $configs configs
- * @return boolean File written or not
+ * @return bool File written or not
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -459,7 +459,7 @@ class InstallController extends InstallAppController {
  * Create database
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return boolean DB created or not
+ * @return bool DB created or not
  **/
 	private function __createDB() {
 		try {
@@ -529,7 +529,7 @@ class InstallController extends InstallAppController {
  * Install packages
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @return boolean Install succeed or not
+ * @return bool Install succeed or not
  **/
 	private function __installPackages() {
 		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
