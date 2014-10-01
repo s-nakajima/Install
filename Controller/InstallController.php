@@ -26,9 +26,9 @@ function __arrayFilterRecursive($input, $callback = null) {
 /**
  * Install Controller
  *
- * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @link     http://www.netcommons.org NetCommons Project
- * @license  http://www.netcommons.org/license.txt NetCommons License
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -458,8 +458,8 @@ class InstallController extends InstallAppController {
 /**
  * Create database
  *
- * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return bool DB created or not
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
 	private function __createDB() {
 		try {
@@ -528,8 +528,8 @@ class InstallController extends InstallAppController {
 /**
  * Install packages
  *
- * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return bool Install succeed or not
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
 	private function __installPackages() {
 		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
