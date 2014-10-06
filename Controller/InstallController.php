@@ -416,7 +416,7 @@ class InstallController extends InstallAppController {
 	private function __saveAppConf() {
 		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'application.yml', true);
-		$conf = __arrayFilterRecursive(Configure::read(), function($val) {
+		$conf = __arrayFilterRecursive(Configure::read(), function ($val) {
 			return !is_object($val);
 		});
 		return $file->write(Spyc::YAMLDump($conf));
