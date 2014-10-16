@@ -333,6 +333,7 @@ class InstallController extends InstallAppController {
 			CakeLog::info('[Migrations.migration] Start migrating all plugins');
 			$connections = array('master');
 			$plugins = array_merge(
+				array('NetCommons'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			);
@@ -532,6 +533,8 @@ class InstallController extends InstallAppController {
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
 	private function __installPackages() {
+		return true;
+
 		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
 		// @see https://github.com/facebook/hhvm/wiki/OSS-PHP-Frameworks-Unit-Testing
 		$gt55 = version_compare(phpversion(), '5.5.0', '>=');
