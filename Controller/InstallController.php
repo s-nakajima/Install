@@ -361,8 +361,36 @@ class InstallController extends InstallAppController {
 	public function init_admin_user() {
 		if ($this->request->is('post')) {
 			$this->loadModel('Users.User');
-			$this->User->create($this->request->data);
-			if ($this->User->validates() && $this->User->saveAdmin($this->request->data)) {
+
+			$ret = true;
+			$roles = [
+				'system_administrator',
+				'room_administrator',
+				'chief_editor',
+				'editor',
+				'general_user',
+				'visitor',
+			];
+
+			// Create default users
+			foreach ($roles as $role) {
+				$data = Hash::merge($this->request->data, [
+					'User' => [
+						'username' => $role,
+						'handlename' => $role,
+						'role_key' => $role,
+					]
+				]);
+				$this->User->create($data);
+				if ($this->User->validates()) {
+					if (!$this->User->saveUser($data)) {
+						$ret = false;
+						break;
+					}
+				}
+			}
+
+			if ($ret) {
 				return $this->redirect(array('action' => 'finish'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please try again.'));
