@@ -11,7 +11,7 @@
 			<div class="form-group">
 				<?php echo $this->Form->input('username',
 							array(
-								'default' => 'admin',
+								'default' => 'system_administrator',
 								'class' => 'form-control',
 								'placeholder' => __('Username'))) ?>
 			</div>
@@ -19,7 +19,7 @@
 				<?php echo $this->Form->input('handlename',
 							array(
 								'label' => __('Handle Name'),
-								'default' => 'admin',
+								'default' => 'system_administrator',
 								'class' => 'form-control',
 								'placeholder' => __('Handle Name'))) ?>
 			</div>
