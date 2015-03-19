@@ -365,11 +365,11 @@ class InstallController extends InstallAppController {
 			$ret = true;
 			$roles = [
 				'system_administrator',
-				'room_administrator',
-				'chief_editor',
-				'editor',
-				'general_user',
-				'visitor',
+				/* 'room_administrator', */
+				/* 'chief_editor', */
+				/* 'editor', */
+				/* 'general_user', */
+				/* 'visitor', */
 			];
 
 			// Create default users
