@@ -374,13 +374,20 @@ class InstallController extends InstallAppController {
 
 			// Create default users
 			foreach ($roles as $role) {
-				$data = Hash::merge($this->request->data, [
-					'User' => [
-						'username' => $role,
-						'handlename' => $role,
-						'role_key' => $role,
-					]
-				]);
+				if ($role === 'system_administrator') {
+					$data = Hash::merge($this->request->data, [
+						'User' => [
+							'role_key' => $role,
+						]
+					]);
+				} else {
+					$data = Hash::merge($this->request->data, [
+						'User' => [
+							'username' => $role,
+							'role_key' => $role,
+						]
+					]);
+				}
 				$this->User->create($data);
 				if ($this->User->validates()) {
 					if (!$this->User->saveUser($data)) {
