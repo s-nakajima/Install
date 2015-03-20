@@ -23,6 +23,7 @@
         "chronon/mobile_detect":   "*",
         "twbs/bootstrap":          "~3.1",
         "netcommons/rooms":        "@dev",
+        "netcommons/roles":        "@dev",
         "netcommons/users":        "@dev",
         "netcommons/m17n":         "@dev",
         "netcommons/net-commons":  "@dev",
