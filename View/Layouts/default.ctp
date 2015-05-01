@@ -7,36 +7,38 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="/net_commons/jquery/jquery.js"></script>
-	<script src="/net_commons/jquery.cookie.js"></script>
-	<script src="/net_commons/jqueryui/jquery-ui.min.js"></script>
-	<script src="/net_commons/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="/net_commons/twbs/bootstrap/assets/js/docs.min.js"></script>
-	<title><?php
-		if (isset($pageTitle)) {
-			echo h($pageTitle);
-		}
-		?></title>
 
-	<!-- Bootstrap -->
-	<?php
-	if (isset($bootstrapMinCss) && $bootstrapMinCss) {
-		echo $this->Html->css('bootstrap.min.css');
-	} else {
-		?><link href="/net_commons/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"><?php
-	}?>
-
-	<link href="/net_commons/twbs/bootstrap/assets/css/docs.min.css" rel="stylesheet">
-	<!-- base  -->
-	<link href="/net_commons/base/css/style.css" rel="stylesheet">
-	<link href="/net_commons/jqueryui/themes/overcast/jquery-ui.min.css" rel="stylesheet">
-
-	<!-- themed  -->
-	<?php echo $this->Html->css("style"); ?>
+	<title>
+		<?php
+			if (isset($pageTitle)) {
+				echo h($pageTitle);
+			}
+		?>
+	</title>
 
 	<?php
 		echo $this->fetch('meta');
+
+		echo $this->Html->css(
+			array(
+				'/components/bootstrap/dist/css/bootstrap.min.css',
+				'/components/jqueryui/themes/overcast/jquery-ui.min.css',
+				'/net_commons/css/style.css',
+				'style'
+			),
+			array('plugin' => false)
+		);
 		echo $this->fetch('css');
+
+		echo $this->Html->script(
+			array(
+				'/components/jquery/dist/jquery.min.js',
+				'/components/jqueryui/ui/minified/jquery-ui.min.js',
+				'/components/bootstrap/dist/js/bootstrap.min.js',
+				'/net_commons/jquery.cookie.js'
+			),
+			array('plugin' => false)
+		);
 		echo $this->fetch('script');
 	?>
 </head>

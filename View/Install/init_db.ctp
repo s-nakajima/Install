@@ -1,6 +1,6 @@
 <?php echo $this->element('scripts') ?>
 <div class="loader hidden text-center">
-	<img src="/net_commons/base/img/loader.gif" />
+	<?php echo $this->Html->image('/net_commons/img/loader.gif', array('plugin' => false)) ?>
 </div>
 <?php foreach ($errors as $error): ?>
 <div class="alert alert-danger alert-dismissable">
