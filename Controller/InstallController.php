@@ -339,11 +339,13 @@ class InstallController extends InstallAppController {
 			);
 			foreach ($connections as $connection) {
 				foreach ($plugins as $plugin) {
+					$output = array();
 					exec(sprintf(
-						'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s',
-						ROOT, $plugin, $connection, $connection
-					));
+						 'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s',
+						 ROOT, $plugin, $connection, $connection
+					), $output);
 					CakeLog::info(sprintf('[Migrations.migration] Migrated %s for %s connection', $plugin, $connection));
+					CakeLog::info(print_r($output, true));
 				}
 			}
 			CakeLog::info('[Migrations.migration] Successfully migrated all plugins');
@@ -567,7 +569,7 @@ class InstallController extends InstallAppController {
  * @return bool Install succeed or not
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
-	private function __installPackages() {
+	private function __installPackages() { return true;
 		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
 		// @see https://github.com/facebook/hhvm/wiki/OSS-PHP-Frameworks-Unit-Testing
 		$gt55 = version_compare(phpversion(), '5.5.0', '>=');
