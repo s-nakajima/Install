@@ -341,7 +341,7 @@ class InstallController extends InstallAppController {
 				foreach ($plugins as $plugin) {
 					$output = array();
 					exec(sprintf(
-						 'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s -m Migrations.PrecheckException',
+						 'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s',
 						 ROOT, $plugin, $connection, $connection
 					), $output);
 					CakeLog::info(sprintf('[Migrations.migration] Migrated %s for %s connection', $plugin, $connection));
