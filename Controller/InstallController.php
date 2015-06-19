@@ -4,6 +4,8 @@
  */
 
 App::uses('InstallAppController', 'Install.Controller');
+App::uses('File', 'Utility');
+App::uses('CakePlugin', 'Core');
 
 /**
  * Apply array_filter() recursively
@@ -488,7 +490,6 @@ class InstallController extends InstallAppController {
 			$conf = str_replace(sprintf('{test_%s}', $key), $value, $conf);
 		}
 
-		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'database.php', true);
 		return $file->write($conf);
 	}
@@ -569,24 +570,30 @@ class InstallController extends InstallAppController {
  * @return bool Install succeed or not
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
-	private function __installPackages() { return true;
+	private function __installPackages() {
 		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
 		// @see https://github.com/facebook/hhvm/wiki/OSS-PHP-Frameworks-Unit-Testing
 		$gt55 = version_compare(phpversion(), '5.5.0', '>=');
 		exec('which hhvm', $messages, $ret);
 		$hhvm = ($gt55 && $ret === 0) ? 'hhvm -vRepo.Central.Path=/var/run/hhvm/hhvm.hhbc' : '';
 
-		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && %s `which composer` update 2>&1', ROOT, $hhvm);
-		exec($cmd, $messages, $ret);
+		$file = new File(CakePlugin::path(Inflector::camelize('install')) . 'vendors.txt');
+		$plugins = explode(chr(10), trim($file->read()));
+		$file->close();
 
-		// Write logs
-		foreach ($messages as $message) {
-			CakeLog::info(sprintf('[composer] %s', $message));
-		}
-		if ($ret !== 0) {
-			$this->response->statusCode(500);
-			$this->set('errors', array_merge($this->viewVars['errors'], $messages));
-			return false;
+		foreach ($plugins as $plugin) {
+			$messages = array();
+			exec(sprintf(
+				'export COMPOSER_HOME=%s && cd %s && %s `which composer` require %s 2>&1',
+				ROOT, ROOT, $hhvm, $plugin
+			), $messages, $ret);
+			CakeLog::info(sprintf('[composer] %s', $plugin));
+			CakeLog::info(print_r($messages, true));
+			if ($ret !== 0) {
+				$this->response->statusCode(500);
+				$this->set('errors', array_merge($this->viewVars['errors'], $messages));
+				return false;
+			}
 		}
 
 		return true;
