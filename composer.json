@@ -1,5 +1,5 @@
 {
-    "name":        "netcommons/install",
+    "name":        "s-nakajima/install",
     "description": "Install Plugin for NetCommons3",
     "type":        "cakephp-plugin",
     "keywords":    ["cakephp", "install"],
