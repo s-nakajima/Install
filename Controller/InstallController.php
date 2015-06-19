@@ -254,29 +254,19 @@ class InstallController extends InstallAppController {
 		// Actually we don't have to check app/Config and app/tmp here,
 		// since cakephp itself cannot handle requests w/o these directories with proper permission.
 		// Just a stub action for future release.
-		if (is_writable(APP . 'Config')) {
-			$permissions[] = array(
-				'message' => __('%s is writable', array(APP . 'Config')),
-				'error' => false,
-			);
-		} else {
-			$ret = false;
-			$permissions[] = array(
-				'message' => __('Failed to write %s. Please check permission.', array(APP . 'Config')),
-				'error' => true,
-			);
-		}
-		if (is_writable(APP . 'tmp')) {
-			$permissions[] = array(
-				'message' => __('%s is writable', array(APP . 'tmp')),
-				'error' => false,
-			);
-		} else {
-			$ret = false;
-			$permissions[] = array(
-				'message' => __('Failed to write %s. Please check permission.', array(APP . 'tmp')),
-				'error' => true,
-			);
+		foreach ([APP . 'Config', APP . 'tmp'] as $path) {
+			if (is_writable($path)) {
+				$permissions[] = array(
+					'message' => __d('install', '%s is writable', array($path)),
+					'error' => false,
+				);
+			} else {
+				$ret = false;
+				$permissions[] = array(
+					'message' => __d('install', 'Failed to write %s. Please check permission.', array($path)),
+					'error' => true,
+				);
+			}
 		}
 
 		// Show current page on failure
@@ -583,11 +573,14 @@ class InstallController extends InstallAppController {
 
 		foreach ($plugins as $plugin) {
 			$messages = array();
-			exec(sprintf(
+
+			$cmd = sprintf(
 				'export COMPOSER_HOME=%s && cd %s && %s `which composer` require %s 2>&1',
 				ROOT, ROOT, $hhvm, $plugin
-			), $messages, $ret);
-			CakeLog::info(sprintf('[composer] %s', $plugin));
+			);
+			exec($cmd, $messages, $ret);
+
+			CakeLog::info(sprintf('[composer] %s', $cmd));
 			CakeLog::info(print_r($messages, true));
 			if ($ret !== 0) {
 				$this->response->statusCode(500);
