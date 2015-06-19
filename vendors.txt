@@ -16,7 +16,6 @@ netcommons/faqs:@dev
 netcommons/files:@dev
 netcommons/frames:@dev
 netcommons/iframes:@dev
-netcommons/install:@dev
 netcommons/likes:@dev
 netcommons/links:@dev
 netcommons/m17n:@dev
