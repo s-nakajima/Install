@@ -3,10 +3,10 @@
 	<?php echo $this->Html->image('/net_commons/img/loader.gif', array('plugin' => false)) ?>
 </div>
 <?php foreach ($errors as $error): ?>
-<div class="alert alert-danger alert-dismissable">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	<?php echo $error ?>
-</div>
+	<div class="alert alert-danger alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<?php echo $error ?>
+	</div>
 <?php endforeach; ?>
 <?php echo $this->Form->create('DatabaseConfiguration',
 			array(
@@ -75,4 +75,4 @@
 		</div>
 	</div>
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>
-<?php echo $this->Form->end() ?>
+<?php echo $this->Form->end();

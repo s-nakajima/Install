@@ -41,4 +41,4 @@
 		</div>
 	</div>
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>
-<?php echo $this->Form->end() ?>
+<?php echo $this->Form->end();
