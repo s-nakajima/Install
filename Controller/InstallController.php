@@ -590,7 +590,7 @@ class InstallController extends InstallAppController {
 				return false;
 			}
 
-			CakeLog::info('[composer] Successfully composer install %s', $plugin);
+			CakeLog::info(sprintf('[composer] Successfully composer install %s', $plugin));
 		}
 
 		return true;
@@ -625,7 +625,7 @@ class InstallController extends InstallAppController {
 					CakeLog::info(sprintf('[migration]   %s', $message));
 				}
 
-				CakeLog::info('[migration] Successfully migrated %s for %s connection', $plugin, $connection);
+				CakeLog::info(sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection));
 			}
 		}
 		CakeLog::info('[migration] Successfully migrated all plugins');
@@ -675,7 +675,7 @@ class InstallController extends InstallAppController {
 				}
 			}
 
-			CakeLog::info('[bower] Successfully bower install %s', $plugin);
+			CakeLog::info(sprintf('[bower] Successfully bower install %s', $plugin));
 		}
 
 		return true;
