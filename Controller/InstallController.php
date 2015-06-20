@@ -582,7 +582,7 @@ class InstallController extends InstallAppController {
 
 			// Write logs
 			foreach ($messages as $message) {
-				CakeLog::info(sprintf('[composer] %s', $message));
+				CakeLog::info(sprintf('[composer]   %s', $message));
 			}
 			if ($ret !== 0) {
 				$this->response->statusCode(500);
@@ -622,13 +622,7 @@ class InstallController extends InstallAppController {
 
 				// Write logs
 				foreach ($messages as $message) {
-					CakeLog::info(sprintf('[Migrations.migration] %s', $message));
-				}
-
-				if ($ret !== 0) {
-					$this->response->statusCode(500);
-					$this->set('errors', array_merge($this->viewVars['errors'], $messages));
-					return false;
+					CakeLog::info(sprintf('[Migrations.migration]   %s', $message));
 				}
 
 				CakeLog::info('[Migrations.migration] Successfully migrated %s for %s connection', $plugin, $connection);
@@ -657,22 +651,28 @@ class InstallController extends InstallAppController {
 
 			CakeLog::info(sprintf('[bower update] Start bower install %s', $plugin));
 
-			$messages = array();
-			$ret = null;
-			exec(sprintf(
-				'cd %s && `which bower` --allow-root update --save',
-				$pluginPath
-			), $messages, $ret);
+			$file = new File($pluginPath . 'bower.json');
+			$bower = json_decode($file->read(), true);
+			$file->close();
 
-			// Write logs
-			foreach ($messages as $message) {
-				CakeLog::info(sprintf('[bower update] %s', $message));
-			}
+			foreach ($bower['dependencies'] as $package => $version) {
+				$messages = array();
+				$ret = null;
+				exec(sprintf(
+					'cd %s && `which bower` --allow-root install %s#%s --save',
+					ROOT, $package, $version
+				), $messages, $ret);
 
-			if ($ret !== 0) {
-				$this->response->statusCode(500);
-				$this->set('errors', array_merge($this->viewVars['errors'], $messages));
-				return false;
+				// Write logs
+				foreach ($messages as $message) {
+					CakeLog::info(sprintf('[bower update]   %s', $message));
+				}
+
+				if ($ret !== 0) {
+					$this->response->statusCode(500);
+					$this->set('errors', array_merge($this->viewVars['errors'], $messages));
+					return false;
+				}
 			}
 
 			CakeLog::info('[bower update] Successfully bower install %s', $plugin);
