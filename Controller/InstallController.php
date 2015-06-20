@@ -321,11 +321,11 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			$plugins = array_merge(
+			$plugins = array_unique(array_merge(
 				array('NetCommons'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
-			);
+			));
 
 			// Install migrations
 			if (!$this->__installMigrations($plugins)) {
@@ -649,13 +649,13 @@ class InstallController extends InstallAppController {
 				continue;
 			}
 
-			CakeLog::info(sprintf('[bower] Start bower install %s', $plugin));
-
 			$file = new File($pluginPath . 'bower.json');
 			$bower = json_decode($file->read(), true);
 			$file->close();
 
 			foreach ($bower['dependencies'] as $package => $version) {
+				CakeLog::info(sprintf('[bower] Start bower install %s#%s for %s', $package, $version, $plugin));
+
 				$messages = array();
 				$ret = null;
 				exec(sprintf(
@@ -673,9 +673,10 @@ class InstallController extends InstallAppController {
 					$this->set('errors', array_merge($this->viewVars['errors'], $messages));
 					return false;
 				}
+
+				CakeLog::info(sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin));
 			}
 
-			CakeLog::info(sprintf('[bower] Successfully bower install %s', $plugin));
 		}
 
 		return true;
