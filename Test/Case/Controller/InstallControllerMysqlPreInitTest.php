@@ -188,6 +188,10 @@ class InstallControllerMysqlPreInitTest extends ControllerTestCase {
 				),
 			),
 		));
+
+		debug(Router::url('/install/init_admin_user', true));
+		debug($this->headers['Location']);
+
 		$this->assertEqual($this->headers['Location'], Router::url('/install/init_admin_user', true));
 	}
 }
