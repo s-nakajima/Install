@@ -611,7 +611,7 @@ class InstallController extends InstallAppController {
 
 		foreach ($connections as $connection) {
 			foreach ($plugins as $plugin) {
-				CakeLog::info(sprintf('[Migrations.migration] Start migrating %s for %s connection', $plugin, $connection));
+				CakeLog::info(sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection));
 
 				$messages = array();
 				$ret = null;
@@ -622,13 +622,13 @@ class InstallController extends InstallAppController {
 
 				// Write logs
 				foreach ($messages as $message) {
-					CakeLog::info(sprintf('[Migrations.migration]   %s', $message));
+					CakeLog::info(sprintf('[migration]   %s', $message));
 				}
 
-				CakeLog::info('[Migrations.migration] Successfully migrated %s for %s connection', $plugin, $connection);
+				CakeLog::info('[migration] Successfully migrated %s for %s connection', $plugin, $connection);
 			}
 		}
-		CakeLog::info('[Migrations.migration] Successfully migrated all plugins');
+		CakeLog::info('[migration] Successfully migrated all plugins');
 
 		return true;
 	}
@@ -649,7 +649,7 @@ class InstallController extends InstallAppController {
 				continue;
 			}
 
-			CakeLog::info(sprintf('[bower update] Start bower install %s', $plugin));
+			CakeLog::info(sprintf('[bower] Start bower install %s', $plugin));
 
 			$file = new File($pluginPath . 'bower.json');
 			$bower = json_decode($file->read(), true);
@@ -665,7 +665,7 @@ class InstallController extends InstallAppController {
 
 				// Write logs
 				foreach ($messages as $message) {
-					CakeLog::info(sprintf('[bower update]   %s', $message));
+					CakeLog::info(sprintf('[bower]   %s', $message));
 				}
 
 				if ($ret !== 0) {
@@ -675,7 +675,7 @@ class InstallController extends InstallAppController {
 				}
 			}
 
-			CakeLog::info('[bower update] Successfully bower install %s', $plugin);
+			CakeLog::info('[bower] Successfully bower install %s', $plugin);
 		}
 
 		return true;
