@@ -19,7 +19,7 @@ script:
   - . tools/build/plugins/cakephp/travis/main.sh
 
 after_script:
-  - . tools/build/plugins/cakephp/travis/post.sh
+  - travis_wait . tools/build/plugins/cakephp/travis/post.sh
 
 notifications:
   email:
