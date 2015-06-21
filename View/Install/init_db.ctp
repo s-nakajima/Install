@@ -15,9 +15,9 @@
 					'controller' => 'install',
 					'action' => 'init_db'))) ?>
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo __('Database Settings') ?></div>
+		<div class="panel-heading"><?php echo __d('install', 'Database Settings') ?></div>
 		<div class="panel-body">
-			<label class="datasource"><?php echo __('Datasource') ?></label>
+			<label class="datasource"><?php echo __d('install', 'Datasource') ?></label>
 			<div class="form-group">
 				<?php echo $this->Form->select('datasource',
 							array(
@@ -60,19 +60,19 @@
 			<div class="form-group">
 				<?php echo $this->Form->input('login',
 							array(
-								'label' => __('ID'),
+								'label' => __d('install', 'ID'),
 								'class' => 'form-control',
 								'default' => $masterDB['login'],
-								'placeholder' => __('Username'))) ?>
+								'placeholder' => __d('install', 'Username'))) ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('password',
 							array(
 								'class' => 'form-control',
-								'placeholder' => __('Password')
+								'placeholder' => __d('install', 'Password')
 							)) ?>
 			</div>
 		</div>
 	</div>
-	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>
+	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __d('install', 'Next') ?></button>
 <?php echo $this->Form->end();

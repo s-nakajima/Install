@@ -215,7 +215,7 @@ class InstallController extends InstallAppController {
 		// Initialize master database connection
 		if (!$this->__saveDBConf($this->chooseDBByEnvironment())) {
 			$this->Session->setFlash(
-				__('Failed to write %s. Please check permission.',
+				__d('install', 'Failed to write %s. Please check permission.',
 				array(APP . 'Config' . DS . 'database.php'))
 			);
 			return;
@@ -228,7 +228,7 @@ class InstallController extends InstallAppController {
 		Configure::write('NetCommons.installed', false);
 		if (!$this->__saveAppConf()) {
 			$this->Session->setFlash(
-				__('Failed to write %s. Please check permission.',
+				__d('install', 'Failed to write %s. Please check permission.',
 				array(APP . 'Config' . DS . 'application.yml'))
 			);
 			return;
@@ -254,7 +254,7 @@ class InstallController extends InstallAppController {
 		// Actually we don't have to check app/Config and app/tmp here,
 		// since cakephp itself cannot handle requests w/o these directories with proper permission.
 		// Just a stub action for future release.
-		foreach ([APP . 'Config', APP . 'tmp'] as $path) {
+		foreach ([APP . 'Config', APP . 'tmp', ROOT . DS .'composer.json', ROOT . DS .'bower.json'] as $path) {
 			if (is_writable($path)) {
 				$permissions[] = array(
 					'message' => __d('install', '%s is writable', array($path)),
@@ -274,7 +274,8 @@ class InstallController extends InstallAppController {
 			foreach ($permissions as $permission) {
 				CakeLog::error($permission['message']);
 			}
-			return $this->redirect(array('action' => 'init_permission'));
+			$this->set('permissions', $permissions);
+			return;
 		}
 
 		if ($this->request->is('post')) {
@@ -392,7 +393,7 @@ class InstallController extends InstallAppController {
 			if ($ret) {
 				return $this->redirect(array('action' => 'finish'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please try again.'));
+				$this->Session->setFlash(__d('install', 'The user could not be saved. Please try again.'));
 			}
 		}
 	}
@@ -644,7 +645,7 @@ class InstallController extends InstallAppController {
 		// Invoke all available bower
 
 		foreach ($plugins as $plugin) {
-			$pluginPath = CakePlugin::path(Inflector::camelize($plugin));
+			$pluginPath = ROOT . DS . 'app' . DS . 'Plugin' . DS . Inflector::camelize($plugin) . DS;
 			if (! file_exists($pluginPath . 'bower.json')) {
 				continue;
 			}
