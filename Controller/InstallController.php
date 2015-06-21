@@ -582,8 +582,10 @@ class InstallController extends InstallAppController {
 			exec($cmd, $messages, $ret);
 
 			// Write logs
-			foreach ($messages as $message) {
-				CakeLog::info(sprintf('[composer]   %s', $message));
+			if (Configure::read('debug') || $ret !== 0) {
+				foreach ($messages as $message) {
+					CakeLog::info(sprintf('[composer]   %s', $message));
+				}
 			}
 			if ($ret !== 0) {
 				$this->response->statusCode(500);
@@ -622,8 +624,10 @@ class InstallController extends InstallAppController {
 				), $messages, $ret);
 
 				// Write logs
-				foreach ($messages as $message) {
-					CakeLog::info(sprintf('[migration]   %s', $message));
+				if (Configure::read('debug')) {
+					foreach ($messages as $message) {
+						CakeLog::info(sprintf('[migration]   %s', $message));
+					}
 				}
 
 				CakeLog::info(sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection));
@@ -665,8 +669,10 @@ class InstallController extends InstallAppController {
 				), $messages, $ret);
 
 				// Write logs
-				foreach ($messages as $message) {
-					CakeLog::info(sprintf('[bower]   %s', $message));
+				if (Configure::read('debug')) {
+					foreach ($messages as $message) {
+						CakeLog::info(sprintf('[bower]   %s', $message));
+					}
 				}
 
 				if ($ret !== 0) {
