@@ -4,6 +4,8 @@
  */
 
 App::uses('InstallAppController', 'Install.Controller');
+App::uses('File', 'Utility');
+App::uses('CakePlugin', 'Core');
 
 /**
  * Apply array_filter() recursively
@@ -213,7 +215,7 @@ class InstallController extends InstallAppController {
 		// Initialize master database connection
 		if (!$this->__saveDBConf($this->chooseDBByEnvironment())) {
 			$this->Session->setFlash(
-				__('Failed to write %s. Please check permission.',
+				__d('install', 'Failed to write %s. Please check permission.',
 				array(APP . 'Config' . DS . 'database.php'))
 			);
 			return;
@@ -226,7 +228,7 @@ class InstallController extends InstallAppController {
 		Configure::write('NetCommons.installed', false);
 		if (!$this->__saveAppConf()) {
 			$this->Session->setFlash(
-				__('Failed to write %s. Please check permission.',
+				__d('install', 'Failed to write %s. Please check permission.',
 				array(APP . 'Config' . DS . 'application.yml'))
 			);
 			return;
@@ -252,29 +254,19 @@ class InstallController extends InstallAppController {
 		// Actually we don't have to check app/Config and app/tmp here,
 		// since cakephp itself cannot handle requests w/o these directories with proper permission.
 		// Just a stub action for future release.
-		if (is_writable(APP . 'Config')) {
-			$permissions[] = array(
-				'message' => __('%s is writable', array(APP . 'Config')),
-				'error' => false,
-			);
-		} else {
-			$ret = false;
-			$permissions[] = array(
-				'message' => __('Failed to write %s. Please check permission.', array(APP . 'Config')),
-				'error' => true,
-			);
-		}
-		if (is_writable(APP . 'tmp')) {
-			$permissions[] = array(
-				'message' => __('%s is writable', array(APP . 'tmp')),
-				'error' => false,
-			);
-		} else {
-			$ret = false;
-			$permissions[] = array(
-				'message' => __('Failed to write %s. Please check permission.', array(APP . 'tmp')),
-				'error' => true,
-			);
+		foreach ([APP . 'Config', APP . 'tmp', ROOT . DS . 'composer.json', ROOT . DS . 'bower.json'] as $path) {
+			if (is_writable($path)) {
+				$permissions[] = array(
+					'message' => __d('install', '%s is writable', array($path)),
+					'error' => false,
+				);
+			} else {
+				$ret = false;
+				$permissions[] = array(
+					'message' => __d('install', 'Failed to write %s. Please check permission.', array($path)),
+					'error' => true,
+				);
+			}
 		}
 
 		// Show current page on failure
@@ -282,7 +274,8 @@ class InstallController extends InstallAppController {
 			foreach ($permissions as $permission) {
 				CakeLog::error($permission['message']);
 			}
-			return $this->redirect(array('action' => 'init_permission'));
+			$this->set('permissions', $permissions);
+			return;
 		}
 
 		if ($this->request->is('post')) {
@@ -329,24 +322,24 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			// Invoke all available migrations
-			CakeLog::info('[Migrations.migration] Start migrating all plugins');
-			$connections = array('master');
-			$plugins = array_merge(
+			$plugins = array_unique(array_merge(
 				array('NetCommons'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
-			);
-			foreach ($connections as $connection) {
-				foreach ($plugins as $plugin) {
-					exec(sprintf(
-						'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s',
-						ROOT, $plugin, $connection, $connection
-					));
-					CakeLog::info(sprintf('[Migrations.migration] Migrated %s for %s connection', $plugin, $connection));
-				}
+			));
+
+			// Install migrations
+			if (!$this->__installMigrations($plugins)) {
+				CakeLog::error('Failed to install migrations');
+				return;
 			}
-			CakeLog::info('[Migrations.migration] Successfully migrated all plugins');
+
+			// Install bower packages
+			if (!$this->__installBowerPackages($plugins)) {
+				CakeLog::error('Failed to install bower packages');
+				return;
+			}
+
 			return $this->redirect(array('action' => 'init_admin_user'));
 		}
 	}
@@ -400,7 +393,7 @@ class InstallController extends InstallAppController {
 			if ($ret) {
 				return $this->redirect(array('action' => 'finish'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please try again.'));
+				$this->Session->setFlash(__d('install', 'The user could not be saved. Please try again.'));
 			}
 		}
 	}
@@ -486,7 +479,6 @@ class InstallController extends InstallAppController {
 			$conf = str_replace(sprintf('{test_%s}', $key), $value, $conf);
 		}
 
-		App::uses('File', 'Utility');
 		$file = new File(APP . 'Config' . DS . 'database.php', true);
 		return $file->write($conf);
 	}
@@ -574,19 +566,127 @@ class InstallController extends InstallAppController {
 		exec('which hhvm', $messages, $ret);
 		$hhvm = ($gt55 && $ret === 0) ? 'hhvm -vRepo.Central.Path=/var/run/hhvm/hhvm.hhbc' : '';
 
-		$cmd = sprintf('export COMPOSER_HOME=/tmp && cd %s && cp tools/build/app/cakephp/composer.json . && %s `which composer` update 2>&1', ROOT, $hhvm);
-		exec($cmd, $messages, $ret);
+		$file = new File(CakePlugin::path(Inflector::camelize('install')) . 'vendors.txt');
+		$plugins = explode(chr(10), trim($file->read()));
+		$file->close();
 
-		// Write logs
-		foreach ($messages as $message) {
-			CakeLog::info(sprintf('[composer] %s', $message));
-		}
-		if ($ret !== 0) {
-			$this->response->statusCode(500);
-			$this->set('errors', array_merge($this->viewVars['errors'], $messages));
-			return false;
+		foreach ($plugins as $plugin) {
+			CakeLog::info(sprintf('[composer] Start composer install %s', $plugin));
+
+			$messages = array();
+			$ret = null;
+			$cmd = sprintf(
+				'export COMPOSER_HOME=%s && cd %s && %s `which composer` require %s 2>&1',
+				ROOT, ROOT, $hhvm, $plugin
+			);
+			exec($cmd, $messages, $ret);
+
+			// Write logs
+			if (Configure::read('debug') || $ret !== 0) {
+				foreach ($messages as $message) {
+					CakeLog::info(sprintf('[composer]   %s', $message));
+				}
+			}
+			if ($ret !== 0) {
+				$this->response->statusCode(500);
+				$this->set('errors', array_merge($this->viewVars['errors'], $messages));
+				return false;
+			}
+
+			CakeLog::info(sprintf('[composer] Successfully composer install %s', $plugin));
 		}
 
 		return true;
 	}
+
+/**
+ * Install migrations
+ *
+ * @param array $plugins Migration plugins
+ * @return bool Install succeed or not
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ **/
+	private function __installMigrations($plugins) {
+		// Invoke all available migrations
+		CakeLog::info('[Migrations.migration] Start migrating all plugins');
+
+		$connections = array('master');
+
+		foreach ($connections as $connection) {
+			foreach ($plugins as $plugin) {
+				CakeLog::info(sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection));
+
+				$messages = array();
+				$ret = null;
+				exec(sprintf(
+					'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s',
+					ROOT, $plugin, $connection, $connection
+				), $messages, $ret);
+
+				// Write logs
+				if (Configure::read('debug')) {
+					foreach ($messages as $message) {
+						CakeLog::info(sprintf('[migration]   %s', $message));
+					}
+				}
+
+				CakeLog::info(sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection));
+			}
+		}
+		CakeLog::info('[migration] Successfully migrated all plugins');
+
+		return true;
+	}
+
+/**
+ * Install migrations
+ *
+ * @param array $plugins Migration plugins
+ * @return bool Install succeed or not
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ **/
+	private function __installBowerPackages($plugins) {
+		// Invoke all available bower
+
+		foreach ($plugins as $plugin) {
+			$pluginPath = ROOT . DS . 'app' . DS . 'Plugin' . DS . Inflector::camelize($plugin) . DS;
+			if (! file_exists($pluginPath . 'bower.json')) {
+				continue;
+			}
+
+			$file = new File($pluginPath . 'bower.json');
+			$bower = json_decode($file->read(), true);
+			$file->close();
+
+			foreach ($bower['dependencies'] as $package => $version) {
+				CakeLog::info(sprintf('[bower] Start bower install %s#%s for %s', $package, $version, $plugin));
+
+				$messages = array();
+				$ret = null;
+				exec(sprintf(
+					'cd %s && `which bower` --allow-root install %s#%s --save',
+					ROOT, $package, $version
+				), $messages, $ret);
+
+				// Write logs
+				if (Configure::read('debug')) {
+					foreach ($messages as $message) {
+						CakeLog::info(sprintf('[bower]   %s', $message));
+					}
+				}
+
+				if ($ret !== 0) {
+					$this->response->statusCode(500);
+					$this->set('errors', array_merge($this->viewVars['errors'], $messages));
+					return false;
+				}
+
+				CakeLog::info(sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin));
+			}
+
+		}
+
+		return true;
+	}
+
 }

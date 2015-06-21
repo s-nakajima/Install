@@ -6,7 +6,7 @@
 						'controller' => 'install',
 						'action' => 'index'))) ?>
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo __('Term') ?></div>
+		<div class="panel-heading"><?php echo __d('install', 'Term') ?></div>
 		<div class="panel-body">
 			<div class="form-group">
 				<?php echo $this->M17n->languages('language',
@@ -17,7 +17,7 @@
 			<div class="form-group">
 			<?php echo $this->Form->textarea('term',
 						array(
-							'default' => __('The terms & conditions for using the contents of this site is governed
+							'default' => __d('install', 'The terms & conditions for using the contents of this site is governed
 by this agreement. Please read carefully the following conditions, and
 register only if you agree to them.
 
@@ -46,6 +46,6 @@ from this site, etc.'),
 			</div>
 		</div>
 	</div>
-	<p><?php echo __('By clicking the button, you agree to the terms above.')?></p>
-	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __('Next') ?></button>
-<?php echo $this->Form->end() ?>
+	<p><?php echo __d('install', 'By clicking the button, you agree to the terms above.')?></p>
+	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __d('install', 'Next') ?></button>
+<?php echo $this->Form->end();
