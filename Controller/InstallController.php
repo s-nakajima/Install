@@ -254,7 +254,7 @@ class InstallController extends InstallAppController {
 		// Actually we don't have to check app/Config and app/tmp here,
 		// since cakephp itself cannot handle requests w/o these directories with proper permission.
 		// Just a stub action for future release.
-		foreach ([APP . 'Config', APP . 'tmp', ROOT . DS .'composer.json', ROOT . DS .'bower.json'] as $path) {
+		foreach ([APP . 'Config', APP . 'tmp', ROOT . DS . 'composer.json', ROOT . DS . 'bower.json'] as $path) {
 			if (is_writable($path)) {
 				$permissions[] = array(
 					'message' => __d('install', '%s is writable', array($path)),
