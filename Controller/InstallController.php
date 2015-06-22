@@ -199,7 +199,7 @@ class InstallController extends InstallAppController {
 		}
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
-		Configure::write('debug', 2);
+		Configure::write('debug', 0);
 		parent::beforeFilter();
 	}
 
@@ -559,7 +559,7 @@ class InstallController extends InstallAppController {
  * @return bool Install succeed or not
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
-	private function __installPackages() { return true;
+	private function __installPackages() {
 		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
 		// @see https://github.com/facebook/hhvm/wiki/OSS-PHP-Frameworks-Unit-Testing
 		$gt55 = version_compare(phpversion(), '5.5.0', '>=');
@@ -673,12 +673,6 @@ class InstallController extends InstallAppController {
 					foreach ($messages as $message) {
 						CakeLog::info(sprintf('[bower]   %s', $message));
 					}
-				}
-
-				if ($ret !== 0) {
-					$this->response->statusCode(500);
-					$this->set('errors', array_merge($this->viewVars['errors'], $messages));
-					return false;
 				}
 
 				CakeLog::info(sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin));
