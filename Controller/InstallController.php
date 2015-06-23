@@ -323,7 +323,7 @@ class InstallController extends InstallAppController {
 			}
 
 			$plugins = array_unique(array_merge(
-				array('NetCommons'),
+				array('NetCommons', 'PluginManager'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			));
@@ -576,7 +576,7 @@ class InstallController extends InstallAppController {
 			$messages = array();
 			$ret = null;
 			$cmd = sprintf(
-				'export COMPOSER_HOME=%s && cd %s && %s `which composer` require %s 2>&1',
+				'export COMPOSER_HOME=%s && cd %s && %s `which composer` require --dev %s 2>&1',
 				ROOT, ROOT, $hhvm, $plugin
 			);
 			exec($cmd, $messages, $ret);
@@ -673,12 +673,6 @@ class InstallController extends InstallAppController {
 					foreach ($messages as $message) {
 						CakeLog::info(sprintf('[bower]   %s', $message));
 					}
-				}
-
-				if ($ret !== 0) {
-					$this->response->statusCode(500);
-					$this->set('errors', array_merge($this->viewVars['errors'], $messages));
-					return false;
 				}
 
 				CakeLog::info(sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin));
