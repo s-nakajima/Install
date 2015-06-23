@@ -15,6 +15,7 @@ netcommons/edumap:@dev
 netcommons/faqs:@dev
 netcommons/files:@dev
 netcommons/frames:@dev
+netcommons/groups:@dev
 netcommons/iframes:@dev
 netcommons/likes:@dev
 netcommons/links:@dev
