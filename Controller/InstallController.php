@@ -199,7 +199,7 @@ class InstallController extends InstallAppController {
 		}
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
-		Configure::write('debug', 0);
+		Configure::write('debug', 2);
 		parent::beforeFilter();
 	}
 
@@ -317,13 +317,13 @@ class InstallController extends InstallAppController {
 			}
 
 			// Install packages
-			if (!$this->__installPackages()) {
-				CakeLog::error('Failed to install dependencies');
-				return;
-			}
+			//if (!$this->__installPackages()) {
+			//	CakeLog::error('Failed to install dependencies');
+			//	return;
+			//}
 
 			$plugins = array_unique(array_merge(
-				array('NetCommons', 'PluginManager'),
+				array('NetCommons', 'Users', 'PluginManager', 'Roles'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			));
