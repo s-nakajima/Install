@@ -76,7 +76,10 @@ $(document).ready(function() {
       $.ajax({
         url: '/install/ping.json',
         type: 'get',
-        cache: false
+        cache: false,
+        success: function(data) {
+          console.log(data);
+        }
       });
     }, 10000);
 

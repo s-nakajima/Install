@@ -1,6 +1,11 @@
 <?php echo $this->element('scripts') ?>
 <div class="loader hidden text-center">
-	<?php echo $this->Html->image('/net_commons/img/loader.gif', array('plugin' => false)) ?>
+	<div class="progress">
+		<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+			<span class="sr-only"></span>
+		</div>
+	</div>
+
 </div>
 <?php foreach ($errors as $error): ?>
 	<div class="alert alert-danger alert-dismissable">

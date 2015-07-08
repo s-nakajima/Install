@@ -317,10 +317,10 @@ class InstallController extends InstallAppController {
 			}
 
 			// Install packages
-			//if (!$this->__installPackages()) {
-			//	CakeLog::error('Failed to install dependencies');
-			//	return;
-			//}
+			if (!$this->__installPackages()) {
+				CakeLog::error('Failed to install dependencies');
+				return;
+			}
 
 			$plugins = array_unique(array_merge(
 				array('NetCommons', 'Users', 'PluginManager', 'Roles'),
@@ -328,17 +328,17 @@ class InstallController extends InstallAppController {
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			));
 
-			// Install migrations
-			if (!$this->__installMigrations($plugins)) {
-				CakeLog::error('Failed to install migrations');
-				return;
-			}
-
-			// Install bower packages
-			if (!$this->__installBowerPackages($plugins)) {
-				CakeLog::error('Failed to install bower packages');
-				return;
-			}
+//			// Install migrations
+//			if (!$this->__installMigrations($plugins)) {
+//				CakeLog::error('Failed to install migrations');
+//				return;
+//			}
+//
+//			// Install bower packages
+//			if (!$this->__installBowerPackages($plugins)) {
+//				CakeLog::error('Failed to install bower packages');
+//				return;
+//			}
 
 			return $this->redirect(array('action' => 'init_admin_user'));
 		}
@@ -570,8 +570,13 @@ class InstallController extends InstallAppController {
 		$plugins = explode(chr(10), trim($file->read()));
 		$file->close();
 
+		$this->Session->write('install_maxvalue', count($plugins) * 3);
+		$this->Session->write('install_value', 0);
+
 		foreach ($plugins as $plugin) {
 			CakeLog::info(sprintf('[composer] Start composer install %s', $plugin));
+
+			$value = $this->Session->read('install_value') + 1;
 
 			$messages = array();
 			$ret = null;
@@ -592,6 +597,8 @@ class InstallController extends InstallAppController {
 				$this->set('errors', array_merge($this->viewVars['errors'], $messages));
 				return false;
 			}
+
+			$this->Session->write('install_value', $value);
 
 			CakeLog::info(sprintf('[composer] Successfully composer install %s', $plugin));
 		}
@@ -616,6 +623,8 @@ class InstallController extends InstallAppController {
 			foreach ($plugins as $plugin) {
 				CakeLog::info(sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection));
 
+				$value = $this->Session->read('install_value') + 1;
+
 				$messages = array();
 				$ret = null;
 				exec(sprintf(
@@ -629,6 +638,8 @@ class InstallController extends InstallAppController {
 						CakeLog::info(sprintf('[migration]   %s', $message));
 					}
 				}
+
+				$this->Session->write('install_value', $value);
 
 				CakeLog::info(sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection));
 			}
@@ -650,37 +661,58 @@ class InstallController extends InstallAppController {
 
 		foreach ($plugins as $plugin) {
 			$pluginPath = ROOT . DS . 'app' . DS . 'Plugin' . DS . Inflector::camelize($plugin) . DS;
-			if (! file_exists($pluginPath . 'bower.json')) {
-				continue;
-			}
+			$value = $this->Session->read('install_value') + 1;
 
-			$file = new File($pluginPath . 'bower.json');
-			$bower = json_decode($file->read(), true);
-			$file->close();
+			if (file_exists($pluginPath . 'bower.json')) {
+				$file = new File($pluginPath . 'bower.json');
+				$bower = json_decode($file->read(), true);
+				$file->close();
 
-			foreach ($bower['dependencies'] as $package => $version) {
-				CakeLog::info(sprintf('[bower] Start bower install %s#%s for %s', $package, $version, $plugin));
+				foreach ($bower['dependencies'] as $package => $version) {
+					CakeLog::info(sprintf('[bower] Start bower install %s#%s for %s', $package, $version, $plugin));
 
-				$messages = array();
-				$ret = null;
-				exec(sprintf(
-					'cd %s && `which bower` --allow-root install %s#%s --save',
-					ROOT, $package, $version
-				), $messages, $ret);
+					$messages = array();
+					$ret = null;
+					exec(sprintf(
+						'cd %s && `which bower` --allow-root install %s#%s --save',
+						ROOT, $package, $version
+					), $messages, $ret);
 
-				// Write logs
-				if (Configure::read('debug')) {
-					foreach ($messages as $message) {
-						CakeLog::info(sprintf('[bower]   %s', $message));
+					// Write logs
+					if (Configure::read('debug')) {
+						foreach ($messages as $message) {
+							CakeLog::info(sprintf('[bower]   %s', $message));
+						}
 					}
-				}
 
-				CakeLog::info(sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin));
+					CakeLog::info(sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin));
+				}
 			}
 
+			$this->Session->write('install_value', $value);
 		}
 
 		return true;
+	}
+
+/**
+ * Keep connection alive
+ *
+ * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
+ * @return void
+ **/
+	public function ping() {
+		if ($this->Session->read('install_maxvalue') > 0) {
+			$progressValueNow = round($this->Session->read('install_value') / $this->Session->read('install_maxvalue'));
+		} else {
+			$progressValueNow = 0;
+		}
+
+		$this->set('result', array(
+			'message' => 'OK',
+			'progressValueNow' => $progressValueNow
+		));
+		$this->set('_serialize', array('result'));
 	}
 
 }
