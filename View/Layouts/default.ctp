@@ -33,7 +33,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->Html->script(
 			array(
 				'/components/jquery/dist/jquery.min.js',
-				'/components/jqueryui/jquery-ui.min.js',
+				'/components/jqueryui/ui/minified/jquery-ui.min.js',
 				'/components/bootstrap/dist/js/bootstrap.min.js',
 				'/net_commons/jquery.cookie.js'
 			),
