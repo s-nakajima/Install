@@ -323,7 +323,7 @@ class InstallController extends InstallAppController {
 			}
 
 			$plugins = array_unique(array_merge(
-				array('NetCommons', 'PluginManager'),
+				array('NetCommons', 'Users', 'PluginManager', 'Roles'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			));
@@ -559,7 +559,7 @@ class InstallController extends InstallAppController {
  * @return bool Install succeed or not
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  **/
-	private function __installPackages() { return true;
+	private function __installPackages() {
 		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
 		// @see https://github.com/facebook/hhvm/wiki/OSS-PHP-Frameworks-Unit-Testing
 		$gt55 = version_compare(phpversion(), '5.5.0', '>=');
