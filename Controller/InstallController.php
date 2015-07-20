@@ -354,6 +354,7 @@ class InstallController extends InstallAppController {
 	public function init_admin_user() {
 		if ($this->request->is('post')) {
 			$this->loadModel('Users.User');
+			$this->User->setDataSource('master');
 
 			$ret = true;
 			$roles = [
