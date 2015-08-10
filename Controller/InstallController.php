@@ -226,6 +226,8 @@ class InstallController extends InstallAppController {
 		Configure::write('Security.cipherSeed', mt_rand() . mt_rand() . mt_rand() . mt_rand());
 		Configure::write('Config.languageEnabled', array('en', 'ja', 'zh'));
 		Configure::write('NetCommons.installed', false);
+		Configure::write('App.siteName', 'NetCommons');
+		Configure::write('App.siteDescription', 'NetCommons');
 		if (!$this->__saveAppConf()) {
 			$this->Session->setFlash(
 				__d('install', 'Failed to write %s. Please check permission.',
