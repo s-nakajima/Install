@@ -27,6 +27,7 @@ netcommons/net-commons:@dev
 netcommons/notifications:@dev
 netcommons/pages:@dev
 netcommons/plugin-manager:@dev
+netcommons/private-space:@dev
 netcommons/public-space:@dev
 netcommons/questionnaires:@dev
 netcommons/roles:@dev
