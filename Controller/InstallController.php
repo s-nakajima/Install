@@ -224,7 +224,7 @@ class InstallController extends InstallAppController {
 		// Initialize application.yml
 		Configure::write('Security.salt', Security::generateAuthKey());
 		Configure::write('Security.cipherSeed', mt_rand() . mt_rand() . mt_rand() . mt_rand());
-		Configure::write('Config.languageEnabled', array('en', 'ja', 'zh'));
+		Configure::write('Config.languageEnabled', array('en', 'ja'));
 		Configure::write('NetCommons.installed', false);
 		Configure::write('App.siteName', 'NetCommons');
 		Configure::write('App.siteDescription', 'NetCommons');
@@ -325,7 +325,7 @@ class InstallController extends InstallAppController {
 			}
 
 			$plugins = array_unique(array_merge(
-				array('NetCommons', 'Users', 'M17n', 'PluginManager', 'Roles'),
+				array('NetCommons', 'Users', 'M17n', 'DataTypes', 'PluginManager', 'Roles'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			));

@@ -9,10 +9,11 @@
 		<div class="panel-heading"><?php echo __d('install', 'Term') ?></div>
 		<div class="panel-body">
 			<div class="form-group">
-				<?php echo $this->M17n->languages('language',
-							array(
-								'label' => '',
-								'div' => array('class' => 'text-right'))) ?>
+				<?php echo $this->M17n->languages('language', array(
+						'label' => '',
+						'div' => array('class' => 'text-right'),
+						'enable' => array_fill_keys(Configure::read('Config.languageEnabled'), true),
+					)); ?>
 			</div>
 			<div class="form-group">
 			<?php echo $this->Form->textarea('term',
