@@ -4,7 +4,10 @@
 				'url' => array(
 					'plugin' => 'install',
 					'controller' => 'install',
-					'action' => 'init_admin_user'))) ?>
+					'action' => 'init_admin_user'
+				),
+				'novalidate' => true
+			)) ?>
 	<div class="panel panel-default">
 		<div class="panel-heading"><?php echo __d('install', 'Create an Administrator') ?></div>
 		<div class="panel-body">
@@ -13,7 +16,14 @@
 							array(
 								'default' => 'system_administrator',
 								'class' => 'form-control',
-								'placeholder' => __d('install', 'Username'))) ?>
+								'placeholder' => __d('install', 'Username'),
+								'error' => false,
+							)); ?>
+				<div class="has-error">
+					<?php echo $this->Form->error('username', null, array(
+							'class' => 'help-block'
+						)); ?>
+				</div>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('handlename',
@@ -21,22 +31,41 @@
 								'label' => __d('install', 'Handle Name'),
 								'default' => 'system_administrator',
 								'class' => 'form-control',
-								'placeholder' => __d('install', 'Handle Name'))) ?>
+								'placeholder' => __d('install', 'Handle Name'),
+								'error' => false,
+							)); ?>
+				<div class="has-error">
+					<?php echo $this->Form->error('handlename', null, array(
+							'class' => 'help-block'
+						)); ?>
+				</div>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('password',
 							array(
 								'class' => 'form-control',
-								'placeholder' => __d('install', 'Password')
-							)) ?>
+								'placeholder' => __d('install', 'Password'),
+								'error' => false,
+							)); ?>
+				<div class="has-error">
+					<?php echo $this->Form->error('password', null, array(
+							'class' => 'help-block'
+						)); ?>
+				</div>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('password_again',
 							array(
 								'type' => 'password',
 								'class' => 'form-control',
-								'placeholder' => __d('install', 'Password')
-							)) ?>
+								'placeholder' => __d('install', 'Password'),
+								'error' => false,
+							)); ?>
+				<div class="has-error">
+					<?php echo $this->Form->error('password_again', null, array(
+							'class' => 'help-block'
+						)); ?>
+				</div>
 			</div>
 		</div>
 	</div>

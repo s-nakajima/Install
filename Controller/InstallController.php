@@ -225,9 +225,13 @@ class InstallController extends InstallAppController {
 		Configure::write('Security.salt', Security::generateAuthKey());
 		Configure::write('Security.cipherSeed', mt_rand() . mt_rand() . mt_rand() . mt_rand());
 		Configure::write('Config.languageEnabled', array('en', 'ja'));
+		if (isset($this->request->query['language'])) {
+			Configure::write('Config.language', $this->request->query['language']);
+		}
 		Configure::write('NetCommons.installed', false);
 		Configure::write('App.siteName', 'NetCommons');
 		Configure::write('App.siteDescription', 'NetCommons');
+
 		if (!$this->__saveAppConf()) {
 			$this->Session->setFlash(
 				__d('install', 'Failed to write %s. Please check permission.',
@@ -237,7 +241,7 @@ class InstallController extends InstallAppController {
 		}
 
 		if ($this->request->is('post')) {
-			return $this->redirect(array('action' => 'init_permission'));
+			$this->redirect(array('action' => 'init_permission'));
 		}
 	}
 
@@ -281,7 +285,8 @@ class InstallController extends InstallAppController {
 		}
 
 		if ($this->request->is('post')) {
-			return $this->redirect(array('action' => 'init_db'));
+			$this->redirect(array('action' => 'init_db'));
+			return;
 		}
 		$this->set('permissions', $permissions);
 	}
@@ -342,7 +347,7 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			return $this->redirect(array('action' => 'init_admin_user'));
+			$this->redirect(array('action' => 'init_admin_user'));
 		}
 	}
 
@@ -356,48 +361,40 @@ class InstallController extends InstallAppController {
 	public function init_admin_user() {
 		if ($this->request->is('post')) {
 			$this->loadModel('Users.User');
+			$this->loadModel('M17n.Language');
+
 			$this->User->setDataSource('master');
+			$this->Language->setDataSource('master');
 
-			$ret = true;
-			$roles = [
-				'system_administrator',
-				/* 'room_administrator', */
-				/* 'chief_editor', */
-				/* 'editor', */
-				/* 'general_user', */
-				/* 'visitor', */
-			];
+			$data = Hash::merge($this->request->data, [
+				'User' => [
+					'role_key' => 'system_administrator',
+				]
+			]);
 
-			// Create default users
-			foreach ($roles as $role) {
-				if ($role === 'system_administrator') {
-					$data = Hash::merge($this->request->data, [
-						'User' => [
-							'role_key' => $role,
-						]
-					]);
-				} else {
-					$data = Hash::merge($this->request->data, [
-						'User' => [
-							'username' => $role,
-							'role_key' => $role,
-						]
-					]);
-				}
-				$this->User->create($data);
-				if ($this->User->validates()) {
-					if (!$this->User->saveUser($data)) {
-						$ret = false;
-						break;
-					}
-				}
+			$languages = $this->Language->find('list', array(
+				'fields' => array('Language.id', 'Language.code'),
+			));
+
+			$index = 0;
+			foreach ($languages as $languageId => $languageCode) {
+				$data['UsersLanguage'][$index] = array(
+					'id' => null,
+					'language_id' => $languageId,
+				);
+				//国際化の対応時に再検討の予定
+				//if ($languageCode === Configure::read('Config.language')) {
+					$data['UsersLanguage'][$index]['name'] = $data['User']['handlename'];
+				//}
+				$index++;
 			}
 
-			if ($ret) {
-				return $this->redirect(array('action' => 'finish'));
-			} else {
+			if (! $this->User->saveUser($data)) {
 				$this->Session->setFlash(__d('install', 'The user could not be saved. Please try again.'));
+				return;
 			}
+
+			$this->redirect(array('action' => 'finish'));
 		}
 	}
 
@@ -496,18 +493,18 @@ class InstallController extends InstallAppController {
 		try {
 			$configuration = $this->request->data['DatabaseConfiguration'];
 			switch ($configuration['datasource']) {
-					case 'Database/Mysql':
-							$driver = 'mysql';
-							break;
-					case 'Database/Postgres':
-							$driver = 'pgsql';
-							break;
-							// Validation blocks following lines to be executed
-							// @codeCoverageIgnoreStart
-					default:
-							CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
-							return false;
-							// @codeCoverageIgnoreEnd
+				case 'Database/Mysql':
+					$driver = 'mysql';
+					break;
+				case 'Database/Postgres':
+					$driver = 'pgsql';
+					break;
+					// Validation blocks following lines to be executed
+					// @codeCoverageIgnoreStart
+				default:
+					CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
+					return false;
+					// @codeCoverageIgnoreEnd
 			}
 			$db = new PDO(
 				"{$driver}:host={$configuration['host']};port={$configuration['port']}",
@@ -528,22 +525,22 @@ class InstallController extends InstallAppController {
 					$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
 				}
 				switch ($configuration['datasource']) {
-						case 'Database/Mysql':
-								$db->query(
-									sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
-								);
-								break;
-						case 'Database/Postgres':
-								$db->query(
-									sprintf('CREATE DATABASE %s WITH ENCODING=\'%s\'', $database, strtoupper($encoding))
-								);
-								break;
-								// Validation blocks following lines to be executed
-								// @codeCoverageIgnoreStart
-						default:
-								CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
-								return false;
-								// @codeCoverageIgnoreEnd
+					case 'Database/Mysql':
+						$db->query(
+							sprintf('CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */', $database, $encoding)
+						);
+						break;
+					case 'Database/Postgres':
+						$db->query(
+							sprintf('CREATE DATABASE %s WITH ENCODING=\'%s\'', $database, strtoupper($encoding))
+						);
+						break;
+						// Validation blocks following lines to be executed
+						// @codeCoverageIgnoreStart
+					default:
+						CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
+						return false;
+						// @codeCoverageIgnoreEnd
 				}
 				CakeLog::info(sprintf('Database %s for %s created successfully', $database, $configuration['datasource']));
 			}
@@ -680,7 +677,6 @@ class InstallController extends InstallAppController {
 
 				CakeLog::info(sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin));
 			}
-
 		}
 
 		return true;
