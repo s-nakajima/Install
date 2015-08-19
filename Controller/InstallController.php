@@ -369,6 +369,7 @@ class InstallController extends InstallAppController {
 			$data = Hash::merge($this->request->data, [
 				'User' => [
 					'role_key' => 'system_administrator',
+					'status' => 'status_1',
 				]
 			]);
 
