@@ -47,6 +47,7 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 					'password' => 'admin',
 					'password_again' => 'admin',
 				),
+				'UsersLanguage' => array()
 			),
 		));
 		$this->assertTrue(isset($this->controller->User->validationErrors['username']));
@@ -67,6 +68,7 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 					'password' => 'admin',
 					'password_again' => 'admin',
 				),
+				'UsersLanguage' => array()
 			),
 		));
 		$this->assertEqual($this->headers['Location'], Router::url('/install/finish', true));
