@@ -45,3 +45,4 @@ netcommons/user-manager:@dev
 netcommons/user-roles:@dev
 netcommons/users:@dev
 netcommons/videos:@dev
+netcommons/workflow:@dev
