@@ -17,10 +17,10 @@ class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 /**
  * @var array fixture
  */
-	public $fixtures = array(
-		'plugin.users.user',
-		'plugin.users.users_language',
-	);
+	//public $fixtures = array(
+	//	'plugin.users.user',
+	//	'plugin.users.users_language',
+	//);
 
 /**
  * setUp
