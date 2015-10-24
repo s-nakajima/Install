@@ -15,6 +15,14 @@ App::uses('InstallController', 'Controller');
 class InstallControllerMysqlPostInitTest extends ControllerTestCase {
 
 /**
+ * @var array fixture
+ */
+	public $fixtures = array(
+		'plugin.users.user',
+		'plugin.users.users_language',
+	);
+
+/**
  * setUp
  *
  * @author   Jun Nishikawa <topaz2@m0n0m0n0.com>

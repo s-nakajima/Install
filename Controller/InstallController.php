@@ -305,7 +305,7 @@ class InstallController extends InstallAppController {
 		$this->set('masterDB', $this->chooseDBByEnvironment());
 		$this->set('errors', array());
 		if ($this->request->is('post')) {
-			$this->loadModel('DatabaseConfiguration');
+			$this->loadModel('Install.DatabaseConfiguration');
 			$this->DatabaseConfiguration->set($this->request->data);
 			if ($this->DatabaseConfiguration->validates()) {
 				// Update database connection
