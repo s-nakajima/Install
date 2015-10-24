@@ -330,7 +330,7 @@ class InstallController extends InstallAppController {
 			}
 
 			$plugins = array_unique(array_merge(
-				array('NetCommons', 'Users', 'M17n', 'DataTypes', 'PluginManager', 'Roles'),
+				array('Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager', 'Roles'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			));
@@ -378,7 +378,8 @@ class InstallController extends InstallAppController {
 			));
 
 			$index = 0;
-			foreach ($languages as $languageId => $languageCode) {
+			//foreach ($languages as $languageId => $languageCode) {
+			foreach (array_keys($languages) as $languageId) {
 				$data['UsersLanguage'][$index] = array(
 					'id' => null,
 					'language_id' => $languageId,
@@ -522,8 +523,12 @@ class InstallController extends InstallAppController {
 				} else {
 					// Remove malicious chars
 					$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
-					/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
-					$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
+					if ($configuration['datasource'] === 'Database/Mysql') {
+						$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8mb4');
+					} else {
+						/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
+						$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
+					}
 				}
 				switch ($configuration['datasource']) {
 					case 'Database/Mysql':
