@@ -367,10 +367,11 @@ class InstallController extends InstallAppController {
 			$this->Language->setDataSource('master');
 
 			$data = Hash::merge($this->request->data, [
-				'User' => [
+				'User' => array(
 					'role_key' => 'system_administrator',
-					'status' => 'status_1',
-				]
+					'status' => '1',
+					'timezone' => 'Asia/Tokyo', //後で変更予定
+				)
 			]);
 
 			$languages = $this->Language->find('list', array(
