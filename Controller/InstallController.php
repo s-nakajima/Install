@@ -330,7 +330,7 @@ class InstallController extends InstallAppController {
 			}
 
 			$plugins = array_unique(array_merge(
-				array('Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager', 'Roles'),
+				array('Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager', 'Roles'),
 				App::objects('plugins'),
 				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 			));
