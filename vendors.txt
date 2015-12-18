@@ -38,6 +38,7 @@ netcommons/room-space:@dev
 netcommons/rss-readers:@dev
 netcommons/search:@dev
 netcommons/search-boxes:@dev
+netcommons/site-manager:@dev
 netcommons/system-manager:@dev
 netcommons/tags:@dev
 netcommons/theme-settings:@dev
