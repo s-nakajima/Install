@@ -50,3 +50,4 @@ netcommons/users:@dev
 netcommons/videos:@dev
 netcommons/visual-captcha:@dev
 netcommons/workflow:@dev
+netcommons/wysiwyg:@dev
