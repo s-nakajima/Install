@@ -626,12 +626,15 @@ class InstallController extends InstallAppController {
 				$messages = array();
 				$ret = null;
 				exec(sprintf(
-					'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s',
+					'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
 					ROOT . DS . APP_DIR, DS, $plugin, $connection, $connection
 				), $messages, $ret);
 
 				// Write logs
 				if (Configure::read('debug')) {
+					// for windows
+					//mb_convert_variables('UTF-8', 'SJIS-win', $messages);
+
 					foreach ($messages as $message) {
 						CakeLog::info(sprintf('[migration]   %s', $message));
 					}
