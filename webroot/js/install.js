@@ -45,7 +45,7 @@ $(document).ready(function() {
 
     // Submit form
     $.ajax({
-      url: '/install/init_db',
+      url: $('#DatabaseConfigurationInitDbForm').attr('action'),
       type: 'post',
       data: $(this).serialize(),
       timeout: 3600000, // 1 hour
@@ -53,7 +53,9 @@ $(document).ready(function() {
       },
       success: function() {
         clearInterval(timer);
-        location.href = '/install/init_admin_user';
+        location.href = $('#DatabaseConfigurationInitDbForm')
+                          .attr('action')
+                          .replace(/init_db$/, 'init_admin_user');
       },
       error: function(xhr) {
         var dom = $.parseHTML(xhr.responseText);

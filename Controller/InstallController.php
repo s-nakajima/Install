@@ -626,8 +626,8 @@ class InstallController extends InstallAppController {
 				$messages = array();
 				$ret = null;
 				exec(sprintf(
-					'cd %s && app/Console/cake Migrations.migration run all -p %s -c %s -i %s',
-					ROOT, $plugin, $connection, $connection
+					'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s',
+					ROOT . DS . APP_DIR, DS, $plugin, $connection, $connection
 				), $messages, $ret);
 
 				// Write logs
