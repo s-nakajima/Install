@@ -199,7 +199,7 @@ class InstallController extends InstallAppController {
 		}
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
-		Configure::write('debug', 0);
+
 		parent::beforeFilter();
 	}
 
