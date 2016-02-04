@@ -305,6 +305,9 @@ class InstallController extends InstallAppController {
 		$this->set('masterDB', $this->chooseDBByEnvironment());
 		$this->set('errors', array());
 		if ($this->request->is('post')) {
+			// タイムアウトはっせいするなら適宜設定
+			// set_time_limit(1800);
+
 			$this->loadModel('DatabaseConfiguration');
 			$this->DatabaseConfiguration->set($this->request->data);
 			if ($this->DatabaseConfiguration->validates()) {
@@ -323,8 +326,10 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
+			$update = isset($this->request->data['update']);
+
 			// Install packages
-			if (!$this->__installPackages()) {
+			if ($update && !$this->__installPackages()) {
 				CakeLog::error('Failed to install dependencies');
 				return;
 			}
@@ -342,7 +347,7 @@ class InstallController extends InstallAppController {
 			}
 
 			// Install bower packages
-			if (!$this->__installBowerPackages($plugins)) {
+			if ($update && !$this->__installBowerPackages($plugins)) {
 				CakeLog::error('Failed to install bower packages');
 				return;
 			}

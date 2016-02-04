@@ -8,12 +8,20 @@
 		<?php echo $error ?>
 	</div>
 <?php endforeach; ?>
-<?php echo $this->Form->create('DatabaseConfiguration',
+<?php
+	echo $this->Form->create('DatabaseConfiguration',
 			array(
 				'url' => array(
 					'plugin' => 'install',
 					'controller' => 'install',
-					'action' => 'init_db'))) ?>
+					'action' => 'init_db'
+				)
+			)
+		);
+
+	// 配布用の場合はコメントにする
+	echo $this->Form->hidden('update', array('name' => 'update'));
+?>
 	<div class="panel panel-default">
 		<div class="panel-heading"><?php echo __d('install', 'Database Settings') ?></div>
 		<div class="panel-body">
