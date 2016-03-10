@@ -23,6 +23,7 @@ netcommons/iframes:@dev
 netcommons/likes:@dev
 netcommons/links:@dev
 netcommons/m17n:@dev
+netcommons/mails:@dev
 netcommons/menus:@dev
 netcommons/net-commons:@dev
 netcommons/notifications:@dev
