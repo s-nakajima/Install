@@ -16,7 +16,7 @@ netcommons/data-types:@dev
 netcommons/edumap:@dev
 netcommons/faqs:@dev
 netcommons/files:@dev
-netcommons/frames:@dev
+netcommons/frames:master-dev
 netcommons/groups:@dev
 netcommons/holidays:@dev
 netcommons/iframes:@dev
