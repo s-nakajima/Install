@@ -15,7 +15,7 @@ netcommons/control-panel:@dev
 netcommons/data-types:@dev
 netcommons/edumap:@dev
 netcommons/faqs:@dev
-netcommons/files:master-dev
+netcommons/files:master@dev
 netcommons/frames:@dev
 netcommons/groups:@dev
 netcommons/holidays:@dev
