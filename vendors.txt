@@ -16,7 +16,7 @@ netcommons/control-panel:@dev
 netcommons/data-types:@dev
 netcommons/edumap:@dev
 netcommons/faqs:@dev
-s-nakajima/files:@dev
+netcommons/files:@dev
 netcommons/frames:@dev
 netcommons/groups:@dev
 netcommons/holidays:@dev
