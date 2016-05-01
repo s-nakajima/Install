@@ -38,10 +38,13 @@ netcommons/roles:@dev
 netcommons/rooms:@dev
 netcommons/room-space:@dev
 netcommons/rss-readers:@dev
+netcommons/search:@dev
+netcommons/search-boxes:@dev
 netcommons/site-manager:@dev
 netcommons/system-manager:@dev
 netcommons/tags:@dev
 netcommons/theme-settings:@dev
+netcommons/topics:@dev
 netcommons/user-attributes:@dev
 netcommons/user-manager:@dev
 netcommons/user-roles:@dev
