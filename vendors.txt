@@ -8,13 +8,13 @@ netcommons/blocks:@dev
 netcommons/blogs:@dev
 netcommons/boxes:@dev
 netcommons/cabinets:@dev
+netcommons/calendars:@dev
 netcommons/categories:@dev
 netcommons/circular-notices:@dev
 netcommons/containers:@dev
 netcommons/content-comments:@dev
 netcommons/control-panel:@dev
 netcommons/data-types:@dev
-netcommons/edumap:@dev
 netcommons/faqs:@dev
 netcommons/files:@dev
 netcommons/frames:@dev
@@ -33,6 +33,7 @@ netcommons/plugin-manager:@dev
 netcommons/private-space:@dev
 netcommons/public-space:@dev
 netcommons/questionnaires:@dev
+netcommons/quizzes:@dev
 netcommons/registrations:@dev
 netcommons/roles:@dev
 netcommons/rooms:@dev
