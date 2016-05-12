@@ -200,7 +200,8 @@ class InstallController extends InstallAppController {
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
 
-		parent::beforeFilter();
+		Security::setHash('sha512');
+		//parent::beforeFilter();
 	}
 
 /**
