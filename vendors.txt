@@ -29,6 +29,7 @@ netcommons/menus:@dev
 netcommons/net-commons:@dev
 netcommons/notifications:@dev
 netcommons/pages:@dev
+netcommons/photo-albums:@dev
 netcommons/plugin-manager:@dev
 netcommons/private-space:@dev
 netcommons/public-space:@dev
