@@ -26,21 +26,6 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<?php echo $this->Form->input('handlename',
-							array(
-								'label' => __d('install', 'Handle Name'),
-								'default' => 'system_administrator',
-								'class' => 'form-control',
-								'placeholder' => __d('install', 'Handle Name'),
-								'error' => false,
-							)); ?>
-				<div class="has-error">
-					<?php echo $this->Form->error('handlename', null, array(
-							'class' => 'help-block'
-						)); ?>
-				</div>
-			</div>
-			<div class="form-group">
 				<?php echo $this->Form->input('password',
 							array(
 								'class' => 'form-control',
@@ -63,6 +48,21 @@
 							)); ?>
 				<div class="has-error">
 					<?php echo $this->Form->error('password_again', null, array(
+							'class' => 'help-block'
+						)); ?>
+				</div>
+			</div>
+			<div class="form-group">
+				<?php echo $this->Form->input('handlename',
+							array(
+								'label' => __d('install', 'Handle Name'),
+								'default' => 'system_administrator',
+								'class' => 'form-control',
+								'placeholder' => __d('install', 'Handle Name'),
+								'error' => false,
+							)); ?>
+				<div class="has-error">
+					<?php echo $this->Form->error('handlename', null, array(
 							'class' => 'help-block'
 						)); ?>
 				</div>
