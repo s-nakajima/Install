@@ -256,15 +256,6 @@ class Install {
  * @return bool
  */
 	public function installApplicationYaml($data) {
-		Configure::write('Security.salt', Security::generateAuthKey());
-		Configure::write('Security.cipherSeed', mt_rand() . mt_rand() . mt_rand() . mt_rand());
-
-		Configure::write('Config.languageEnabled', Hash::get($data, 'languageEnabled', ['en', 'ja']));
-		Configure::write('Config.language', Hash::get($data, 'language', 'ja'));
-		Configure::write('NetCommons.installed', false);
-		Configure::write('App.siteName', 'NetCommons');
-		Configure::write('App.siteDescription', 'NetCommons');
-
 		// phpDocumentor Settings
 		// Put author name to netcommons.php or netcommons.yaml
 		/* $author = 'Noriko Arai, Ryuji Masukawa'; */
@@ -278,6 +269,13 @@ class Install {
 EOF;
 
 		Configure::write('PhpDocumentor.classHeader', $header);
+
+		Configure::write('Security.salt', Security::generateAuthKey());
+		Configure::write('Security.cipherSeed', mt_rand() . mt_rand() . mt_rand() . mt_rand());
+
+		Configure::write('Config.languageEnabled', Hash::get($data, 'languageEnabled', ['en', 'ja']));
+		Configure::write('Config.language', Hash::get($data, 'language', 'ja'));
+		Configure::write('NetCommons.installed', false);
 
 		return $this->saveAppConf();
 	}

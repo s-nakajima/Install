@@ -156,10 +156,11 @@ class InstallController extends InstallAppController {
 			$update = isset($this->request->data['update']);
 
 			// Install packages
-			if (!$this->Install->installPackages($update)) {
-				CakeLog::error('Failed to install dependencies');
-				return;
-			}
+			// compser install(update)で依存関係を含み取得する際、全プラグインを落としてくるため不要
+			//if (!$this->Install->installPackages($update)) {
+			//	CakeLog::error('Failed to install dependencies');
+			//	return;
+			//}
 
 			// Install migrations
 			if (!$this->Install->installMigrations('master')) {
