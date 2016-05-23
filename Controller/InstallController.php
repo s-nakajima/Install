@@ -154,7 +154,6 @@ class InstallController extends InstallAppController {
 			}
 
 			$update = isset($this->request->data['update']);
-			$update = true;
 
 			// Install packages
 			if (!$this->Install->installPackages($update)) {
