@@ -2,6 +2,7 @@
 /**
  * Install Controller
  *
+ * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
@@ -26,9 +27,8 @@ class InstallController extends InstallAppController {
 /**
  * beforeFilter
  *
- * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
- * @throws NotFoundException
  * @return void
+ * @throws NotFoundException
  **/
 	public function beforeFilter() {
 		if (Configure::read('NetCommons.installed')) {
@@ -181,8 +181,8 @@ class InstallController extends InstallAppController {
 	}
 
 /**
- * Step 4
- * Initialize administrator account
+ * ステップ 4
+ * 管理者アカウントの登録
  *
  * @return void
  */
@@ -200,8 +200,8 @@ class InstallController extends InstallAppController {
 	}
 
 /**
- * Step 5
- * Last page of installation
+ * ステップ 5
+ * インストール終了
  *
  * @return void
  **/

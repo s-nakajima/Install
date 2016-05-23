@@ -1,17 +1,20 @@
 <?php
 /**
- * Install App Controller
+ * InstallApp Controller
+ *
+ * @author Noriko Arai <arai@nii.ac.jp>
+ * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
  */
 
 App::uses('AppController', 'Controller');
 
 /**
- * Install App Controller
+ * InstallApp Controller
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @package NetCommons\Install\Controlelr
  */
 class InstallAppController extends AppController {
 }
