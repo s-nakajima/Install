@@ -9,7 +9,7 @@
  */
 
 App::uses('InstallAppController', 'Install.Controller');
-App::uses('Install', 'Install.Utility');
+App::uses('InstallUtil', 'Install.Utility');
 
 /**
  * Install Controller
@@ -37,7 +37,7 @@ class InstallController extends InstallAppController {
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
 
-		$this->Install = new Install();
+		$this->InstallUtil = new InstallUtil();
 	}
 
 /**
@@ -48,8 +48,8 @@ class InstallController extends InstallAppController {
  **/
 	public function index() {
 		// Initialize master database connection
-		$configs = $this->Install->chooseDBByEnvironment();
-		if (! $this->Install->saveDBConf($configs)) {
+		$configs = $this->InstallUtil->chooseDBByEnvironment();
+		if (! $this->InstallUtil->saveDBConf($configs)) {
 			$message = __d(
 				'install',
 				'Failed to write %s. Please check permission.',
@@ -59,7 +59,7 @@ class InstallController extends InstallAppController {
 			return;
 		}
 
-		if (! $this->Install->installApplicationYaml($this->request->query)) {
+		if (! $this->InstallUtil->installApplicationYaml($this->request->query)) {
 			$message = __d(
 				'install',
 				'Failed to write %s. Please check permission.',
@@ -97,7 +97,9 @@ class InstallController extends InstallAppController {
 			} else {
 				$ret = false;
 				$permissions[] = array(
-					'message' => __d('install', 'Failed to write %s. Please check permission.', array($path)),
+					'message' => __d(
+						'install', 'Failed to write %s. Please check permission.', array($path)
+					),
 					'error' => true,
 				);
 			}
@@ -129,7 +131,7 @@ class InstallController extends InstallAppController {
 		// Destroy session in order to handle ping request
 		$this->Session->destroy();
 
-		$this->set('masterDB', $this->Install->chooseDBByEnvironment());
+		$this->set('masterDB', $this->InstallUtil->chooseDBByEnvironment());
 		$this->set('errors', array());
 		if ($this->request->is('post')) {
 			// タイムアウトはっせいするなら適宜設定
@@ -139,7 +141,7 @@ class InstallController extends InstallAppController {
 			$this->DatabaseConfiguration->set($this->request->data);
 			if ($this->DatabaseConfiguration->validates()) {
 				// Update database connection
-				$this->Install->saveDBConf($this->request->data['DatabaseConfiguration']);
+				$this->InstallUtil->saveDBConf($this->request->data['DatabaseConfiguration']);
 			} else {
 				$this->response->statusCode(400);
 				CakeLog::info(sprintf('Validation error: %s',
@@ -147,7 +149,7 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			if (!$this->Install->createDB($this->request->data['DatabaseConfiguration'])) {
+			if (!$this->InstallUtil->createDB($this->request->data['DatabaseConfiguration'])) {
 				$this->response->statusCode(400);
 				CakeLog::info('Failed to create database');
 				return;
@@ -157,19 +159,19 @@ class InstallController extends InstallAppController {
 
 			// Install packages
 			// compser install(update)で依存関係を含み取得する際、全プラグインを落としてくるため不要
-			//if (!$this->Install->installPackages($update)) {
+			//if (!$this->InstallUtil->installPackages($update)) {
 			//	CakeLog::error('Failed to install dependencies');
 			//	return;
 			//}
 
 			// Install migrations
-			if (!$this->Install->installMigrations('master')) {
+			if (!$this->InstallUtil->installMigrations('master')) {
 				CakeLog::error('Failed to install migrations');
 				return;
 			}
 
 			// Install bower packages
-			if (!$this->Install->installBowerPackages($update)) {
+			if (!$this->InstallUtil->installBowerPackages($update)) {
 				CakeLog::error('Failed to install bower packages');
 				return;
 			}
@@ -186,7 +188,7 @@ class InstallController extends InstallAppController {
  */
 	public function init_admin_user() {
 		if ($this->request->is('post')) {
-			if (! $this->Install->saveAdminUser($this->request->data)) {
+			if (! $this->InstallUtil->saveAdminUser($this->request->data)) {
 				$this->Session->setFlash(
 					__d('install', 'The user could not be saved. Please try again.')
 				);
@@ -206,7 +208,7 @@ class InstallController extends InstallAppController {
 	public function finish() {
 		Configure::write('NetCommons.installed', true);
 		/* Configure::write('NetCommons.installed', false); */
-		$this->Install->saveAppConf();
+		$this->InstallUtil->saveAppConf();
 	}
 
 }

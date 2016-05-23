@@ -19,7 +19,7 @@ App::uses('File', 'Utility');
  * @package NetCommons\Install\Utility
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Install {
+class InstallUtil {
 
 /**
  * Master configuration
