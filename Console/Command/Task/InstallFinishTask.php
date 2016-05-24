@@ -10,6 +10,7 @@
  */
 
 App::uses('InstallAppTask', 'Install.Console/Command');
+App::uses('Folder', 'Utility');
 
 /**
  * Installの終了
@@ -25,6 +26,13 @@ class InstallFinishTask extends InstallAppTask {
  * @var string
  */
 	const KEY_APACHE_OWNER = 'owner';
+
+/**
+ * releaseのオプションKEY
+ *
+ * @var string
+ */
+	const KEY_RELEASE = 'release';
 
 /**
  * Execution method always used for tasks
@@ -51,8 +59,21 @@ class InstallFinishTask extends InstallAppTask {
 				exec($cmd, $messages, $ret);
 			}
 		}
+		if (array_key_exists(self::KEY_RELEASE, $this->params)) {
+			$path = ROOT . DS . 'app' . DS . 'Plugin' . DS;
+			$plugins = array_unique(array_merge(
+				App::objects('plugins'), array_map('basename', glob($path . '*', GLOB_ONLYDIR))
+			));
 
-		Configure::write('NetCommons.installed', true);
+			$folder = new Folder();
+			foreach ($plugins as $plugin) {
+				$folder->delete($path . $plugin . DS . '.git');
+			}
+			$folder->delete(ROOT . DS . '.git');
+			$folder->delete(ROOT . DS . '.chef');
+		}
+
+		//Configure::write('NetCommons.installed', true);
 		$this->InstallUtil->saveAppConf();
 	}
 
@@ -67,6 +88,10 @@ class InstallFinishTask extends InstallAppTask {
 		$parser->description(__d('install', 'NetCommons Install End'))
 			->addOption(self::KEY_APACHE_OWNER, array(
 				'help' => __d('install', 'Apache owner'),
+				'required' => false
+			))
+			->addOption(self::KEY_RELEASE, array(
+				'help' => __d('install', 'Release type. Deleting ".git" and ".chef" directory'),
 				'required' => false
 			));
 
