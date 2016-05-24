@@ -11,6 +11,7 @@
 
 App::uses('CakePlugin', 'Core');
 App::uses('File', 'Utility');
+App::uses('Current', 'NetCommons.Utility');
 
 /**
  * Install Utility

@@ -64,10 +64,10 @@ class SaveAdministratorTask extends InstallAppTask {
 
 		// * login
 		if (array_key_exists(self::KEY_USERNAME, $this->params)) {
-			$data[self::KEY_USERNAME] = Hash::get($this->params, self::KEY_USERNAME);
+			$data['User'][self::KEY_USERNAME] = Hash::get($this->params, self::KEY_USERNAME);
 		} else {
 			$data['User'][self::KEY_USERNAME] = $this->in(
-				__d('install', 'Login id?')
+				__d('install', 'NetCommons Login id?')
 			);
 		}
 
@@ -76,7 +76,7 @@ class SaveAdministratorTask extends InstallAppTask {
 			$data['User'][self::KEY_PASSWORD] = Hash::get($this->params, self::KEY_PASSWORD);
 		} else {
 			$data['User'][self::KEY_PASSWORD] = $this->in(
-				__d('install', 'Password?')
+				__d('install', 'NetCommons Login password?')
 			);
 		}
 		$data['User'][self::KEY_PASSWORD . '_again'] = $data['User'][self::KEY_PASSWORD];
@@ -85,6 +85,7 @@ class SaveAdministratorTask extends InstallAppTask {
 		$data['User'][self::KEY_HANDLENAME] = __d('install', 'System administrator');
 
 		//アカウント作成
+		debug($data);
 		if (! $this->InstallUtil->saveAdminUser($data)) {
 			return $this->error(__d('install', 'The user could not be saved. Please try again.'));
 		}

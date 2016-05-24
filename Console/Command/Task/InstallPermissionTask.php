@@ -27,17 +27,6 @@ class InstallPermissionTask extends InstallAppTask {
 	const KEY_APACHE_OWNER = 'owner';
 
 /**
- * Override startup
- *
- * @return void
- */
-	public function startup() {
-		$this->hr();
-		$this->out(__d('install', 'NetCommons Install Step 2'));
-		$this->hr();
-	}
-
-/**
  * Execution method always used for tasks
  *
  * @return void

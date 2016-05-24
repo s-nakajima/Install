@@ -20,17 +20,6 @@ App::uses('InstallAppTask', 'Install.Console/Command');
 class InstallBowerTask extends InstallAppTask {
 
 /**
- * Override startup
- *
- * @return void
- */
-	public function startup() {
-		$this->hr();
-		$this->out(__d('install', 'NetCommons Install Step 5'));
-		$this->hr();
-	}
-
-/**
  * Execution method always used for tasks
  *
  * @return void

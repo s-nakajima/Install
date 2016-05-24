@@ -69,17 +69,6 @@ class CreateDatabaseTask extends InstallAppTask {
 	const KEY_PASSWORD = 'password';
 
 /**
- * Override startup
- *
- * @return void
- */
-	public function startup() {
-		$this->hr();
-		$this->out(__d('install', 'NetCommons Install Step 3'));
-		$this->hr();
-	}
-
-/**
  * Execution method always used for tasks
  *
  * @return void

@@ -70,6 +70,7 @@ class InstallShell extends AppShell {
 				$this->SaveAdministrator->execute();
 				$this->InstallFinish->execute();
 
+				$this->out('<success>' . __d('install', 'Install success.') . '</success>');
 				return $this->_stop();
 			case 'q':
 				return $this->_stop();

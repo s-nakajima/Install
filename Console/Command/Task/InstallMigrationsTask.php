@@ -27,17 +27,6 @@ class InstallMigrationsTask extends InstallAppTask {
 	const KEY_CONNECTION = 'connection';
 
 /**
- * Override startup
- *
- * @return void
- */
-	public function startup() {
-		$this->hr();
-		$this->out(__d('install', 'NetCommons Install Step 4'));
-		$this->hr();
-	}
-
-/**
  * Execution method always used for tasks
  *
  * @return void

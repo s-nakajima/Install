@@ -41,17 +41,6 @@ class InstallStartTask extends InstallAppTask {
 	const KEY_ENABLE_LANGUAGES = 'enable-langs';
 
 /**
- * Override startup
- *
- * @return void
- */
-	public function startup() {
-		$this->hr();
-		$this->out(__d('install', 'NetCommons Install Step 1'));
-		$this->hr();
-	}
-
-/**
  * Execution method always used for tasks
  *
  * @return void
