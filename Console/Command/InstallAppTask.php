@@ -27,9 +27,5 @@ class InstallAppTask extends AppShell {
  */
 	public function execute() {
 		$this->InstallUtil = new InstallUtil();
-
-		if (Configure::read('NetCommons.installed')) {
-			return $this->error(__d('install', 'Already installed.'));
-		}
 	}
 }
