@@ -85,7 +85,6 @@ class SaveAdministratorTask extends InstallAppTask {
 		$data['User'][self::KEY_HANDLENAME] = __d('install', 'System administrator');
 
 		//アカウント作成
-		debug($data);
 		if (! $this->InstallUtil->saveAdminUser($data)) {
 			return $this->error(__d('install', 'The user could not be saved. Please try again.'));
 		}
