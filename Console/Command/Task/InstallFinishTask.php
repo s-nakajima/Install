@@ -73,7 +73,7 @@ class InstallFinishTask extends InstallAppTask {
 			$folder->delete(ROOT . DS . '.chef');
 		}
 
-		//Configure::write('NetCommons.installed', true);
+		Configure::write('NetCommons.installed', true);
 		$this->InstallUtil->saveAppConf();
 	}
 
