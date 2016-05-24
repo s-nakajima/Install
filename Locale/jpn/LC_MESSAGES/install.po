@@ -143,6 +143,9 @@ msgstr "ログインID"
 msgid "Handle Name"
 msgstr "ハンドル名"
 
+msgid "System administrator"
+msgstr "システム管理者"
+
 #: View/Install/init_db.ctp:31
 msgid "Password"
 msgstr "パスワード"
