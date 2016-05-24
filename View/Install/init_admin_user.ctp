@@ -56,7 +56,7 @@
 				<?php echo $this->Form->input('handlename',
 							array(
 								'label' => __d('install', 'Handle Name'),
-								'default' => 'system_administrator',
+								'default' => __d('install', 'System administrator'),
 								'class' => 'form-control',
 								'placeholder' => __d('install', 'Handle Name'),
 								'error' => false,

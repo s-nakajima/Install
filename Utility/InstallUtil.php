@@ -172,6 +172,34 @@ class InstallUtil {
  */
 	public function __construct() {
 		Security::setHash('sha512');
+
+		//デフォルトの言語
+		Configure::write('Config.language', 'ja');
+
+		// Initialize application configurations
+		if (Configure::read('Security.salt') === 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi' ||
+			Configure::read('Security.cipherSeed') === '76859309657453542496749683645') {
+			App::uses('File', 'Utility');
+			App::uses('Security', 'Utility');
+			Configure::write('Security.salt', Security::generateAuthKey());
+			Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
+		}
+	}
+
+/**
+ * Apply array_filter() recursively
+ *
+ * @param mixed $input input value
+ * @param callback $callback callback
+ * @return void
+ */
+	private function __arrayFilterRecursive($input, $callback = null) {
+		foreach ($input as &$value) {
+			if (is_array($value)) {
+				$value = $this->__arrayFilterRecursive($value, $callback);
+			}
+		}
+		return array_filter($input, $callback);
 	}
 
 /**
@@ -181,7 +209,14 @@ class InstallUtil {
  */
 	public function saveAppConf() {
 		$file = new File(APP . 'Config' . DS . 'application.yml', true);
-		$conf = Configure::read();
+		$conf = $this->__arrayFilterRecursive(Configure::read(), function ($val) {
+			return !is_object($val);
+		});
+
+		//不要な設定値削除
+		$conf = Hash::remove($conf, 'Error.consoleHandler');
+		$conf = Hash::remove($conf, 'Exception.consoleHandler');
+
 		return $file->write(Spyc::YAMLDump($conf));
 	}
 
