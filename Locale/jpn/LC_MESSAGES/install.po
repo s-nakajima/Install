@@ -16,7 +16,7 @@ msgstr ""
 
 #: Controller/InstallController.php:54
 msgid "Failed to write %s. Please check permission."
-msgstr "%s に書き込みができません。パーミッションを確認して下さい。"
+msgstr "%s に書き込みができません。パーミッションを確認してください。"
 
 #: Controller/InstallController.php:120;132
 msgid "%s is writable"
@@ -24,7 +24,7 @@ msgstr "%s 書き込み可"
 
 #: Controller/InstallController.php:160
 msgid "The user could not be saved. Please try again."
-msgstr "ユーザを保存できませんでした。暫くしてから再度お試し下さい。"
+msgstr "ユーザを保存できませんでした。暫くしてから再度お試しください。"
 
 #: View/Install/finish.ctp:2
 msgid "Installed"
