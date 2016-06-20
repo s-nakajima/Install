@@ -171,10 +171,10 @@ class InstallController extends InstallAppController {
 			}
 
 			// Install bower packages
-			if (!$this->InstallUtil->installBowerPackages($update)) {
-				CakeLog::error('Failed to install bower packages');
-				return;
-			}
+			//if (!$this->InstallUtil->installBowerPackages($update)) {
+			//	CakeLog::error('Failed to install bower packages');
+			//	return;
+			//}
 
 			$this->redirect(array('action' => 'init_admin_user'));
 		}
