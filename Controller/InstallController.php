@@ -155,7 +155,7 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			$update = isset($this->request->data['update']);
+			//$update = isset($this->request->data['update']);
 
 			// Install packages
 			// compser install(update)で依存関係を含み取得する際、全プラグインを落としてくるため不要
