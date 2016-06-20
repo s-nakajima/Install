@@ -155,7 +155,7 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			$update = isset($this->request->data['update']);
+			//$update = isset($this->request->data['update']);
 
 			// Install packages
 			// compser install(update)で依存関係を含み取得する際、全プラグインを落としてくるため不要
@@ -171,10 +171,10 @@ class InstallController extends InstallAppController {
 			}
 
 			// Install bower packages
-			if (!$this->InstallUtil->installBowerPackages($update)) {
-				CakeLog::error('Failed to install bower packages');
-				return;
-			}
+			//if (!$this->InstallUtil->installBowerPackages($update)) {
+			//	CakeLog::error('Failed to install bower packages');
+			//	return;
+			//}
 
 			$this->redirect(array('action' => 'init_admin_user'));
 		}
