@@ -436,56 +436,6 @@ EOF;
 	}
 
 /**
- * composer packagesのインストール
- *
- * @param boot $update 更新かどうか。Trueの場合、処理しない
- * @return bool Install succeed or not
- **/
-	public function installPackages($update) {
-		if ($update) {
-			return true;
-		}
-
-		// Use hhvm only if php version greater than 5.5.0 and hhvm installed
-		// @see https://github.com/facebook/hhvm/wiki/OSS-PHP-Frameworks-Unit-Testing
-		$gt55 = version_compare(phpversion(), '5.5.0', '>=');
-		exec('which hhvm', $messages, $ret);
-		$hhvm = ($gt55 && $ret === 0) ? 'hhvm -vRepo.Central.Path=/var/run/hhvm/hhvm.hhbc' : '';
-
-		$file = new File(CakePlugin::path(Inflector::camelize('install')) . 'vendors.txt');
-		$plugins = explode(chr(10), trim($file->read()));
-		$file->close();
-
-		foreach ($plugins as $plugin) {
-			CakeLog::info(sprintf('[composer] Start composer install %s', $plugin));
-
-			$messages = array();
-			$ret = null;
-			$cmd = sprintf(
-				'export COMPOSER_HOME=%s && cd %s && %s `which composer` require %s 2>&1',
-				ROOT, ROOT, $hhvm, $plugin
-			);
-			exec($cmd, $messages, $ret);
-
-			// Write logs
-			if (Configure::read('debug') || $ret !== 0) {
-				foreach ($messages as $message) {
-					CakeLog::info(sprintf('[composer]   %s', $message));
-				}
-			}
-			if ($ret !== 0) {
-				$this->response->statusCode(500);
-				$this->set('errors', array_merge($this->viewVars['errors'], $messages));
-				return false;
-			}
-
-			CakeLog::info(sprintf('[composer] Successfully composer install %s', $plugin));
-		}
-
-		return true;
-	}
-
-/**
  * マイグレーション実行
  *
  * @param string $connection 接続先
@@ -517,14 +467,7 @@ EOF;
 			), $messages, $ret);
 
 			// Write logs
-			if (Configure::read('debug')) {
-				// for windows
-				//mb_convert_variables('UTF-8', 'SJIS-win', $messages);
-
-				foreach ($messages as $message) {
-					CakeLog::info(sprintf('[migration]   %s', $message));
-				}
-			}
+			$this->__commandOutputResults('migration', $messages);
 
 			CakeLog::info(
 				sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
@@ -556,6 +499,8 @@ EOF;
 			array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 		));
 
+		$this->__installRootBower();
+
 		foreach ($plugins as $plugin) {
 			$pluginPath = ROOT . DS . 'app' . DS . 'Plugin' . DS . Inflector::camelize($plugin) . DS;
 			if (! file_exists($pluginPath . 'bower.json')) {
@@ -579,11 +524,7 @@ EOF;
 				), $messages, $ret);
 
 				// Write logs
-				if (Configure::read('debug')) {
-					foreach ($messages as $message) {
-						CakeLog::info(sprintf('[bower]   %s', $message));
-					}
-				}
+				$this->__commandOutputResults('bower', $messages);
 
 				CakeLog::info(
 					sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin)
@@ -592,6 +533,49 @@ EOF;
 		}
 
 		return true;
+	}
+
+/**
+ * bower packagesのインストール
+ *
+ * @return bool Install succeed or not
+ */
+	private function __installRootBower() {
+		CakeLog::info(
+			sprintf('[bower] Start bower update for %s', ROOT)
+		);
+
+		$messages = array();
+		$ret = null;
+		exec(sprintf(
+			'cd %s && `which bower` --allow-root update',
+			ROOT
+		), $messages, $ret);
+
+		// Write logs
+		$this->__commandOutputResults('bower', $messages);
+
+		CakeLog::info(
+			sprintf('[bower] Successfully bower update for %s', ROOT)
+		);
+
+		return true;
+	}
+
+/**
+ * コマンド実行結果をログ委に出力
+ *
+ * @param string $type タイプ `bower` or `migration`
+ * @param array $messages コマンド実行結果
+ * @return void
+ */
+	private function __commandOutputResults($type, $messages) {
+		// Write logs
+		if (Configure::read('debug')) {
+			foreach ($messages as $message) {
+				CakeLog::info(sprintf('[' . $type . ']   %s', $message));
+			}
+		}
 	}
 
 }
