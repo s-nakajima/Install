@@ -601,7 +601,7 @@ EOF;
  *
  * @return bool Install succeed or not
  */
-	public function __installRootBower() {
+	private function __installRootBower() {
 		CakeLog::info(
 			sprintf('[bower] Start bower update for %s', ROOT)
 		);
