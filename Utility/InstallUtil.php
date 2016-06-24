@@ -556,6 +556,26 @@ EOF;
 			array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 		));
 
+		CakeLog::info(
+			sprintf('[bower] Start bower update for %s', ROOT)
+		);
+		$messages = array();
+		$ret = null;
+		exec(sprintf(
+			'cd %s && `which bower` --allow-root update',
+			ROOT
+		), $messages, $ret);
+
+		// Write logs
+		if (Configure::read('debug')) {
+			foreach ($messages as $message) {
+				CakeLog::info(sprintf('[bower]   %s', $message));
+			}
+		}
+		CakeLog::info(
+			sprintf('[bower] Successfully bower update for %s', ROOT)
+		);
+
 		foreach ($plugins as $plugin) {
 			$pluginPath = ROOT . DS . 'app' . DS . 'Plugin' . DS . Inflector::camelize($plugin) . DS;
 			if (! file_exists($pluginPath . 'bower.json')) {
