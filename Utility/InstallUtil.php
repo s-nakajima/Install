@@ -556,25 +556,7 @@ EOF;
 			array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
 		));
 
-		CakeLog::info(
-			sprintf('[bower] Start bower update for %s', ROOT)
-		);
-		$messages = array();
-		$ret = null;
-		exec(sprintf(
-			'cd %s && `which bower` --allow-root update',
-			ROOT
-		), $messages, $ret);
-
-		// Write logs
-		if (Configure::read('debug')) {
-			foreach ($messages as $message) {
-				CakeLog::info(sprintf('[bower]   %s', $message));
-			}
-		}
-		CakeLog::info(
-			sprintf('[bower] Successfully bower update for %s', ROOT)
-		);
+		$this->__installRootBower();
 
 		foreach ($plugins as $plugin) {
 			$pluginPath = ROOT . DS . 'app' . DS . 'Plugin' . DS . Inflector::camelize($plugin) . DS;
@@ -610,6 +592,36 @@ EOF;
 				);
 			}
 		}
+
+		return true;
+	}
+
+/**
+ * bower packagesのインストール
+ *
+ * @return bool Install succeed or not
+ */
+	public function __installRootBower() {
+		CakeLog::info(
+			sprintf('[bower] Start bower update for %s', ROOT)
+		);
+
+		$messages = array();
+		$ret = null;
+		exec(sprintf(
+			'cd %s && `which bower` --allow-root update',
+			ROOT
+		), $messages, $ret);
+
+		// Write logs
+		if (Configure::read('debug')) {
+			foreach ($messages as $message) {
+				CakeLog::info(sprintf('[bower]   %s', $message));
+			}
+		}
+		CakeLog::info(
+			sprintf('[bower] Successfully bower update for %s', ROOT)
+		);
 
 		return true;
 	}
