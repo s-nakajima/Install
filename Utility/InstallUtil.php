@@ -481,7 +481,7 @@ EOF;
 			$ret = null;
 			exec(sprintf(
 				'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
-				ROOT . DS . APP_DIR, DS, $plugin, $connection, $connection
+				ROOT . DS . APP_DIR, DS, escapeshellcmd($plugin), $connection, $connection
 			), $messages, $ret);
 
 			// Write logs
@@ -538,7 +538,7 @@ EOF;
 				$ret = null;
 				exec(sprintf(
 					'cd %s && `which bower` --allow-root install %s#%s --save',
-					ROOT, $package, $version
+					ROOT, escapeshellcmd($package), escapeshellcmd($version)
 				), $messages, $ret);
 
 				// Write logs
