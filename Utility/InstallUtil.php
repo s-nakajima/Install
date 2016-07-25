@@ -463,7 +463,7 @@ EOF;
 		$plugins = array_unique(array_merge(
 			array(
 				'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
-				'Roles', 'Mails', 'SiteManager'
+				'Roles', 'Mails', 'SiteManager', 'Blocks'
 			),
 			App::objects('plugins'),
 			array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
