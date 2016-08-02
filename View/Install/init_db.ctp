@@ -39,16 +39,17 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 	<div class="panel panel-default">
 		<div class="panel-heading"><?php echo __d('install', 'Database Settings'); ?></div>
 		<div class="panel-body">
-			<label class="datasource"><?php echo __d('install', 'Datasource'); ?></label>
-			<div class="form-group">
-				<?php echo $this->Form->select('datasource',
+			<div class="form-group form-inline">
+				<?php echo $this->Form->input('datasource',
 						array(
-							'Database/Mysql' => 'Mysql',
-							'Database/Postgres' => 'Postgresql'
-						),
-						array(
+							'type' => 'select',
+							'options' => array(
+								'Database/Mysql' => 'Mysql',
+								//'Database/Postgres' => 'Postgresql'
+							),
 							'empty' => false,
-							'class' => ''
+							'class' => 'form-control',
+							'label' => array('text' => __d('install', 'Datasource'), 'style' => 'margin-right: 8px;')
 						)
 					); ?>
 			</div>
