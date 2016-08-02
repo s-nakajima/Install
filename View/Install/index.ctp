@@ -1,12 +1,21 @@
-<?php echo $this->element('scripts'); ?>
-<?php echo $this->Form->create(false,
-				array(
-					'url' => array(
-						'plugin' => 'install',
-						'controller' => 'install',
-						'action' => 'index'))) ?>
+<?php
+/**
+ * 利用規約
+ *
+ * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+
+echo $this->NetCommonsHtml->script('/install/js/install.js');
+echo $this->NetCommonsHtml->css('/install/css/install.css');
+?>
+
+<?php echo $this->Form->create(false, array('url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'index'))); ?>
+
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo __d('install', 'Term') ?></div>
+		<div class="panel-heading"><?php echo __d('install', 'Term'); ?></div>
 		<div class="panel-body">
 			<div class="form-group">
 				<?php echo $this->M17n->languages('language', array(
@@ -43,10 +52,13 @@ This site is not responsible for damage (direct or indirect) to user
 that is caused by, is resulted from the connection of, the usage of
 this site, contents related to this site, services from links stemming
 from this site, etc.'),
-							'class' => 'form-control')) ?>
+							'class' => 'form-control')); ?>
 			</div>
 		</div>
 	</div>
-	<p><?php echo __d('install', 'By clicking the button, you agree to the terms above.')?></p>
-	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __d('install', 'Next') ?></button>
+
+	<p><?php echo __d('install', 'By clicking the button, you agree to the terms above.'); ?></p>
+
+	<button class="btn btn-lg btn-primary btn-block" type="submit">
+		<?php echo __d('install', 'Next'); ?></button>
 <?php echo $this->Form->end();
