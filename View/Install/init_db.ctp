@@ -1,86 +1,116 @@
-<?php echo $this->element('scripts') ?>
+<?php
+/**
+ * データベース設定
+ *
+ * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+
+echo $this->NetCommonsHtml->script('/install/js/install.js');
+echo $this->NetCommonsHtml->css('/install/css/install.css');
+?>
+
 <div class="loader hidden text-center">
-	<?php echo $this->Html->image('/net_commons/img/loader.gif', array('plugin' => false)) ?>
+	<?php echo $this->Html->image('/net_commons/img/loader.gif', array('plugin' => false)); ?>
 </div>
+
 <?php foreach ($errors as $error): ?>
 	<div class="alert alert-danger alert-dismissable">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<?php echo $error ?>
+		<?php echo $error; ?>
 	</div>
 <?php endforeach; ?>
 <?php
 	echo $this->Form->create('DatabaseConfiguration',
-			array(
-				'url' => array(
-					'plugin' => 'install',
-					'controller' => 'install',
-					'action' => 'init_db'
-				)
+		array(
+			'url' => array(
+				'plugin' => 'install',
+				'controller' => 'install',
+				'action' => 'init_db'
 			)
-		);
+		)
+	);
 
 	// 配布用の場合はコメントにする
 	echo $this->Form->hidden('update', array('name' => 'update'));
 ?>
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo __d('install', 'Database Settings') ?></div>
+		<div class="panel-heading"><?php echo __d('install', 'Database Settings'); ?></div>
 		<div class="panel-body">
-			<label class="datasource"><?php echo __d('install', 'Datasource') ?></label>
+			<label class="datasource"><?php echo __d('install', 'Datasource'); ?></label>
 			<div class="form-group">
 				<?php echo $this->Form->select('datasource',
-							array(
-								'Database/Mysql' => 'Mysql',
-								'Database/Postgres' => 'Postgresql'),
-							array(
-								'empty' => false,
-								'class' => '')) ?>
+						array(
+							'Database/Mysql' => 'Mysql',
+							'Database/Postgres' => 'Postgresql'
+						),
+						array(
+							'empty' => false,
+							'class' => ''
+						)
+					); ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('host',
-							array(
-								'default' => $masterDB['host'],
-								'class' => 'form-control')) ?>
+						array(
+							'default' => $masterDB['host'],
+							'class' => 'form-control'
+						)
+					); ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('port',
-							array(
-								'default' => $masterDB['port'],
-								'class' => 'form-control')) ?>
+						array(
+							'default' => $masterDB['port'],
+							'class' => 'form-control'
+						)
+					); ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('database',
-							array(
-								'default' => 'nc3',
-								'class' => 'form-control')) ?>
+						array(
+							'default' => 'nc3',
+							'class' => 'form-control'
+						)
+					); ?>
 			</div>
-			<div class="form-group <?php echo isset($this->request->data['datasource']) && $this->request->data['datasource'] === 'Database/Postgres' ? '' : 'none' ?>">
+			<div class="form-group<?php echo isset($this->request->data['datasource']) && $this->request->data['datasource'] === 'Database/Postgres' ? '' : ' none'; ?>">
 				<?php echo $this->Form->input('schema',
-							array(
-								'default' => 'public',
-								'class' => 'form-control')) ?>
+						array(
+							'default' => 'public',
+							'class' => 'form-control'
+						)
+					); ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('prefix',
-							array(
-								'placeholder' => 'nc3_',
-								'class' => 'form-control')) ?>
+						array(
+							'placeholder' => 'nc3_',
+							'class' => 'form-control'
+						)
+					); ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('login',
-							array(
-								'label' => __d('install', 'ID'),
-								'class' => 'form-control',
-								'default' => $masterDB['login'],
-								'placeholder' => __d('install', 'Username'))) ?>
+						array(
+							'label' => __d('install', 'ID'),
+							'class' => 'form-control',
+							'default' => $masterDB['login'],
+							'placeholder' => __d('install', 'Username')
+						)
+					); ?>
 			</div>
 			<div class="form-group">
 				<?php echo $this->Form->input('password',
-							array(
-								'class' => 'form-control',
-								'placeholder' => __d('install', 'Password')
-							)) ?>
+						array(
+							'class' => 'form-control',
+							'placeholder' => __d('install', 'Password')
+						)
+					); ?>
 			</div>
 		</div>
 	</div>
-	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __d('install', 'Next') ?></button>
+	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __d('install', 'Next'); ?></button>
 <?php echo $this->Form->end();

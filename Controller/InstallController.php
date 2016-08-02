@@ -89,7 +89,7 @@ class InstallController extends InstallAppController {
 		// Actually we don't have to check app/Config and app/tmp here,
 		// since cakephp itself cannot handle requests w/o these directories with proper permission.
 		// Just a stub action for future release.
-		$writables = [APP . 'Config', APP . 'tmp', ROOT . DS . 'composer.json', ROOT . DS . 'bower.json'];
+		$writables = [APP . 'Config', APP . 'tmp'];
 		foreach ($writables as $path) {
 			if (is_writable($path)) {
 				$permissions[] = array(
@@ -140,6 +140,10 @@ class InstallController extends InstallAppController {
 			// set_time_limit(1800);
 
 			$this->loadModel('Install.DatabaseConfiguration');
+
+			if (substr($this->request->data['DatabaseConfiguration']['prefix'], -1, 1) !== '_') {
+				$this->request->data['DatabaseConfiguration']['prefix'] .= '_';
+			}
 			$this->DatabaseConfiguration->set($this->request->data);
 			if ($this->DatabaseConfiguration->validates()) {
 				// Update database connection
