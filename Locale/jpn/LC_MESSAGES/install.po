@@ -14,6 +14,10 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: Poedit 1.7.5\n"
 
+#: Controller/InstallController.php:120;132
+msgid "Install"
+msgstr "インストール"
+
 #: Controller/InstallController.php:54
 msgid "Failed to write %s. Please check permission."
 msgstr "%s に書き込みができません。パーミッションを確認してください。"
@@ -158,7 +162,7 @@ msgstr "管理者ユーザ作成"
 
 #: View/Install/init_permission.ctp:8
 msgid "Permissions"
-msgstr "パーミッション"
+msgstr "パーミッションチェック"
 
 #: Model/Archive.php:validation for field parent_model_name;validation
 #: model_name;validation title;validation content;validation
