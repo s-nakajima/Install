@@ -41,6 +41,7 @@
         "netcommons/searches": "dev-master",
         "netcommons/site-manager": "dev-master",
         "netcommons/system-manager": "dev-master",
+        "netcommons/tasks": "dev-master",
         "netcommons/topics": "dev-master",
         "netcommons/user-attributes": "dev-master",
         "netcommons/user-manager": "dev-master",
