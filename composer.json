@@ -7,8 +7,8 @@
     "license":     "NetCommons License",
     "installors": [
         {
-            "name":     "NetCommons Community",
-            "homepage": "https://github.com/NetCommons3/Install/graphs/contributors"
+            "name": "NetCommons Community",
+            "homepage": "http://www.netcommons.org"
         }
     ],
     "extra": {
