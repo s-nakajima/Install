@@ -49,6 +49,8 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function index() {
+		$this->set('pageTitle', __d('install', 'Term'));
+
 		// Initialize master database connection
 		$configs = $this->InstallUtil->chooseDBByEnvironment();
 		if (! $this->InstallUtil->saveDBConf($configs)) {
@@ -83,6 +85,8 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function init_permission() {
+		$this->set('pageTitle', __d('install', 'Permissions'));
+
 		// Check permissions
 		$permissions = array();
 		$ret = true;
@@ -130,6 +134,8 @@ class InstallController extends InstallAppController {
  * @return void
  */
 	public function init_db() {
+		$this->set('pageTitle', __d('install', 'Database Settings'));
+
 		// Destroy session in order to handle ping request
 		$this->Session->destroy();
 
@@ -180,6 +186,8 @@ class InstallController extends InstallAppController {
  * @return void
  */
 	public function init_admin_user() {
+		$this->set('pageTitle', __d('install', 'Create an Administrator'));
+
 		if ($this->request->is('post')) {
 			if (! $this->InstallUtil->saveAdminUser($this->request->data)) {
 				$this->Session->setFlash(
@@ -199,6 +207,8 @@ class InstallController extends InstallAppController {
  * @return void
  **/
 	public function finish() {
+		$this->set('pageTitle', __d('install', 'Installed'));
+
 		Configure::write('NetCommons.installed', true);
 		/* Configure::write('NetCommons.installed', false); */
 		$this->InstallUtil->saveAppConf();
