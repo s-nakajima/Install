@@ -31,7 +31,7 @@
         "netcommons/links": "dev-master",
         "netcommons/menus": "dev-master",
         "netcommons/net-commons": "dev-master",
-        "netcommons/photo-albums": "dev-master",
+        "netcommons/photo-albums": "~0.0",
         "netcommons/plugin-manager": "dev-master",
         "netcommons/questionnaires": "dev-master",
         "netcommons/quizzes": "dev-master",
