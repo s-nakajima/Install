@@ -7,7 +7,6 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -19,7 +18,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		<title>
 			<?php
 				if (isset($pageTitle)) {
-					echo h($pageTitle);
+					echo h($pageTitle) . ' - ' . __d('install', 'Install');
 				}
 			?>
 		</title>

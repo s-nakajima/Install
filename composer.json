@@ -7,8 +7,8 @@
     "license":     "NetCommons License",
     "installors": [
         {
-            "name":     "NetCommons Community",
-            "homepage": "https://github.com/NetCommons3/Install/graphs/contributors"
+            "name": "NetCommons Community",
+            "homepage": "http://www.netcommons.org"
         }
     ],
     "extra": {
@@ -41,6 +41,7 @@
         "netcommons/searches": "dev-master",
         "netcommons/site-manager": "dev-master",
         "netcommons/system-manager": "dev-master",
+        "netcommons/tasks": "dev-master",
         "netcommons/topics": "dev-master",
         "netcommons/user-attributes": "dev-master",
         "netcommons/user-manager": "dev-master",
