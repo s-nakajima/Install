@@ -54,8 +54,8 @@ $(document).ready(function() {
       success: function() {
         clearInterval(timer);
         location.href = $('#DatabaseConfigurationInitDbForm')
-                          .attr('action')
-                          .replace(/init_db$/, 'init_admin_user');
+                            .attr('action')
+                            .replace(/init_db$/, 'init_admin_user');
       },
       error: function(xhr) {
         var dom = $.parseHTML(xhr.responseText);
