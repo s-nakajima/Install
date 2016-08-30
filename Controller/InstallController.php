@@ -147,7 +147,8 @@ class InstallController extends InstallAppController {
 
 			$this->loadModel('Install.DatabaseConfiguration');
 
-			if (substr($this->request->data['DatabaseConfiguration']['prefix'], -1, 1) !== '_') {
+			if ($this->request->data['DatabaseConfiguration']['prefix'] &&
+					substr($this->request->data['DatabaseConfiguration']['prefix'], -1, 1) !== '_') {
 				$this->request->data['DatabaseConfiguration']['prefix'] .= '_';
 			}
 			$this->DatabaseConfiguration->set($this->request->data);
