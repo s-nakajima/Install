@@ -195,6 +195,7 @@ class InstallUtil {
 		//デフォルトの言語
 		Configure::write('Config.language', 'ja');
 		Configure::write('ManagerPlugins', $this->managerPlugins);
+		Configure::write('debug', 0);
 
 		// Initialize application configurations
 		if (Configure::read('Security.salt') === 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi' ||
