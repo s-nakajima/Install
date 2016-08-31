@@ -143,7 +143,7 @@ class InstallController extends InstallAppController {
 		$this->set('errors', array());
 		if ($this->request->is('post')) {
 			// タイムアウトはっせいするなら適宜設定
-			// set_time_limit(1800);
+			set_time_limit(1800);
 
 			$this->loadModel('Install.DatabaseConfiguration');
 
