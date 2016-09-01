@@ -140,6 +140,9 @@ msgstr "プレフィックス"
 msgid "Datasource"
 msgstr "データベース種別"
 
+msgid "Failed to create database."
+msgstr "データベースが作成できませんでした。"
+
 #: View/Install/init_db.ctp:27
 msgid "Username"
 msgstr "ログインID"
@@ -164,174 +167,15 @@ msgstr "管理者ユーザ作成"
 msgid "Permissions"
 msgstr "パーミッションチェック"
 
-#: Model/Archive.php:validation for field parent_model_name;validation
-#: model_name;validation title;validation content;validation
-#: search_content;validation url;validation created_user_name;validation
-#: modified_user_name Model/Asset.php:validation hash_content;validation
-#: plugin Model/Authority.php:validation default_name;validation
-#: Model/AuthorityLang.php:validation lang;validation name;validation
-#: Model/Background.php:validation type;validation category;validation
-#: color;validation file_path Model/Block.php:validation
-#: controller_action;validation theme_name;validation temp_name;validation
-#: Model/Blog.php:validation comment_mail_subject;validation
-#: comment_mail_body;validation Model/BlogComment.php:validation
-#: author_email;validation author_url;validation author_ip;validation
-#: blog_name;validation comment_type;validation Model/BlogPost.php:validation
-#: permalink;validation post_password;validation to_ping;validation
-#: pinged;validation Model/BlogStyle.php:validation options;validation
-#: Model/BlogTerm.php:validation taxonomy;validation
-#: Model/BlogTermLink.php:validation Model/Community.php:validation
-#: Model/CommunityInvitation.php:validation Model/CommunityLang.php:validation
-#: community_name;validation summary;validation
-#: Model/CommunitySumTag.php:validation tag_value;validation
-#: Model/CommunityTag.php:validation Model/Config.php:validation
-#: value;validation description;validation domain;validation
-#: attribute;validation regexp;validation Model/ConfigLang.php:validation
-#: config_name;validation Model/Content.php:validation
-#: Model/Language.php:validation display_name Model/Module.php:validation
-#: dir_name;validation version;validation edit_controller_action;validation
-#: style_controller_action;validation module_icon;validation
-#: copy_operation;validation shortcut_operation;validation
-#: move_operation;validation Model/ModuleLink.php:validation
-#: Model/ModuleSystemLink.php:validation Model/PageColumn.php:validation
-#: Model/PageLayout.php:validation Model/PageMeta.php:validation
-#: Model/PageStyle.php:validation align;validation width;validation
-#: height;validation original_background_image;validation
-#: original_background_repeat;validation
-#: original_background_position;validation
-#: original_background_attachment;validation file;validation
-#: Model/PageSumView.php:validation Model/PageTheme.php:validation
-#: center_theme;validation header_theme;validation left_theme;validation
-#: right_theme;validation footer_theme;validation
-#: Model/PageUserLink.php:validation Model/Passport.php:validation passport
-#: Model/SchemaMigration.php:validation class;validation type
-#: Model/Session.php:validation data Model/TempData.php:validation
-#: Model/Upload.php:validation file_name;validation alt;validation
-#: caption;validation file_path;validation mimetype;validation
-#: extension;validation plugin;validation upload_model_name;validation
-#: Model/UploadLink.php:validation field_name;validation
-#: download_password;validation check_component_action;validation
-#: Model/UserGroup.php:validation Model/UserGroupLink.php:validation
-#: Model/UserInvitation.php:validation user_name;validation
-#: Model/UserItem.php:validation default_description;validation
-#: default_options;validation tag_name;validation default_selected;validation
-#: autoregist_use;validation Model/UserItemAuthorityLink.php:validation
-#: Model/UserItemLang.php:validation Model/UserItemLink.php:validation content
-#: Model/WhatsnewStyle.php:validation
-#: /home/netcommons/usr/local/src/NetCommons3/plugins/Users/Model/User.php:validation
-#: handle;validation mobile_email;validation
+msgid "Failed to install migrations."
+msgstr "テーブルの生成（マイグレーション）に失敗しました。"
+
 msgid "notEmpty"
 msgstr ""
 
-#: Model/Archive.php:validation for field parent_id;validation
-#: module_id;validation content_id;validation plugin_unique;validation
-#: status;validation user_group_id;validation access_hierarchy;validation
-#: count Model/Authority.php:validation hierarchy;validation
-#: allow_creating_community;validation myportal_use_flag;validation
-#: allow_myportal_viewing_hierarchy;validation private_use_flag;validation
-#: allow_style_flag;validation allow_attachment;validation max_size
-#: Model/AuthorityLang.php:validation authority_id
-#: Model/Background.php:validation group_num;validation file_width;validation
-#: file_height;validation file_size Model/Block.php:validation
-#: page_id;validation root;validation thread_num;validation col_num;validation
-#: row_num;validation min_width_size;validation min_height_size;validation
-#: lock_authority_num Model/Blog.php:validation post_hierarchy;validation
-#: term_hierarchy;validation new_period;validation mail_hierarchy;validation
-#: comment_flag;validation comment_hierarchy;validation comment_mail_hierarchy
-#: Model/BlogComment.php:validation blog_post_id Model/BlogPost.php:validation
-#: revision_root;validation approved_comment_count;validation
-#: comment_count;validation approved_trackback_count;validation
-#: trackback_count;validation vote_count Model/BlogStyle.php:validation
-#: block_id;validation widget_type;validation visible_item
-#: Model/BlogTerm.php:validation parent;validation
-#: Model/BlogTermLink.php:validation blog_post_id;validation blog_term_id
-#: Model/Community.php:validation room_num;validation
-#: publication_range_flag;validation participate_flag;validation
-#: invite_hierarchy;validation participate_notice_hierarchy;validation
-#: resign_notice_hierarchy Model/CommunityInvitation.php:validation user_id
-#: Model/CommunityLang.php:validation revision_root
-#: Model/CommunitySumTag.php:validation used_number
-#: Model/CommunityTag.php:validation community_sum_tag_id;validation
-#: display_sequence Model/Config.php:validation category;validation
-#: minlength;validation maxlength Model/ConfigLang.php:validation module_id
-#: Model/Content.php:validation shortcut_type;validation display_flag
-#: Model/Language.php:validation display_sequence;validation
-#: Model/Module.php:validation content_has_one Model/ModuleLink.php:validation
-#: space_type;validation authority_id;validation
-#: Model/ModuleSystemLink.php:validation hierarchy
-#: Model/PageColumn.php:validation scope;validation type;validation
-#: header_page;validation left_page;validation right_page;validation
-#: footer_page Model/PageLayout.php:validation space_type
-#: Model/PageMeta.php:validation Model/PageStyle.php:validation
-#: Model/PageSumView.php:validation user_id;validation sum
-#: Model/PageTheme.php:validation Model/PageTree.php:validation
-#: child;validation stratum_num Model/PageUserLink.php:validation
-#: Model/Passport.php:validation Model/SiteSettingValue.php:validation
-#: site_setting_id Model/Upload.php:validation file_size;validation
-#: download_count;validation year;validation month;validation day
-#: Model/UploadLink.php:validation upload_id;validation is_use
-#: Model/UserGroup.php:validation content_id
-#: Model/UserGroupLink.php:validation Model/UserItem.php:validation
-#: maxlength;validation list_num;validation row_num
-#: Model/UserItemAuthorityLink.php:validation user_item_id;validation
-#: user_authority;validation edit_lower_hierarchy;validation
-#: show_lower_hierarchy Model/UserItemLang.php:validation user_item_id
-#: Model/UserItemLink.php:validation Model/WhatsnewSelectRoom.php:validation
-#: room_num Model/WhatsnewSelectUser.php:validation
-#: Model/WhatsnewStyle.php:validation display_type;validation
-#: display_days;validation display_number;validation
-#: title_truncate_num;validation description_truncate_num
-#: /home/netcommons/usr/local/src/NetCommons3/plugins/ThemeSettings/Model/ThemeSettingsSiteValue.php:validation
-#: /home/netcommons/usr/local/src/NetCommons3/plugins/Users/Model/User.php:validation
-#: is_active;validation myportal_page;validation private_page;validation
-#: timezone_offset
 msgid "numeric"
 msgstr "数値"
 
-#: Model/Archive.php:validation for field is_approved
-#: Model/Authority.php:validation system_flag;validation
-#: allow_new_participant;validation public_createroom_flag;validation
-#: group_createroom_flag;validation myportal_createroom_flag;validation
-#: private_createroom_flag;validation allow_htmltag_flag;validation
-#: allow_meta_flag;validation allow_theme_flag;validation
-#: allow_layout_flag;validation allow_column_flag;validation
-#: allow_video;validation change_leftcolumn_flag;validation
-#: change_rightcolumn_flag;validation change_headercolumn_flag;validation
-#: change_footercolumn_flag;validation display_participants_editing;validation
-#: allow_move_operation;validation allow_copy_operation;validation
-#: allow_shortcut_operation;validation allow_operation_of_shortcut
-#: Model/Block.php:validation show_title;validation display_flag
-#: Model/Blog.php:validation vote_flag;validation sns_flag;validation
-#: mail_flag;validation comment_required_name;validation
-#: comment_image_auth;validation comment_mail_flag;validation
-#: trackback_transmit_flag;validation trackback_receive_flag;validation
-#: approved_flag;validation approved_pre_change_flag;validation
-#: approved_mail_flag;validation comment_approved_flag;validation
-#: trackback_approved_flag;validation comment_approved_mail_flag
-#: Model/BlogComment.php:validation Model/BlogPost.php:validation
-#: is_future;validation is_approved;validation pre_change_flag
-#: Model/BlogStyle.php:validation Model/BlogTerm.php:validation checked
-#: Model/Community.php:validation is_upload;validation
-#: participate_force_all_users;validation is_participate_notice;validation
-#: is_resign_notice Model/CommunityInvitation.php:validation
-#: is_pending_approval_mail Model/Config.php:validation required;validation
-#: lang_flag Model/Content.php:validation Model/Module.php:validation
-#: disposition_flag Model/PageLayout.php:validation
-#: is_display_header;validation is_display_left;validation
-#: is_display_right;validation is_display_footer Model/Upload.php:validation
-#: is_delete_from_library;validation is_use;validation is_wysiwyg
-#: Model/UserInvitation.php:validation Model/UserItem.php:validation
-#: is_system;validation allow_self_edit;validation allow_duplicate;validation
-#: display_flag;validation allow_public_flag;validation
-#: allow_email_reception_flag;validation display_title;validation
-#: is_lang;validation autoregist_sendmail Model/UserItemLink.php:validation
-#: public_flag;validation email_reception_flag
-#: Model/WhatsnewStyle.php:validation display_period_type;validation
-#: is_display_title;validation is_display_description;validation
-#: is_display_room_name;validation is_display_module_name;validation
-#: is_display_user_name;validation is_display_created;validation
-#: allow_rss_feed;validation myportal_flag;validation myroom_flag;validation
-#: select_myportal_users
 msgid "boolean"
 msgstr "真偽値"
 

@@ -29,7 +29,7 @@ class InstallController extends InstallAppController {
  *
  * @return void
  * @throws NotFoundException
- **/
+ */
 	public function beforeFilter() {
 		if (Configure::read('NetCommons.installed')) {
 			throw new NotFoundException;
@@ -47,7 +47,7 @@ class InstallController extends InstallAppController {
  * application.ymlの初期値セット
  *
  * @return void
- **/
+ */
 	public function index() {
 		$this->set('pageTitle', __d('install', 'Term'));
 
@@ -83,7 +83,7 @@ class InstallController extends InstallAppController {
  * パーミッションのチェック
  *
  * @return void
- **/
+ */
 	public function init_permission() {
 		$this->set('pageTitle', __d('install', 'Permissions'));
 
@@ -164,7 +164,8 @@ class InstallController extends InstallAppController {
 
 			if (!$this->InstallUtil->createDB($this->request->data['DatabaseConfiguration'])) {
 				$this->response->statusCode(400);
-				CakeLog::info('Failed to create database');
+				CakeLog::info('Failed to create database.');
+				$this->set('errors', [__d('install', 'Failed to create database.')]);
 				return;
 			}
 
@@ -172,7 +173,9 @@ class InstallController extends InstallAppController {
 
 			// Install migrations
 			if (!$this->InstallUtil->installMigrations('master')) {
+				$this->response->statusCode(400);
 				CakeLog::error('Failed to install migrations');
+				$this->set('errors', [__d('install', 'Failed to install migrations.')]);
 				return;
 			}
 
@@ -206,7 +209,7 @@ class InstallController extends InstallAppController {
  * インストール終了
  *
  * @return void
- **/
+ */
 	public function finish() {
 		$this->set('pageTitle', __d('install', 'Installed'));
 
@@ -220,7 +223,7 @@ class InstallController extends InstallAppController {
  *
  * @author Jun Nishikawa <topaz2@m0n0m0n0.com>
  * @return void
- **/
+ */
 	public function ping() {
 		$this->set('result', array('message' => 'OK'));
 		$this->set('_serialize', array('result'));

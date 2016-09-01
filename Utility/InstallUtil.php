@@ -374,7 +374,7 @@ EOF;
 			}
 			switch ($configuration['datasource']) {
 				case 'Database/Mysql':
-					$db->query(
+					$result = $db->query(
 						sprintf(
 							'CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */',
 							$database,
@@ -395,15 +395,21 @@ EOF;
 					CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
 					return false;
 			}
-			CakeLog::info(
-				sprintf('Database %s for %s created successfully', $database, $configuration['datasource'])
-			);
+			if ($result) {
+				CakeLog::info(
+					sprintf('Database %s for %s created successfully', $database, $configuration['datasource'])
+				);
+				return true;
+			} else {
+				CakeLog::info(
+					sprintf('Database %s for %s created failure', $database, $configuration['datasource'])
+				);
+				return false;
+			}
 		} catch (Exception $e) {
 			CakeLog::error($e->getMessage());
-			throw $e;
+			return false;
 		}
-
-		return true;
 	}
 
 /**
@@ -467,6 +473,8 @@ EOF;
 		// Invoke all available migrations
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
 
+		$result = true;
+
 		foreach ($plugins as $plugin) {
 			CakeLog::info(
 				sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection)
@@ -480,16 +488,36 @@ EOF;
 			), $messages, $ret);
 
 			// Write logs
+			if ($ret) {
+				$matches = preg_grep('/No migrations available/', $messages);
+				if ($ret) {
+					$matches = preg_grep('/No migrations/', $messages);
+					if (count($matches) === 0) {
+						CakeLog::info(
+							sprintf('[migration] Failure migrated %s for %s connection', $plugin, $connection)
+						);
+						$result = false;
+					} else {
+						CakeLog::info(
+							sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
+						);
+					}
+				} else {
+					CakeLog::info(
+						sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
+					);
+				}
+			}
 			$this->__commandOutputResults('migration', $messages);
-
-			CakeLog::info(
-				sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
-			);
 		}
 
-		CakeLog::info('[migration] Successfully migrated all plugins');
+		if ($result) {
+			CakeLog::info('[migration] Successfully migrated all plugins');
+		} else {
+			CakeLog::info('[migration] Failure migrated all plugins');
+		}
 
-		return true;
+		return $result;
 	}
 
 /**
