@@ -279,7 +279,8 @@ class InstallUtil {
 		$params = array_merge($this->chooseDBByEnvironment(), $configs);
 		$conf = $this->__parseDBConf($conf, $params, 'master');
 
-		$params = $this->chooseDBByEnvironment('test');
+		$params = array_merge($this->chooseDBByEnvironment('test'), $configs);
+		$params['database'] .= '_test';
 		$conf = $this->__parseDBConf($conf, $params, 'test');
 
 		$file = new File(APP . 'Config' . DS . 'database.php', true);
@@ -349,9 +350,9 @@ EOF;
 				case 'Database/Mysql':
 					$driver = 'mysql';
 					break;
-				case 'Database/Postgres':
-					$driver = 'pgsql';
-					break;
+				//case 'Database/Postgres':
+				//	$driver = 'pgsql';
+				//	break;
 				default:
 					CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
 					return false;
@@ -363,54 +364,52 @@ EOF;
 			);
 			CakeLog::info(sprintf('DB Connected'));
 
-			foreach (array('master', 'test') as $env) {
-				if ($env === 'test') {
-					$params = $this->chooseDBByEnvironment('test');
-					$database = $params['database'];
-					$encoding = $params['encoding'];
-				} else {
-					// Remove malicious chars
-					$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
-					if ($configuration['datasource'] === 'Database/Mysql') {
-						$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8mb4');
-					} else {
-						/* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
-						$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
-					}
-				}
-				switch ($configuration['datasource']) {
-					case 'Database/Mysql':
-						$db->query(
-							sprintf(
-								'CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */',
-								$database,
-								$encoding
-							)
-						);
-						break;
-					case 'Database/Postgres':
-						$db->query(
-							sprintf(
-								'CREATE DATABASE %s WITH ENCODING=\'%s\'',
-								$database,
-								strtoupper($encoding)
-							)
-						);
-						break;
-					default:
-						CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
-						return false;
-				}
+			// Remove malicious chars
+			$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
+			if ($configuration['datasource'] === 'Database/Mysql') {
+				$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8mb4');
+			} else {
+				///* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
+				//$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
+			}
+			switch ($configuration['datasource']) {
+				case 'Database/Mysql':
+					$result = $db->query(
+						sprintf(
+							'CREATE DATABASE IF NOT EXISTS `%s` /*!40100 DEFAULT CHARACTER SET %s */',
+							$database,
+							$encoding
+						)
+					);
+					break;
+				//case 'Database/Postgres':
+				//	$db->query(
+				//		sprintf(
+				//			'CREATE DATABASE %s WITH ENCODING=\'%s\'',
+				//			$database,
+				//			strtoupper($encoding)
+				//		)
+				//	);
+				//	break;
+				default:
+					CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
+					return false;
+			}
+			if ($result) {
 				CakeLog::info(
 					sprintf('Database %s for %s created successfully', $database, $configuration['datasource'])
 				);
+				return true;
+			} else {
+				CakeLog::info(
+					sprintf('Database %s for %s created failure', $database, $configuration['datasource'])
+				);
+				return false;
 			}
 		} catch (Exception $e) {
 			CakeLog::error($e->getMessage());
-			throw $e;
+			return false;
 		}
-
-		return true;
 	}
 
 /**
@@ -474,6 +473,8 @@ EOF;
 		// Invoke all available migrations
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
 
+		$result = true;
+
 		foreach ($plugins as $plugin) {
 			CakeLog::info(
 				sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection)
@@ -487,16 +488,36 @@ EOF;
 			), $messages, $ret);
 
 			// Write logs
+			if ($ret) {
+				$matches = preg_grep('/No migrations available/', $messages);
+				if ($ret) {
+					$matches = preg_grep('/No migrations/', $messages);
+					if (count($matches) === 0) {
+						CakeLog::info(
+							sprintf('[migration] Failure migrated %s for %s connection', $plugin, $connection)
+						);
+						$result = false;
+					} else {
+						CakeLog::info(
+							sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
+						);
+					}
+				} else {
+					CakeLog::info(
+						sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
+					);
+				}
+			}
 			$this->__commandOutputResults('migration', $messages);
-
-			CakeLog::info(
-				sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
-			);
 		}
 
-		CakeLog::info('[migration] Successfully migrated all plugins');
+		if ($result) {
+			CakeLog::info('[migration] Successfully migrated all plugins');
+		} else {
+			CakeLog::info('[migration] Failure migrated all plugins');
+		}
 
-		return true;
+		return $result;
 	}
 
 /**
