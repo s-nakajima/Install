@@ -32,7 +32,7 @@ class PrivateInstallUtilityInstallUtilArrayFilterRecursiveTest extends NetCommon
  *
  * @return void
  */
-	public function test__arrayFilterRecursive() {
+	public function testArrayFilterRecursive() {
 		//データ生成
 		$input = array('aaaa', array('object' => new InstallUtil()));
 		$callback = function ($val) {
