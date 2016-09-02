@@ -604,7 +604,7 @@ EOF;
 	}
 
 /**
- * コマンド実行結果をログ委に出力
+ * コマンド実行結果をログに出力
  *
  * @param string $type タイプ `bower` or `migration`
  * @param array $messages コマンド実行結果
