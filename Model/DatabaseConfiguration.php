@@ -70,7 +70,7 @@ class DatabaseConfiguration extends AppModel {
 					'required' => true,
 				),
 				'regex' => array(
-					'rule' => array('custom', '/[\w]+/'),
+					'rule' => array('custom', '/[\w' . preg_quote('!#%&()*+,-./;<=>?@[]^_{|}~', '/') . ']+$/'),
 					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
 					'required' => true,
 				),
@@ -84,7 +84,7 @@ class DatabaseConfiguration extends AppModel {
 					'required' => true,
 				),
 				'numeric' => array(
-					'rule' => array('range', 0, 65535),
+					'rule' => array('range', -1, 65536),
 					'message' => sprintf(
 						__d('net_commons', 'The input %s must be a number bigger than %d and less than %d.'),
 						__d('install', 'Port'),
@@ -102,21 +102,21 @@ class DatabaseConfiguration extends AppModel {
 					'required' => true,
 				),
 				'regex' => array(
-					'rule' => array('custom', '/[\w]+/'),
-					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
+					'rule' => array('custom', '/^[\w]+$/'),
+					'message' => __d('install', 'Only alphabets and numbers are allowed.'),
 				),
 			),
-			'schema' => array(
-				'regex' => array(
-					'rule' => array('custom', '/[\w]+/'),
-					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
-					'allowEmpty' => true,
-				),
-			),
+			//'schema' => array(
+			//	'regex' => array(
+			//		'rule' => array('custom', '/^[\w]+$/'),
+			//		'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
+			//		'allowEmpty' => true,
+			//	),
+			//),
 			'prefix' => array(
 				'regex' => array(
-					'rule' => array('custom', '/[\w]+/'),
-					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
+					'rule' => array('custom', '/^[\w]+$/'),
+					'message' => __d('install', 'Only alphabets and numbers are allowed.'),
 					'allowEmpty' => true,
 				),
 			),
@@ -129,7 +129,7 @@ class DatabaseConfiguration extends AppModel {
 					'required' => true,
 				),
 				'regex' => array(
-					'rule' => array('custom', '/[\w]+/'),
+					'rule' => array('custom', '/[\w' . preg_quote('!#%&()*+,-./;<=>?@[]^_{|}~', '/') . ']+$/'),
 					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
 					'required' => true,
 				),
@@ -143,7 +143,7 @@ class DatabaseConfiguration extends AppModel {
 					'required' => true,
 				),
 				'regex' => array(
-					'rule' => array('custom', '/[\w]+/'),
+					'rule' => array('custom', '/[\w' . preg_quote('!#%&()*+,-./;<=>?@[]^_{|}~', '/') . ']+$/'),
 					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
 					'allowEmpty' => true,
 				),

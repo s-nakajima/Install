@@ -24,6 +24,13 @@ App::uses('Security', 'Utility');
 class InstallUtil {
 
 /**
+ * application.ymlのプレフィックス(Unitテストで使用する)
+ *
+ * @return array
+ */
+	public $appYmlPrefix = '';
+
+/**
  * Master configuration
  *
  * @return array
@@ -192,6 +199,11 @@ class InstallUtil {
 	public function __construct() {
 		Security::setHash('sha512');
 
+		$DatabaseConfig = ClassRegistry::init('Install.DatabaseConfiguration', true);
+		if ($DatabaseConfig->useDbConfig === 'test') {
+			$this->appYmlPrefix = 'test_';
+		}
+
 		//デフォルトの言語
 		Configure::write('Config.language', 'ja');
 		Configure::write('ManagerPlugins', $this->managerPlugins);
@@ -229,7 +241,7 @@ class InstallUtil {
  * @return bool File written or not
  */
 	public function saveAppConf() {
-		$file = new File(APP . 'Config' . DS . 'application.yml', true);
+		$file = new File(APP . 'Config' . DS . $this->appYmlPrefix . 'application.yml', true);
 		$conf = $this->__arrayFilterRecursive(Configure::read(), function ($val) {
 			return !is_object($val);
 		});
@@ -297,9 +309,13 @@ class InstallUtil {
  */
 	private function __parseDBConf($conf, $params, $dbPrefix) {
 		foreach ($params as $key => $value) {
-			$value = ($value === null) ? 'null' : $value;
-			$value = ($value === true) ? 'true' : $value;
-			$value = ($value === false) ? 'false' : $value;
+			if ($value === null) {
+				$value = 'null';
+			} elseif ($value === true) {
+				$value = 'true';
+			} elseif ($value === false) {
+				$value = 'false';
+			}
 			$conf = str_replace(sprintf('{' . $dbPrefix . '_%s}', $key), $value, $conf);
 		}
 
