@@ -20,9 +20,20 @@ App::uses('InstallUtil', 'Install.Utility');
 class InstallController extends InstallAppController {
 
 /**
+ * Model name
+ *
+ * @var array
+ */
+	public $uses = array(
+		'Install.DatabaseConfiguration',
+	);
+
+/**
  * Helpers
  */
-	public $helpers = array('M17n.M17n');
+	public $helpers = array(
+		'M17n.M17n',
+	);
 
 /**
  * beforeFilter
@@ -145,8 +156,6 @@ class InstallController extends InstallAppController {
 			// タイムアウトはっせいするなら適宜設定
 			set_time_limit(1800);
 
-			$this->loadModel('Install.DatabaseConfiguration');
-
 			if ($this->request->data['DatabaseConfiguration']['prefix'] &&
 					substr($this->request->data['DatabaseConfiguration']['prefix'], -1, 1) !== '_') {
 				$this->request->data['DatabaseConfiguration']['prefix'] .= '_';
@@ -157,8 +166,14 @@ class InstallController extends InstallAppController {
 				$this->InstallUtil->saveDBConf($this->request->data['DatabaseConfiguration']);
 			} else {
 				$this->response->statusCode(400);
-				CakeLog::info(sprintf('Validation error: %s',
-				implode(', ', array_keys($this->DatabaseConfiguration->validationErrors))));
+				$this->set('errors', [
+					__d('net_commons', 'Failed on validation errors. Please check the input data.')
+				]);
+				CakeLog::info('[ValidationErrors] ' . $this->request->here());
+				if (Configure::read('debug')) {
+					CakeLog::info(var_export($this->DatabaseConfiguration->validationErrors, true));
+					//CakeLog::info(print_r($this->request->data, true));
+				}
 				return;
 			}
 
