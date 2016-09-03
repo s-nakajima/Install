@@ -296,7 +296,7 @@ class InstallUtil {
 		$params['database'] .= '_test';
 		$conf = $this->__parseDBConf($conf, $params, 'test');
 
-		$file = new File(APP . 'Config' . DS . 'database.php', true);
+		$file = new File(APP . 'Config' . DS . $this->appYmlPrefix . 'database.php', true);
 		return $file->write($conf);
 	}
 
