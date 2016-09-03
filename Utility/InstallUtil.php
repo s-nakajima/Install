@@ -385,7 +385,7 @@ EOF;
 			$database = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['database']);
 			if ($configuration['datasource'] === 'Database/Mysql') {
 				$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8mb4');
-			} else {
+				//} else {
 				///* $encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', $configuration['encoding']); */
 				//$encoding = preg_replace('/[^a-zA-Z0-9_\-]/', '', 'utf8');
 			}
@@ -408,15 +408,11 @@ EOF;
 				//		)
 				//	);
 				//	break;
-				default:
-					CakeLog::error(sprintf('Unknown datasource %s', $configuration['datasource']));
-					return false;
 			}
 			if ($result) {
 				CakeLog::info(
 					sprintf('Database %s for %s created successfully', $database, $configuration['datasource'])
 				);
-				return true;
 			} else {
 				CakeLog::info(
 					sprintf('Database %s for %s created failure', $database, $configuration['datasource'])
@@ -427,6 +423,8 @@ EOF;
 			CakeLog::error($e->getMessage());
 			return false;
 		}
+
+		return true;
 	}
 
 /**
