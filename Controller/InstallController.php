@@ -153,7 +153,6 @@ class InstallController extends InstallAppController {
 		$this->set('masterDB', $this->InstallUtil->chooseDBByEnvironment());
 		$this->set('errors', array());
 		if ($this->request->is('post')) {
-			// タイムアウトはっせいするなら適宜設定
 			set_time_limit(1800);
 
 			if ($this->request->data['DatabaseConfiguration']['prefix'] &&
@@ -172,7 +171,6 @@ class InstallController extends InstallAppController {
 				CakeLog::info('[ValidationErrors] ' . $this->request->here());
 				if (Configure::read('debug')) {
 					CakeLog::info(var_export($this->DatabaseConfiguration->validationErrors, true));
-					//CakeLog::info(print_r($this->request->data, true));
 				}
 				return;
 			}
@@ -183,8 +181,6 @@ class InstallController extends InstallAppController {
 				$this->set('errors', [__d('install', 'Failed to create database.')]);
 				return;
 			}
-
-			//$update = isset($this->request->data['update']);
 
 			// Install migrations
 			if (!$this->InstallUtil->installMigrations('master')) {
