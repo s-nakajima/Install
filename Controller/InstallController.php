@@ -43,7 +43,7 @@ class InstallController extends InstallAppController {
  */
 	public function beforeFilter() {
 		if (Configure::read('NetCommons.installed')) {
-			throw new NotFoundException;
+			throw new NotFoundException();
 		}
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
