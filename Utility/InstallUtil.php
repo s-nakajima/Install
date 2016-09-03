@@ -54,18 +54,18 @@ class InstallUtil {
  *
  * @return array
  */
-	public $masterDBPostgresql = array(
-		'datasource' => 'Database/Postgres',
-		'persistent' => false,
-		'host' => 'localhost',
-		'port' => 5432,
-		'login' => 'postgres',
-		'password' => 'postgres',
-		'database' => 'nc3',
-		'prefix' => '',
-		'schema' => 'public',
-		'encoding' => 'utf8',
-	);
+	//public $masterDBPostgresql = array(
+	//	'datasource' => 'Database/Postgres',
+	//	'persistent' => false,
+	//	'host' => 'localhost',
+	//	'port' => 5432,
+	//	'login' => 'postgres',
+	//	'password' => 'postgres',
+	//	'database' => 'nc3',
+	//	'prefix' => '',
+	//	'schema' => 'public',
+	//	'encoding' => 'utf8',
+	//);
 
 /**
  * DB configuration for travis
@@ -90,18 +90,18 @@ class InstallUtil {
  *
  * @return array
  */
-	public $travisDBPostgresql = array(
-		'datasource' => 'Database/Postgres',
-		'persistent' => false,
-		'host' => 'localhost',
-		'port' => 5432,
-		'login' => 'postgres',
-		'password' => 'postgres',
-		'database' => 'cakephp_test',
-		'prefix' => '',
-		'schema' => 'public',
-		'encoding' => 'utf8',
-	);
+	//public $travisDBPostgresql = array(
+	//	'datasource' => 'Database/Postgres',
+	//	'persistent' => false,
+	//	'host' => 'localhost',
+	//	'port' => 5432,
+	//	'login' => 'postgres',
+	//	'password' => 'postgres',
+	//	'database' => 'cakephp_test',
+	//	'prefix' => '',
+	//	'schema' => 'public',
+	//	'encoding' => 'utf8',
+	//);
 
 /**
  * Master configuration
@@ -126,18 +126,18 @@ class InstallUtil {
  *
  * @return array
  */
-	public $masterTestDBPostgresql = array(
-		'datasource' => 'Database/Postgres',
-		'persistent' => false,
-		'host' => 'localhost',
-		'port' => 5432,
-		'login' => 'postgres',
-		'password' => 'postgres',
-		'database' => 'test_nc3',
-		'prefix' => '',
-		'schema' => 'public',
-		'encoding' => 'utf8',
-	);
+	//public $masterTestDBPostgresql = array(
+	//	'datasource' => 'Database/Postgres',
+	//	'persistent' => false,
+	//	'host' => 'localhost',
+	//	'port' => 5432,
+	//	'login' => 'postgres',
+	//	'password' => 'postgres',
+	//	'database' => 'test_nc3',
+	//	'prefix' => '',
+	//	'schema' => 'public',
+	//	'encoding' => 'utf8',
+	//);
 
 /**
  * DB configuration for travis
@@ -162,18 +162,18 @@ class InstallUtil {
  *
  * @return array
  */
-	public $travisTestDBPostgresql = array(
-		'datasource' => 'Database/Postgres',
-		'persistent' => false,
-		'host' => 'localhost',
-		'port' => 5432,
-		'login' => 'postgres',
-		'password' => 'postgres',
-		'database' => 'cakephp_test',
-		'prefix' => '',
-		'schema' => 'public',
-		'encoding' => 'utf8',
-	);
+	//public $travisTestDBPostgresql = array(
+	//	'datasource' => 'Database/Postgres',
+	//	'persistent' => false,
+	//	'host' => 'localhost',
+	//	'port' => 5432,
+	//	'login' => 'postgres',
+	//	'password' => 'postgres',
+	//	'database' => 'cakephp_test',
+	//	'prefix' => '',
+	//	'schema' => 'public',
+	//	'encoding' => 'utf8',
+	//);
 
 /**
  * 管理プラグイン
@@ -267,15 +267,15 @@ class InstallUtil {
 			$db = 'master' . ucfirst($env) . 'DB';
 		}
 
-		if (isset($_SERVER['DB'])) {
-			if ($_SERVER['DB'] === 'pgsql') {
-				$db .= 'Postgresql';
-			} else {
-				$db .= 'Mysql';
-			}
-		} else {
+		//if (isset($_SERVER['DB'])) {
+		//	if ($_SERVER['DB'] === 'pgsql') {
+		//		$db .= 'Postgresql';
+		//	} else {
+		//		$db .= 'Mysql';
+		//	}
+		//} else {
 			$db .= 'Mysql';
-		}
+		//}
 
 		return $this->$db;
 	}
