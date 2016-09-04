@@ -183,7 +183,11 @@ class InstallController extends InstallAppController {
 			}
 
 			// Install migrations
-			if (!$this->InstallUtil->installMigrations('master')) {
+			$plugins = array_unique(array_merge(
+				App::objects('plugins'),
+				array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
+			));
+			if (!$this->InstallUtil->installMigrations('master', $plugins)) {
 				$this->response->statusCode(400);
 				CakeLog::error('Failed to install migrations');
 				$this->set('errors', [__d('install', 'Failed to install migrations.')]);

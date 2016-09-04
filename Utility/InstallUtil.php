@@ -32,6 +32,13 @@ class InstallUtil {
 	public $appYmlPrefix = '';
 
 /**
+ * application.ymlのプレフィックス(Unitテストで使用する)
+ *
+ * @return array
+ */
+	public $useDbConfig = '';
+
+/**
  * Master configuration
  *
  * @return array
@@ -201,6 +208,7 @@ class InstallUtil {
 		Security::setHash('sha512');
 
 		$DatabaseConfig = ClassRegistry::init('Install.DatabaseConfiguration', true);
+		$this->useDbConfig = $DatabaseConfig->useDbConfig;
 		if ($DatabaseConfig->useDbConfig === 'test') {
 			$this->appYmlPrefix = 'test_';
 		}
@@ -473,17 +481,22 @@ EOF;
  * マイグレーション実行
  *
  * @param string $connection 接続先
+ * @param array $addPlugins 追加するプラグイン
  * @return bool Install succeed or not
  */
-	public function installMigrations($connection = 'master') {
+	public function installMigrations($connection = 'master', $addPlugins = array()) {
 		$plugins = array_unique(array_merge(
 			array(
 				'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
 				'Roles', 'Mails', 'SiteManager', 'Blocks'
 			),
-			App::objects('plugins'),
-			array_map('basename', glob(ROOT . DS . 'app' . DS . 'Plugin' . DS . '*', GLOB_ONLYDIR))
+			$addPlugins
 		));
+
+		//Unitテストの時、強制的にtestに変換する。
+		if ($this->useDbConfig === 'test') {
+			$connection = 'test';
+		}
 
 		// Invoke all available migrations
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
@@ -504,24 +517,21 @@ EOF;
 
 			// Write logs
 			if ($ret) {
-				$matches = preg_grep('/No migrations available/', $messages);
-				if ($ret) {
-					$matches = preg_grep('/No migrations/', $messages);
-					if (count($matches) === 0) {
-						CakeLog::info(
-							sprintf('[migration] Failure migrated %s for %s connection', $plugin, $connection)
-						);
-						$result = false;
-					} else {
-						CakeLog::info(
-							sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
-						);
-					}
+				$matches = preg_grep('/No migrations/', $messages);
+				if (count($matches) === 0) {
+					CakeLog::info(
+						sprintf('[migration] Failure migrated %s for %s connection', $plugin, $connection)
+					);
+					$result = false;
 				} else {
 					CakeLog::info(
 						sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
 					);
 				}
+			} else {
+				CakeLog::info(
+					sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
+				);
 			}
 			$this->__commandOutputResults('migration', $messages);
 		}
