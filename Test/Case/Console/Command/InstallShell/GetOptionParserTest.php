@@ -92,13 +92,13 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 		$this->assertEquals('ConsoleOptionParser', get_class($result));
 
 		$expected = array(
-			'install_start ' . __d('install', 'Install Step 1'),
-			'install_permission ' . __d('install', 'Install Step 2'),
-			'create_database ' . __d('install', 'Install Step 3'),
-			'install_migrations ' . __d('install', 'Install Step 4'),
-			'install_bower ' . __d('install', 'Install Step 5'),
-			'save_administrator ' . __d('install', 'Install Step 6'),
-			'install_finish ' . __d('install', 'Install Step 7'),
+			'install_start' . ' ' . __d('install', 'Install Step 1'),
+			'install_permission' . ' ' . __d('install', 'Install Step 2'),
+			'create_database' . ' ' . __d('install', 'Install Step 3'),
+			'install_migrations' . ' ' . __d('install', 'Install Step 4'),
+			'install_bower' . ' ' . __d('install', 'Install Step 5'),
+			'save_administrator' . ' ' . __d('install', 'Install Step 6'),
+			'install_finish' . ' ' . __d('install', 'Install Step 7'),
 		);
 		$actual = array(
 			$result->subcommands()['install_start']->help(strlen('install_start') + 1),
