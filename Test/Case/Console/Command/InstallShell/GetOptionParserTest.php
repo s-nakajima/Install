@@ -92,16 +92,15 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 		$this->assertEquals('ConsoleOptionParser', get_class($result));
 
 		$expected = array(
-			'install_start Install Step 1',
-			'install_permission Install Step 2',
-			'create_database Install Step 3',
-			'install_migrations Install Step 4',
-			'install_bower Install Step 5',
-			'save_administrator Install Step 6',
-			'install_finish Install End',
+			'install_start ' . __d('install', 'Install Step 1'),
+			'install_permission ' . __d('install', 'Install Step 2'),
+			'create_database ' . __d('install', 'Install Step 3'),
+			'install_migrations ' . __d('install', 'Install Step 4'),
+			'install_bower ' . __d('install', 'Install Step 5'),
+			'save_administrator ' . __d('install', 'Install Step 6'),
+			'install_finish ' . __d('install', 'Install Step 7'),
 		);
-
-		$result = array(
+		$actual = array(
 			$result->subcommands()['install_start']->help(strlen('install_start') + 1),
 			$result->subcommands()['install_permission']->help(strlen('install_permission') + 1),
 			$result->subcommands()['create_database']->help(strlen('create_database') + 1),
@@ -110,7 +109,7 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 			$result->subcommands()['save_administrator']->help(strlen('save_administrator') + 1),
 			$result->subcommands()['install_finish']->help(strlen('install_finish') + 1),
 		);
-		$this->assertEquals($expected, $result);
+		$this->assertEquals($expected, $actual);
 	}
 
 }
