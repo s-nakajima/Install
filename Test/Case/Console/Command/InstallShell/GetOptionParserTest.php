@@ -49,7 +49,7 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 		$shell = $this->_shellName;
 		$this->$shell = $this->loadShell($shell, 'h');
 
-		//チェック
+		//事前準備
 		$tasks = array(
 			'InstallStart', 'InstallPermission', 'CreateDatabase', 'InstallMigrations',
 			'InstallBower', 'SaveAdministrator', 'InstallFinish'
@@ -67,22 +67,20 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 		//チェック
 		$this->assertEquals('ConsoleOptionParser', get_class($result));
 
-		$expected = array(
-			'install_start' . ' ' . __d('install', 'Install Step 1'),
-			'install_permission' . ' ' . __d('install', 'Install Step 2'),
-			'create_database' . ' ' . __d('install', 'Install Step 3'),
-			'install_migrations' . ' ' . __d('install', 'Install Step 4'),
-			'install_bower' . ' ' . __d('install', 'Install Step 5'),
-			'save_administrator' . ' ' . __d('install', 'Install Step 6'),
-			'install_finish' . ' ' . __d('install', 'Install End'),
-		);
-
-		$subCommands = array(
-			'install_start', 'install_permission', 'create_database', 'install_migrations',
-			'install_bower', 'save_administrator', 'install_finish'
-		);
+		//サブタスクヘルプのチェック
+		$expected = array();
 		$actual = array();
-		foreach ($subCommands as $subCommand) {
+		$subCommands = array(
+			'install_start' => __d('install', 'Install Step 1'),
+			'install_permission' => __d('install', 'Install Step 2'),
+			'create_database' => __d('install', 'Install Step 3'),
+			'install_migrations' => __d('install', 'Install Step 4'),
+			'install_bower' => __d('install', 'Install Step 5'),
+			'save_administrator' => __d('install', 'Install Step 6'),
+			'install_finish' => __d('install', 'Install End')
+		);
+		foreach ($subCommands as $subCommand => $helpMessage) {
+			$expected[] = $subCommand . ' ' . $helpMessage;
 			$actual[] = $result->subcommands()[$subCommand]->help(strlen($subCommand) + 1);
 		}
 		$this->assertEquals($expected, $actual);
