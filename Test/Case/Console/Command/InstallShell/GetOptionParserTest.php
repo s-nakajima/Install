@@ -50,40 +50,16 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 		$this->$shell = $this->loadShell($shell, 'h');
 
 		//チェック
-		$this->$shell->InstallStart = $this->getMock('InstallStart',
-				array('getOptionParser'), array(), '', false);
-		$this->$shell->InstallStart->expects($this->once())->method('getOptionParser')
-			->will($this->returnValue(true));
-
-		$this->$shell->InstallPermission = $this->getMock('InstallPermission',
-				array('getOptionParser'), array(), '', false);
-		$this->$shell->InstallPermission->expects($this->once())->method('getOptionParser')
-			->will($this->returnValue(true));
-
-		$this->$shell->CreateDatabase = $this->getMock('CreateDatabase',
-				array('getOptionParser'), array(), '', false);
-		$this->$shell->CreateDatabase->expects($this->once())->method('getOptionParser')
-			->will($this->returnValue(true));
-
-		$this->$shell->InstallMigrations = $this->getMock('InstallMigrations',
-				array('getOptionParser'), array(), '', false);
-		$this->$shell->InstallMigrations->expects($this->once())->method('getOptionParser')
-			->will($this->returnValue(true));
-
-		$this->$shell->InstallBower = $this->getMock('InstallBower',
-				array('getOptionParser'), array(), '', false);
-		$this->$shell->InstallBower->expects($this->once())->method('getOptionParser')
-			->will($this->returnValue(true));
-
-		$this->$shell->SaveAdministrator = $this->getMock('SaveAdministrator',
-				array('getOptionParser'), array(), '', false);
-		$this->$shell->SaveAdministrator->expects($this->once())->method('getOptionParser')
-			->will($this->returnValue(true));
-
-		$this->$shell->InstallFinish = $this->getMock('InstallFinish',
-				array('getOptionParser'), array(), '', false);
-		$this->$shell->InstallFinish->expects($this->once())->method('getOptionParser')
-			->will($this->returnValue(true));
+		$tasks = array(
+			'InstallStart', 'InstallPermission', 'CreateDatabase', 'InstallMigrations',
+			'InstallBower', 'SaveAdministrator', 'InstallFinish'
+		);
+		foreach ($tasks as $task) {
+			$this->$shell->$task = $this->getMock($task,
+					array('getOptionParser'), array(), '', false);
+			$this->$shell->$task->expects($this->once())->method('getOptionParser')
+				->will($this->returnValue(true));
+		}
 
 		//テスト実施
 		$result = $this->$shell->getOptionParser();
@@ -100,15 +76,15 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 			'save_administrator' . ' ' . __d('install', 'Install Step 6'),
 			'install_finish' . ' ' . __d('install', 'Install End'),
 		);
-		$actual = array(
-			$result->subcommands()['install_start']->help(strlen('install_start') + 1),
-			$result->subcommands()['install_permission']->help(strlen('install_permission') + 1),
-			$result->subcommands()['create_database']->help(strlen('create_database') + 1),
-			$result->subcommands()['install_migrations']->help(strlen('install_migrations') + 1),
-			$result->subcommands()['install_bower']->help(strlen('install_bower') + 1),
-			$result->subcommands()['save_administrator']->help(strlen('save_administrator') + 1),
-			$result->subcommands()['install_finish']->help(strlen('install_finish') + 1),
+
+		$subCommands = array(
+			'install_start', 'install_permission', 'create_database', 'install_migrations',
+			'install_bower', 'save_administrator', 'install_finish'
 		);
+		$actual = array();
+		foreach ($subCommands as $subCommand) {
+			$actual[] = $result->subcommands()[$subCommand]->help(strlen($subCommand) + 1);
+		}
 		$this->assertEquals($expected, $actual);
 	}
 
