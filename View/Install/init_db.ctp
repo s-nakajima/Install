@@ -32,9 +32,6 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 			)
 		)
 	);
-
-	// 配布用の場合はコメントにする
-	echo $this->NetCommonsForm->hidden('update', array('name' => 'update'));
 ?>
 	<div class="panel panel-default">
 		<div class="panel-heading"><?php echo __d('install', 'Database Settings'); ?></div>

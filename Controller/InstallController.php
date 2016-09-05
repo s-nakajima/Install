@@ -48,7 +48,10 @@ class InstallController extends InstallAppController {
 		$this->Auth->allow();
 		$this->layout = 'Install.default';
 
-		$this->InstallUtil = new InstallUtil();
+		//テストのために必要
+		if (substr(get_class($this->InstallUtil), 0, strlen('Mock_')) !== 'Mock_') {
+			$this->InstallUtil = new InstallUtil();
+		}
 
 		$this->Components->unload('NetCommons.Permission');
 	}
