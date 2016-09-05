@@ -98,7 +98,7 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 			'install_migrations' . ' ' . __d('install', 'Install Step 4'),
 			'install_bower' . ' ' . __d('install', 'Install Step 5'),
 			'save_administrator' . ' ' . __d('install', 'Install Step 6'),
-			'install_finish' . ' ' . __d('install', 'Install Step 7'),
+			'install_finish' . ' ' . __d('install', 'Install End'),
 		);
 		$actual = array(
 			$result->subcommands()['install_start']->help(strlen('install_start') + 1),
