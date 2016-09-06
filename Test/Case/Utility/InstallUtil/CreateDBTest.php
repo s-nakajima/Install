@@ -187,7 +187,7 @@ class InstallUtilityInstallUtilCreateDBTest extends NetCommonsCakeTestCase {
 		$this->assertFalse($result);
 		$logger = CakeLog::stream('TestMockLog');
 
-		$expected = 'Error: SQLSTATE[HY000] [2005] Unknown MySQL server host';
+		$expected = 'Error: SQLSTATE[HY000]';
 		$this->assertContains($expected, $logger->output[0]);
 	}
 
