@@ -61,18 +61,36 @@ class InstallUtilityInstallUtilChooseDBByEnvironmentTest extends NetCommonsCakeT
 		$result = $instance->chooseDBByEnvironment($env);
 
 		//チェック
-		$expected = array(
-			'datasource' => 'Database/Mysql',
-			'persistent' => false,
-			'host' => 'localhost',
-			'port' => 3306,
-			'login' => 'root',
-			'password' => 'root',
-			'database' => 'nc3',
-			'prefix' => '',
-			'schema' => '',
-			'encoding' => 'utf8',
-		);
+		//@codeCoverageIgnoreStart
+		if (isset($_SERVER['TRAVIS'])) {
+			$expected = array(
+				'datasource' => 'Database/Mysql',
+				'persistent' => false,
+				'host' => '0.0.0.0',
+				'port' => 3306,
+				'login' => 'travis',
+				'password' => '',
+				'database' => 'cakephp_test',
+				'prefix' => '',
+				'schema' => '',
+				'encoding' => 'utf8',
+			);
+		} else {
+			$expected = array(
+				'datasource' => 'Database/Mysql',
+				'persistent' => false,
+				'host' => 'localhost',
+				'port' => 3306,
+				'login' => 'root',
+				'password' => 'root',
+				'database' => 'nc3',
+				'prefix' => '',
+				'schema' => '',
+				'encoding' => 'utf8',
+			);
+		}
+		//@codeCoverageIgnoreEnd
+
 		$this->assertEquals($expected, $result);
 	}
 
@@ -90,78 +108,33 @@ class InstallUtilityInstallUtilChooseDBByEnvironmentTest extends NetCommonsCakeT
 		$result = $instance->chooseDBByEnvironment($env);
 
 		//チェック
-		$expected = array(
-			'datasource' => 'Database/Mysql',
-			'persistent' => false,
-			'host' => 'localhost',
-			'port' => 3306,
-			'login' => 'test',
-			'password' => 'test',
-			'database' => 'test_nc3',
-			'prefix' => '',
-			'schema' => '',
-			'encoding' => 'utf8',
-		);
-		$this->assertEquals($expected, $result);
-	}
-
-/**
- * TravisとしてのchooseDBByEnvironment()のテスト
- *
- * @return void
- */
-	public function testOnTravis() {
-		//データ生成
-		$env = '';
-		$_SERVER['TRAVIS'] = true;
-
-		//テスト実施
-		$instance = new InstallUtil();
-		$result = $instance->chooseDBByEnvironment($env);
-
-		//チェック
-		$expected = array(
-			'datasource' => 'Database/Mysql',
-			'persistent' => false,
-			'host' => '0.0.0.0',
-			'port' => 3306,
-			'login' => 'travis',
-			'password' => '',
-			'database' => 'cakephp_test',
-			'prefix' => '',
-			'schema' => '',
-			'encoding' => 'utf8',
-		);
-		$this->assertEquals($expected, $result);
-	}
-
-/**
- * TravisとしてのchooseDBByEnvironment('test')のテスト
- *
- * @return void
- */
-	public function testEnvTestOnTravis() {
-		//データ生成
-		$env = 'test';
-		$_SERVER['TRAVIS'] = true;
-
-		//テスト実施
-		$instance = new InstallUtil();
-		$result = $instance->chooseDBByEnvironment($env);
-
-		//チェック
-		$expected = array(
-			'datasource' => 'Database/Mysql',
-			'persistent' => false,
-			'host' => '0.0.0.0',
-			'port' => 3306,
-			'login' => 'travis',
-			'password' => '',
-			'database' => 'cakephp_test',
-			'prefix' => '',
-			'schema' => '',
-			'encoding' => 'utf8',
-		);
+		if (isset($_SERVER['TRAVIS'])) {
+			$expected = array(
+				'datasource' => 'Database/Mysql',
+				'persistent' => false,
+				'host' => '0.0.0.0',
+				'port' => 3306,
+				'login' => 'travis',
+				'password' => '',
+				'database' => 'cakephp_test',
+				'prefix' => '',
+				'schema' => '',
+				'encoding' => 'utf8',
+			);
+		} else {
+			$expected = array(
+				'datasource' => 'Database/Mysql',
+				'persistent' => false,
+				'host' => 'localhost',
+				'port' => 3306,
+				'login' => 'test',
+				'password' => 'test',
+				'database' => 'test_nc3',
+				'prefix' => '',
+				'schema' => '',
+				'encoding' => 'utf8',
+			);
+		}
 		$this->assertEquals($expected, $result);
 	}
 

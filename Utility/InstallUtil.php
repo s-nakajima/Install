@@ -269,11 +269,13 @@ class InstallUtil {
  * @return array Database configuration
  */
 	public function chooseDBByEnvironment($env = '') {
+		//@codeCoverageIgnoreStart
 		if (isset($_SERVER['TRAVIS'])) {
 			$db = 'travis' . ucfirst($env) . 'DB';
 		} else {
 			$db = 'master' . ucfirst($env) . 'DB';
 		}
+		//@codeCoverageIgnoreEnd
 
 		//if (isset($_SERVER['DB'])) {
 		//	if ($_SERVER['DB'] === 'pgsql') {
