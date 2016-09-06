@@ -22,6 +22,13 @@ App::uses('ConnectionManager', 'Model');
 class InstallUtilityInstallUtilCreateDBTest extends NetCommonsCakeTestCase {
 
 /**
+ * Fixture merge
+ *
+ * @var array
+ */
+	protected $_isFixtureMerged = false;
+
+/**
  * Plugin name
  *
  * @var string

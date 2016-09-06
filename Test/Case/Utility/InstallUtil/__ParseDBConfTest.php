@@ -21,6 +21,13 @@ App::uses('InstallUtil', 'Install.Utility');
 class PrivateInstallUtilityInstallUtilParseDBConfTest extends NetCommonsCakeTestCase {
 
 /**
+ * Fixture merge
+ *
+ * @var array
+ */
+	protected $_isFixtureMerged = false;
+
+/**
  * Plugin name
  *
  * @var string

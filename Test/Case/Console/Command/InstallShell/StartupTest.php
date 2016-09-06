@@ -20,6 +20,13 @@ App::uses('NetCommonsConsoleTestCase', 'NetCommons.TestSuite');
 class InstallConsoleCommandInstallShellStartupTest extends NetCommonsConsoleTestCase {
 
 /**
+ * Fixture merge
+ *
+ * @var array
+ */
+	protected $_isFixtureMerged = false;
+
+/**
  * Fixtures
  *
  * @var array

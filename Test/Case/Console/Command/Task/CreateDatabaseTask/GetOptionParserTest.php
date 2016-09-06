@@ -21,6 +21,13 @@ App::uses('CreateDatabaseTask', 'Install.Console/Command/Task');
 class InstallConsoleCommandTaskCreateDatabaseTaskGetOptionParserTest extends NetCommonsConsoleTestCase {
 
 /**
+ * Fixture merge
+ *
+ * @var array
+ */
+	protected $_isFixtureMerged = false;
+
+/**
  * Fixtures
  *
  * @var array

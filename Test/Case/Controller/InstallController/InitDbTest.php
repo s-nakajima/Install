@@ -20,12 +20,18 @@ App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 
 /**
+ * Fixture merge
+ *
+ * @var array
+ */
+	protected $_isFixtureMerged = false;
+
+/**
  * Fixtures
  *
  * @var array
  */
-	public $fixtures = array(
-	);
+	public $fixtures = array();
 
 /**
  * Plugin name

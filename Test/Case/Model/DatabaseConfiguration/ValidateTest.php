@@ -21,12 +21,18 @@ App::uses('DatabaseConfigurationFixture', 'Install.Test/Fixture');
 class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
 
 /**
+ * Fixture merge
+ *
+ * @var array
+ */
+	protected $_isFixtureMerged = false;
+
+/**
  * Fixtures
  *
  * @var array
  */
-	public $fixtures = array(
-	);
+	public $fixtures = array();
 
 /**
  * Plugin name
