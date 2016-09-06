@@ -32,7 +32,9 @@ class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.m17n.language',
+	);
 
 /**
  * Plugin name

@@ -31,7 +31,10 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.m17n.language',
+		'plugin.site_manager.site_setting',
+	);
 
 /**
  * Plugin name
