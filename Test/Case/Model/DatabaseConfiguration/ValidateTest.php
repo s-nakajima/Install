@@ -118,10 +118,10 @@ class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
 				),
 			),
 			array('data' => $data, 'field' => 'host', 'value' => 'あ',
-				'message' => __d('net_commons', 'Only alphabets and numbers are allowed.')
+				'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.')
 			),
 			array('data' => $data, 'field' => 'host', 'value' => 'ｱ',
-				'message' => __d('net_commons', 'Only alphabets and numbers are allowed.')
+				'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.')
 			),
 
 			//port
@@ -198,7 +198,7 @@ class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
 				),
 			),
 			array('data' => $data, 'field' => 'login', 'value' => 'あ',
-				'message' => __d('net_commons', 'Only alphabets and numbers are allowed.')
+				'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.')
 			),
 
 			//password
@@ -213,7 +213,7 @@ class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
 				),
 			),
 			array('data' => $data, 'field' => 'password', 'value' => 'あ',
-				'message' => __d('net_commons', 'Only alphabets and numbers are allowed.')
+				'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.')
 			),
 		);
 	}

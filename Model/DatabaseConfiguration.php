@@ -71,7 +71,7 @@ class DatabaseConfiguration extends AppModel {
 				),
 				'regex' => array(
 					'rule' => array('custom', '/[\w' . preg_quote('!#%&()*+,-./;<=>?@[]^_{|}~', '/') . ']+$/'),
-					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
+					'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.'),
 					'required' => true,
 				),
 			),
@@ -130,7 +130,7 @@ class DatabaseConfiguration extends AppModel {
 				),
 				'regex' => array(
 					'rule' => array('custom', '/[\w' . preg_quote('!#%&()*+,-./;<=>?@[]^_{|}~', '/') . ']+$/'),
-					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
+					'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.'),
 					'required' => true,
 				),
 			),
@@ -144,7 +144,7 @@ class DatabaseConfiguration extends AppModel {
 				),
 				'regex' => array(
 					'rule' => array('custom', '/[\w' . preg_quote('!#%&()*+,-./;<=>?@[]^_{|}~', '/') . ']+$/'),
-					'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
+					'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.'),
 					'allowEmpty' => true,
 				),
 			),
