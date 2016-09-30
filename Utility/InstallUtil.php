@@ -207,10 +207,12 @@ class InstallUtil {
 	public function __construct() {
 		Security::setHash('sha512');
 
-		$DatabaseConfig = ClassRegistry::init('Install.DatabaseConfiguration', true);
-		$this->useDbConfig = $DatabaseConfig->useDbConfig;
-		if ($DatabaseConfig->useDbConfig === 'test') {
-			$this->appYmlPrefix = 'test_';
+		if (file_exists(APP . 'Config' . DS . 'database.php')) {
+			$DatabaseConfig = ClassRegistry::init('Install.DatabaseConfiguration', true);
+			$this->useDbConfig = $DatabaseConfig->useDbConfig;
+			if ($DatabaseConfig->useDbConfig === 'test') {
+				$this->appYmlPrefix = 'test_';
+			}
 		}
 
 		//デフォルトの言語
