@@ -446,11 +446,17 @@ EOF;
  * @return void
  */
 	public function saveAdminUser($data) {
-		$this->User = ClassRegistry::init('Users.User');
-		$this->User->setDataSource('master');
-
+		//テストでMockに差し替えが必要なための処理であるので、カバレッジレポートから除外する。
+		//@codeCoverageIgnoreStart
+		if (empty($this->User) || substr(get_class($this->User), 0, 4) !== 'Mock') {
+			$this->User = ClassRegistry::init('Users.User');
+			$this->User->setDataSource('master');
+		}
 		$this->Language = ClassRegistry::init('M17n.Language');
-		$this->Language->setDataSource('master');
+		if (empty($this->Language) || substr(get_class($this->Language), 0, 4) !== 'Mock') {
+			$this->Language->setDataSource('master');
+		}
+		//@codeCoverageIgnoreEnd
 
 		$data = Hash::merge($data, array(
 			'User' => array(
@@ -460,9 +466,7 @@ EOF;
 			)
 		));
 
-		$languages = $this->Language->find('list', array(
-			'fields' => array('Language.id', 'Language.code'),
-		));
+		$languages = $this->Language->getLanguage('list');
 
 		$index = 0;
 		//foreach ($languages as $languageId => $languageCode) {
