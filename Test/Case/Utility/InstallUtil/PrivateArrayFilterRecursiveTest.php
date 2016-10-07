@@ -18,7 +18,7 @@ App::uses('InstallUtil', 'Install.Utility');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Install\Test\Case\Utility\InstallUtil
  */
-class PrivateInstallUtilityInstallUtilArrayFilterRecursiveTest extends NetCommonsCakeTestCase {
+class InstallUtilityInstallUtilPrivateArrayFilterRecursiveTest extends NetCommonsCakeTestCase {
 
 /**
  * Fixture merge
