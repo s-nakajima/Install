@@ -65,10 +65,11 @@ class InstallUtilityInstallUtilSaveAdminUserTest extends NetCommonsCakeTestCase 
 				'timezone' => 'Asia/Tokyo',
 			),
 			'UsersLanguage' => array(
-				array('id' => null, 'language_id' => '2', 'name' => 'Test User'),
 				array('id' => null, 'language_id' => '1', 'name' => 'Test User'),
+				array('id' => null, 'language_id' => '2', 'name' => 'Test User'),
 			)
 		));
+		$instance->Language = ClassRegistry::init('M17n.Language');
 
 		//データ生成
 		$data = array(

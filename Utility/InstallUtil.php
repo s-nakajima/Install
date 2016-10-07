@@ -452,8 +452,8 @@ EOF;
 			$this->User = ClassRegistry::init('Users.User');
 			$this->User->setDataSource('master');
 		}
-		$this->Language = ClassRegistry::init('M17n.Language');
-		if (empty($this->Language) || substr(get_class($this->Language), 0, 4) !== 'Mock') {
+		if (empty($this->Language)) {
+			$this->Language = ClassRegistry::init('M17n.Language');
 			$this->Language->setDataSource('master');
 		}
 		//@codeCoverageIgnoreEnd
@@ -466,11 +466,13 @@ EOF;
 			)
 		));
 
-		$languages = $this->Language->getLanguage('list');
+		$languages = $this->Language->getLanguage('list', array(
+			'fields' => array('id', 'id')
+		));
 
 		$index = 0;
 		//foreach ($languages as $languageId => $languageCode) {
-		foreach (array_keys($languages) as $languageId) {
+		foreach ($languages as $languageId) {
 			$data['UsersLanguage'][$index] = array(
 				'id' => null,
 				'language_id' => $languageId,
