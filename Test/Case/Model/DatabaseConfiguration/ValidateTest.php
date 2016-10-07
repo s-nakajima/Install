@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsValidateTest', 'NetCommons.TestSuite');
+App::uses('NetCommonsCakeTestCase', 'NetCommons.TestSuite');
 App::uses('DatabaseConfigurationFixture', 'Install.Test/Fixture');
 
 /**
@@ -18,7 +18,7 @@ App::uses('DatabaseConfigurationFixture', 'Install.Test/Fixture');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Install\Test\Case\Model\DatabaseConfiguration
  */
-class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
+class DatabaseConfigurationValidateTest extends NetCommonsCakeTestCase {
 
 /**
  * Fixture merge
@@ -26,15 +26,6 @@ class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
  * @var array
  */
 	protected $_isFixtureMerged = false;
-
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.m17n.language',
-	);
 
 /**
  * Plugin name
@@ -216,6 +207,40 @@ class DatabaseConfigurationValidateTest extends NetCommonsValidateTest {
 				'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.')
 			),
 		);
+	}
+
+/**
+ * Validatesのテスト
+ *
+ * @param array $data 登録データ
+ * @param string $field フィールド名
+ * @param string $value セットする値
+ * @param string $message エラーメッセージ
+ * @param array $overwrite 上書きするデータ
+ * @dataProvider dataProviderValidationError
+ * @return void
+ */
+	public function testValidationError($data, $field, $value, $message, $overwrite = array()) {
+		$model = $this->_modelName;
+
+		if (is_null($value)) {
+			unset($data[$model][$field]);
+		} else {
+			$data[$model][$field] = $value;
+		}
+		$data = Hash::merge($data, $overwrite);
+
+		//validate処理実行
+		$this->$model->set($data);
+		$result = $this->$model->validates();
+		if ($message === true) {
+			$this->assertTrue($result);
+		} else {
+			$this->assertFalse($result);
+			if ($message) {
+				$this->assertEquals($this->$model->validationErrors[$field][0], $message);
+			}
+		}
 	}
 
 }

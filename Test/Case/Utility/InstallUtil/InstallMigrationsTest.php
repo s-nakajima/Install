@@ -62,7 +62,7 @@ class InstallUtilityInstallUtilInstallMigrationsTest extends NetCommonsCakeTestC
  * @return void
  */
 	public function tearDown() {
-		$this->__databaseClear();
+		//$this->__databaseClear();
 
 		parent::tearDown();
 	}

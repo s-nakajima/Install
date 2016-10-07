@@ -18,7 +18,7 @@ App::uses('InstallUtil', 'Install.Utility');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Install\Test\Case\Utility\InstallUtil
  */
-class PrivateInstallUtilityInstallUtilConstructTest extends NetCommonsCakeTestCase {
+class InstallUtilityInstallUtilPrivateConstructTest extends NetCommonsCakeTestCase {
 
 /**
  * Fixture merge
