@@ -103,9 +103,31 @@ class InstallController extends InstallAppController {
 	public function init_permission() {
 		$this->set('pageTitle', __d('install', 'Permissions'));
 
+		$ret = true;
+
+		//バージョンチェック
+		$messages = array();
+		$return = null;
+		exec(sprintf(
+			'cd %s && Console%scake Install.install check_lib_version 2>&1',
+			ROOT . DS . APP_DIR, DS
+		), $messages, $return);
+
+		$ret = !(bool)$return;
+		array_shift($messages);
+		array_shift($messages);
+		array_shift($messages);
+
+		$versions = array();
+		foreach ($messages as $message) {
+			$versions[] = array(
+				'message' => preg_replace('/^Error: /', '', $message),
+				'error' => (bool)preg_match('/^Error:/', $message),
+			);
+		}
+
 		// Check permissions
 		$permissions = array();
-		$ret = true;
 		// Actually we don't have to check app/Config and app/tmp here,
 		// since cakephp itself cannot handle requests w/o these directories with proper permission.
 		// Just a stub action for future release.
@@ -128,11 +150,17 @@ class InstallController extends InstallAppController {
 		}
 
 		// Show current page on failure
-		if (!$ret) {
+		$this->set('versions', $versions);
+		$this->set('permissions', $permissions);
+		$this->set('canInstall', $ret);
+
+		if (! $ret) {
+			foreach ($versions as $version) {
+				CakeLog::error($version['message']);
+			}
 			foreach ($permissions as $permission) {
 				CakeLog::error($permission['message']);
 			}
-			$this->set('permissions', $permissions);
 			return;
 		}
 
@@ -143,7 +171,6 @@ class InstallController extends InstallAppController {
 			));
 			return;
 		}
-		$this->set('permissions', $permissions);
 	}
 
 /**

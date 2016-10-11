@@ -59,7 +59,7 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 		//事前準備
 		$tasks = array(
 			'InstallStart', 'InstallPermission', 'CreateDatabase', 'InstallMigrations',
-			'InstallBower', 'SaveAdministrator', 'InstallFinish'
+			'InstallBower', 'SaveAdministrator', 'InstallFinish', 'CheckLibVersion'
 		);
 		foreach ($tasks as $task) {
 			$this->$shell->$task = $this->getMock($task,
@@ -79,7 +79,8 @@ class InstallConsoleCommandInstallShellGetOptionParserTest extends NetCommonsCon
 		$actual = array();
 		$subCommands = array(
 			'install_start' => __d('install', 'Install Step 1'),
-			'install_permission' => __d('install', 'Install Step 2'),
+			'check_lib_version' => __d('install', 'Install Step 2(1)'),
+			'install_permission' => __d('install', 'Install Step 2(2)'),
 			'create_database' => __d('install', 'Install Step 3'),
 			'install_migrations' => __d('install', 'Install Step 4'),
 			'install_bower' => __d('install', 'Install Step 5'),
