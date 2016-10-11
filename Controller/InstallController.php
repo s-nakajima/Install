@@ -95,6 +95,22 @@ class InstallController extends InstallAppController {
 	}
 
 /**
+ * バージョンチェックを出力するかどうか
+ *
+ * @param string $message メッセージ
+ * @return bool
+ */
+	private function __displayVersionMessage($message) {
+		if (substr($message, 0, 2) === '--' ||
+				$message === 'NetCommons Install' || ! $message || $message === 'NULL' ||
+				! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning/', $message)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+/**
  * ステップ 2
  * パーミッションのチェック
  *
@@ -117,9 +133,7 @@ class InstallController extends InstallAppController {
 
 		$versions = array();
 		foreach ($messages as $message) {
-			if (substr($message, 0, 2) === '--' ||
-					$message === 'NetCommons Install' || ! $message || $message === 'NULL' ||
-					! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning/', $message)) {
+			if (! $this->__displayVersionMessage($message)) {
 				continue;
 			}
 
@@ -162,11 +176,9 @@ class InstallController extends InstallAppController {
 		$this->set('canInstall', $ret);
 
 		if (! $ret) {
-			foreach ($versions as $version) {
-				CakeLog::error($version['message']);
-			}
-			foreach ($permissions as $permission) {
-				CakeLog::error($permission['message']);
+			$outputs = array_merge($versions, $permissions);
+			foreach ($outputs as $output) {
+				CakeLog::error($output['message']);
 			}
 			return;
 		}
