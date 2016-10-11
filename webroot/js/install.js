@@ -5,23 +5,23 @@ $(document).ready(function() {
     window.location.href = url + 'language=' + $(this).val();
   });
 
-  var model = 'DatabaseConfiguration';
-  $('#' + model + 'Datasource').on('change', function() {
+  var model = '';
+  $('#' + model + 'datasource').on('change', function() {
     var type = $('option:selected', this).text();
     if (type === 'Mysql') {
-      $('#' + model + 'Port').val(3306);
-      $('#' + model + 'Login').val('root');
-      $('#' + model + 'Schema').parent().parent().slideUp();
-      $('#' + model + 'Schema').prop('disabled', true);
+      $('#' + model + 'port').val(3306);
+      $('#' + model + 'pogin').val('root');
+      $('#' + model + 'pchema').parent().parent().slideUp();
+      $('#' + model + 'schema').prop('disabled', true);
     } else if (type === 'Postgresql') {
-      $('#' + model + 'Port').val(5432);
-      $('#' + model + 'Login').val('postgres');
-      $('#' + model + 'Schema').prop('disabled', false).
+      $('#' + model + 'port').val(5432);
+      $('#' + model + 'login').val('postgres');
+      $('#' + model + 'schema').prop('disabled', false).
           parent().parent().slideDown();
     }
   });
 
-  $('#DatabaseConfigurationInitDbForm').on('submit', function(event) {
+  $('#InitDbForm').on('submit', function(event) {
     var dialog = $('div.loader').dialog({
       modal: true,
       resizable: false,

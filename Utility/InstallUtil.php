@@ -14,6 +14,7 @@ App::uses('File', 'Utility');
 App::uses('Current', 'NetCommons.Utility');
 App::uses('Security', 'Utility');
 App::uses('ClassRegistry', 'Utility');
+App::uses('InstallValidatorUtil', 'Install.Utility');
 
 /**
  * Install Utility
@@ -49,8 +50,8 @@ class InstallUtil {
 		'host' => 'localhost',
 		'port' => 3306,
 		'login' => 'root',
-		'password' => 'root',
-		'database' => 'nc3',
+		'password' => '',
+		'database' => '',
 		'prefix' => '',
 		'schema' => '',
 		'encoding' => 'utf8',
@@ -200,19 +201,24 @@ class InstallUtil {
 	);
 
 /**
+ * List of validation errors.
+ *
+ * @var array
+ */
+	public $validationErrors = array();
+
+/**
  * コンストラクタ
  *
+ * @param bool $testing テストかどうか
  * @return void
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
-	public function __construct() {
+	public function __construct($testing = false) {
 		Security::setHash('sha512');
 
-		if (file_exists(APP . 'Config' . DS . 'database.php')) {
-			$DatabaseConfig = ClassRegistry::init('Install.DatabaseConfiguration', true);
-			$this->useDbConfig = $DatabaseConfig->useDbConfig;
-			if ($DatabaseConfig->useDbConfig === 'test') {
-				$this->appYmlPrefix = 'test_';
-			}
+		if ($testing) {
+			$this->appYmlPrefix = 'test_';
 		}
 
 		//デフォルトの言語
@@ -313,6 +319,20 @@ class InstallUtil {
 	}
 
 /**
+ * database.phpの入力チェック
+ *
+ * @param array $data configs
+ * @return bool File written or not
+ */
+	public function validatesDBConf($data = array()) {
+		$validator = new InstallValidatorUtil();
+		$result = $validator->validates($data);
+
+		$this->validationErrors = $validator->validationErrors;
+		return $result;
+	}
+
+/**
  * database.phpの登録
  *
  * @param array $conf コンフィグ値
@@ -328,7 +348,10 @@ class InstallUtil {
 				$value = 'true';
 			} elseif ($value === false) {
 				$value = 'false';
+			} elseif (! is_string($value)) {
+				continue;
 			}
+
 			$conf = str_replace(sprintf('{' . $dbPrefix . '_%s}', $key), $value, $conf);
 		}
 
@@ -508,6 +531,13 @@ EOF;
 			$connection = 'test';
 		}
 
+		try {
+			$SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
+			$count = $SiteSetting->find('count');
+		} catch (Exception $ex) {
+			$count = false;
+		}
+
 		// Invoke all available migrations
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
 
@@ -544,6 +574,27 @@ EOF;
 				);
 			}
 			$this->__commandOutputResults('migration', $messages);
+		}
+
+		if (! $count) {
+			$SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
+			$SiteSetting->useDbConfig = 'master';
+			$conditions = array(
+				'key' => 'Config.language'
+			);
+			$update = array(
+				'value' => '\'' . Configure::read('Config.language') . '\''
+			);
+			if (! $SiteSetting->updateAll($update, $conditions)) {
+				CakeLog::info(
+					sprintf('[migration] Failure `Config.language` update.', $plugin, $connection)
+				);
+				$result = false;
+			} else {
+				CakeLog::info(
+					sprintf('[migration] Successfully `Config.language` update.', $plugin, $connection)
+				);
+			}
 		}
 
 		if ($result) {

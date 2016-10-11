@@ -26,6 +26,15 @@ msgstr "%s に書き込みができません。パーミッションを確認し
 msgid "%s is writable"
 msgstr "%s 書き込み可"
 
+msgid "%s(%s) version error. Please more than \"%s\" version."
+msgstr "%s(%s)のバージョンが違っています。%s以上にしてください。"
+
+msgid "%s(%s) version success."
+msgstr "%s(%s) 正常"
+
+msgid "Not found the %s. Please install the %s."
+msgstr "%sが見つかりません。%sをインストールしてください。"
+
 #: Controller/InstallController.php:160
 msgid "The user could not be saved. Please try again."
 msgstr "ユーザを保存できませんでした。暫くしてから再度お試しください。"
@@ -166,6 +175,10 @@ msgstr "管理者ユーザ作成"
 #: View/Install/init_permission.ctp:8
 msgid "Permissions"
 msgstr "パーミッションチェック"
+
+#: View/Install/init_permission.ctp:8
+msgid "Versions"
+msgstr "バージョンチェック"
 
 msgid "Failed to install migrations."
 msgstr "テーブルの生成（マイグレーション）に失敗しました。"

@@ -117,7 +117,7 @@ class InstallUtilityInstallUtilCreateDBTest extends NetCommonsCakeTestCase {
 		$configuration = $this->__data();
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $instance->createDB($configuration);
 
 		//チェック
@@ -154,7 +154,7 @@ class InstallUtilityInstallUtilCreateDBTest extends NetCommonsCakeTestCase {
 		$configuration['datasource'] = 'error_db';
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $instance->createDB($configuration);
 
 		//チェック
@@ -180,7 +180,7 @@ class InstallUtilityInstallUtilCreateDBTest extends NetCommonsCakeTestCase {
 		$configuration['password'] = 'dummy';
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $instance->createDB($configuration);
 
 		//チェック
@@ -202,7 +202,7 @@ class InstallUtilityInstallUtilCreateDBTest extends NetCommonsCakeTestCase {
 		$configuration['database'] = '``';
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $instance->createDB($configuration);
 
 		//チェック

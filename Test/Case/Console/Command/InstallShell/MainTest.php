@@ -134,6 +134,11 @@ class InstallConsoleCommandInstallShellMainTest extends NetCommonsConsoleTestCas
 		$this->$shell->InstallStart->expects($this->once())->method('execute')
 			->will($this->returnValue(true));
 
+		$this->$shell->CheckLibVersion = $this->getMock('CheckLibVersion',
+				array('execute'), array(), '', false);
+		$this->$shell->CheckLibVersion->expects($this->once())->method('execute')
+			->will($this->returnValue(true));
+
 		$this->$shell->InstallPermission = $this->getMock('InstallPermission',
 				array('execute'), array(), '', false);
 		$this->$shell->InstallPermission->expects($this->once())->method('execute')
@@ -189,6 +194,11 @@ class InstallConsoleCommandInstallShellMainTest extends NetCommonsConsoleTestCas
 		$this->$shell->InstallStart = $this->getMock('InstallStart',
 				array('getOptionParser'), array(), '', false);
 		$this->$shell->InstallStart->expects($this->once())->method('getOptionParser')
+			->will($this->returnValue(true));
+
+		$this->$shell->CheckLibVersion = $this->getMock('CheckLibVersion',
+				array('getOptionParser'), array(), '', false);
+		$this->$shell->CheckLibVersion->expects($this->once())->method('getOptionParser')
 			->will($this->returnValue(true));
 
 		$this->$shell->InstallPermission = $this->getMock('InstallPermission',

@@ -20,15 +20,6 @@ App::uses('InstallUtil', 'Install.Utility');
 class InstallController extends InstallAppController {
 
 /**
- * Model name
- *
- * @var array
- */
-	public $uses = array(
-		'Install.DatabaseConfiguration',
-	);
-
-/**
  * Helpers
  */
 	public $helpers = array(
@@ -53,6 +44,14 @@ class InstallController extends InstallAppController {
 			$this->InstallUtil = new InstallUtil();
 		}
 
+		if (isset($this->request->query['language'])) {
+			Configure::write('Config.language', $this->request->query['language']);
+			$this->Session->write('Config.language', $this->request->query['language']);
+		} else {
+			Configure::write('Config.language', 'ja');
+			$this->Session->write('Config.language', 'ja');
+		}
+
 		$this->Components->unload('NetCommons.Permission');
 	}
 
@@ -65,17 +64,17 @@ class InstallController extends InstallAppController {
 	public function index() {
 		$this->set('pageTitle', __d('install', 'Term'));
 
-		// Initialize master database connection
-		$configs = $this->InstallUtil->chooseDBByEnvironment();
-		if (! $this->InstallUtil->saveDBConf($configs)) {
-			$message = __d(
-				'install',
-				'Failed to write %s. Please check permission.',
-				array(APP . 'Config' . DS . 'database.php')
-			);
-			$this->Session->setFlash($message);
-			return;
-		}
+		//// Initialize master database connection
+		//$configs = $this->InstallUtil->chooseDBByEnvironment();
+		//if (! $this->InstallUtil->saveDBConf($configs)) {
+		//	$message = __d(
+		//		'install',
+		//		'Failed to write %s. Please check permission.',
+		//		array(APP . 'Config' . DS . 'database.php')
+		//	);
+		//	$this->Session->setFlash($message);
+		//	return;
+		//}
 
 		if (! $this->InstallUtil->installApplicationYaml($this->request->query)) {
 			$message = __d(
@@ -88,7 +87,26 @@ class InstallController extends InstallAppController {
 		}
 
 		if ($this->request->is('post')) {
-			$this->redirect(array('action' => 'init_permission'));
+			$this->redirect(array(
+				'action' => 'init_permission',
+				'?' => ['language' => Configure::read('Config.language')]
+			));
+		}
+	}
+
+/**
+ * バージョンチェックを出力するかどうか
+ *
+ * @param string $message メッセージ
+ * @return bool
+ */
+	private function __displayVersionMessage($message) {
+		if (substr($message, 0, 2) === '--' ||
+				$message === 'NetCommons Install' || ! $message || $message === 'NULL' ||
+				! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning/', $message)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -101,9 +119,36 @@ class InstallController extends InstallAppController {
 	public function init_permission() {
 		$this->set('pageTitle', __d('install', 'Permissions'));
 
+		$ret = true;
+
+		//バージョンチェック
+		$messages = array();
+		$result = null;
+		exec(sprintf(
+			'cd %s && Console%scake Install.install check_lib_version 2>&1',
+			ROOT . DS . APP_DIR, DS
+		), $messages, $result);
+
+		$ret = !(bool)$result;
+
+		$versions = array();
+		foreach ($messages as $message) {
+			if (! $this->__displayVersionMessage($message)) {
+				continue;
+			}
+
+			$result = (bool)preg_match('/^Error|^Notice|^Fatal|^Warning/', $message);
+			if ($result) {
+				$ret = false;
+			}
+			$versions[] = array(
+				'message' => preg_replace('/^Error:|^Success:/', '', $message),
+				'error' => $result,
+			);
+		}
+
 		// Check permissions
 		$permissions = array();
-		$ret = true;
 		// Actually we don't have to check app/Config and app/tmp here,
 		// since cakephp itself cannot handle requests w/o these directories with proper permission.
 		// Just a stub action for future release.
@@ -126,19 +171,25 @@ class InstallController extends InstallAppController {
 		}
 
 		// Show current page on failure
-		if (!$ret) {
-			foreach ($permissions as $permission) {
-				CakeLog::error($permission['message']);
+		$this->set('versions', $versions);
+		$this->set('permissions', $permissions);
+		$this->set('canInstall', $ret);
+
+		if (! $ret) {
+			$outputs = array_merge($versions, $permissions);
+			foreach ($outputs as $output) {
+				CakeLog::error($output['message']);
 			}
-			$this->set('permissions', $permissions);
 			return;
 		}
 
 		if ($this->request->is('post')) {
-			$this->redirect(array('action' => 'init_db'));
+			$this->redirect(array(
+				'action' => 'init_db',
+				'?' => ['language' => Configure::read('Config.language')]
+			));
 			return;
 		}
-		$this->set('permissions', $permissions);
 	}
 
 /**
@@ -155,30 +206,31 @@ class InstallController extends InstallAppController {
 
 		$this->set('masterDB', $this->InstallUtil->chooseDBByEnvironment());
 		$this->set('errors', array());
+		$this->set('validationErrors', array());
 		if ($this->request->is('post')) {
 			set_time_limit(1800);
 
-			if ($this->request->data['DatabaseConfiguration']['prefix'] &&
-					substr($this->request->data['DatabaseConfiguration']['prefix'], -1, 1) !== '_') {
-				$this->request->data['DatabaseConfiguration']['prefix'] .= '_';
+			if ($this->request->data['prefix'] &&
+					substr($this->request->data['prefix'], -1, 1) !== '_') {
+				$this->request->data['prefix'] .= '_';
 			}
-			$this->DatabaseConfiguration->set($this->request->data);
-			if ($this->DatabaseConfiguration->validates()) {
-				// Update database connection
-				$this->InstallUtil->saveDBConf($this->request->data['DatabaseConfiguration']);
+
+			if ($this->InstallUtil->validatesDBConf($this->request->data)) {
+				$this->InstallUtil->saveDBConf($this->request->data);
 			} else {
+				$this->set('validationErrors', $this->InstallUtil->validationErrors);
 				$this->response->statusCode(400);
 				$this->set('errors', [
 					__d('net_commons', 'Failed on validation errors. Please check the input data.')
 				]);
 				CakeLog::info('[ValidationErrors] ' . $this->request->here());
 				if (Configure::read('debug')) {
-					CakeLog::info(var_export($this->DatabaseConfiguration->validationErrors, true));
+					CakeLog::info(var_export($this->InstallUtil->validationErrors, true));
 				}
 				return;
 			}
 
-			if (!$this->InstallUtil->createDB($this->request->data['DatabaseConfiguration'])) {
+			if (! $this->InstallUtil->createDB($this->request->data)) {
 				$this->response->statusCode(400);
 				CakeLog::info('Failed to create database.');
 				$this->set('errors', [__d('install', 'Failed to create database.')]);
@@ -197,7 +249,10 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			$this->redirect(array('action' => 'init_admin_user'));
+			$this->redirect(array(
+				'action' => 'init_admin_user',
+				'?' => ['language' => Configure::read('Config.language')]
+			));
 		}
 	}
 
@@ -218,7 +273,10 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
-			$this->redirect(array('action' => 'finish'));
+			$this->redirect(array(
+				'action' => 'finish',
+				'?' => ['language' => Configure::read('Config.language')]
+			));
 		}
 	}
 

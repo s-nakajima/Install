@@ -12,7 +12,33 @@ echo $this->NetCommonsHtml->script('/install/js/install.js');
 echo $this->NetCommonsHtml->css('/install/css/install.css');
 ?>
 
-<?php echo $this->Form->create(false, array('url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'init_permission'))); ?>
+<?php echo $this->Form->create(false, array('url' => array(
+		'plugin' => 'install',
+		'controller' => 'install',
+		'action' => 'init_permission',
+		'?' => ['language' => Configure::read('Config.language')]
+	))); ?>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<?php echo __d('install', 'Versions'); ?>
+		</div>
+		<div>
+			<?php foreach ($versions as $version): ?>
+				<?php if ($version['error']): ?>
+					<p class="bg-danger message text-danger">
+						<span class="glyphicon glyphicon-remove"></span>
+						<?php echo h($version['message']); ?>
+					</p>
+				<?php else: ?>
+					<p class="bg-success message text-success">
+						<span class="glyphicon glyphicon-ok"></span>
+						<?php echo h($version['message']); ?>
+					</p>
+				<?php endif; ?>
+			<?php endforeach ?>
+		</div>
+	</div>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -34,7 +60,8 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 			<?php endforeach ?>
 		</div>
 	</div>
-	<button class="btn btn-lg btn-primary btn-block" type="submit">
+
+	<button class="btn btn-lg btn-primary btn-block" type="submit"<?php echo ($canInstall ? '' : ' disabled="disabled"'); ?>>
 		<?php echo __d('install', 'Next'); ?>
 	</button>
 

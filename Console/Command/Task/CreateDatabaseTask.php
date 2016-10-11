@@ -76,17 +76,14 @@ class CreateDatabaseTask extends InstallAppTask {
 	public function execute() {
 		parent::execute();
 
-		$this->DbConfiguration = ClassRegistry::init('Install.DatabaseConfiguration');
-
 		//引数のセット
 		$this->__prepare();
 
 		//データベースの設定
-		$this->DbConfiguration->set($this->data);
-		if ($this->DbConfiguration->validates()) {
+		if ($this->InstallUtil->validatesDBConf($this->data)) {
 			$this->InstallUtil->saveDBConf($this->data);
 		} else {
-			$message = var_export($this->DbConfiguration->validationErrors, true);
+			$message = var_export($this->InstallUtil->validationErrors, true);
 			return $this->error('validation error', $message);
 		}
 

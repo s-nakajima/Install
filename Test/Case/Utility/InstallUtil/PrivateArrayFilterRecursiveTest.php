@@ -47,7 +47,7 @@ class InstallUtilityInstallUtilPrivateArrayFilterRecursiveTest extends NetCommon
 		};
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $this->_testReflectionMethod(
 			$instance, '__arrayFilterRecursive', array($input, $callback)
 		);

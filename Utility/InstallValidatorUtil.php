@@ -1,6 +1,6 @@
 <?php
 /**
- * DatabaseConfiguration Model
+ * Install Utility
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -9,41 +9,47 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('AppModel', 'Model');
+App::uses('CakeValidationSet', 'Model/Validator');
 
 /**
- * DatabaseConfiguration Model
+ * Install Utility
  *
- * @package NetCommons\Install\Model
+ * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @package NetCommons\Install\Utility
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
-class DatabaseConfiguration extends AppModel {
+class InstallValidatorUtil {
 
 /**
- * useTable
+ * Holds the CakeValidationSet objects array
  *
- * @var bool
+ * @var CakeValidationSet[]
  */
-	public $useTable = false;
+	protected $_fields = array();
 
 /**
- * Validation rules
+ * The validators $validate property, used for checking whether validation
+ * rules definition changed in the model and should be refreshed in this class
  *
  * @var array
  */
-	public $validate = array();
+	protected $_validates = array();
 
 /**
- * Called during validation operations, before validation. Please note that custom
- * validation rules can be defined in $validate.
+ * List of validation errors.
  *
- * @param array $options Options passed from Model::save().
- * @return bool True if validate operation should continue, false to abort
- * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforevalidate
- * @see Model::save()
+ * @var array
+ */
+	public $validationErrors = array();
+
+/**
+ * コンストラクタ
+ *
+ * @return void
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+	public function __construct() {
+		$this->_validates = array(
 			'datasource' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
@@ -70,7 +76,7 @@ class DatabaseConfiguration extends AppModel {
 					'required' => true,
 				),
 				'regex' => array(
-					'rule' => array('custom', '/[\w' . preg_quote('!#%&()*+,-./;<=>?@[]^_{|}~', '/') . ']+$/'),
+					'rule' => array('custom', '/[\w' . preg_quote('-./_~', '/') . ']+$/'),
 					'message' => __d('net_commons', 'Only alphabets, numbers and symbols are allowed.'),
 					'required' => true,
 				),
@@ -148,8 +154,61 @@ class DatabaseConfiguration extends AppModel {
 					'allowEmpty' => true,
 				),
 			),
-		));
-
-		return parent::beforeValidate($options);
+		);
 	}
+
+/**
+ * Returns true if all fields pass validation. Will validate hasAndBelongsToMany associations
+ * that use the 'with' key as well. Since `Model::_saveMulti` is incapable of exiting a save operation.
+ *
+ * Will validate the currently set data. Use `Model::set()` or `Model::create()` to set the active data.
+ *
+ * @param array $options An optional array of custom options to be made available in the beforeValidate callback
+ * @return bool True if there are no errors
+ */
+	public function validates($options = array()) {
+		$this->_fields = array();
+		foreach ($this->_validates as $fieldName => $ruleSet) {
+			$this->_fields[$fieldName] = new CakeValidationSet($fieldName, $ruleSet);
+		}
+
+		$errors = $this->errors($options);
+		if (is_array($errors)) {
+			return count($errors) === 0;
+		}
+		return $errors;
+	}
+
+/**
+ * Returns an array of fields that have failed validation. On the current model. This method will
+ * actually run validation rules over data, not just return the messages.
+ *
+ * @param string $options An optional array of custom options to be made available in the beforeValidate callback
+ * @return array Array of invalid fields
+ * @triggers Model.afterValidate $model
+ * @see ModelValidator::validates()
+ */
+	public function errors($options = array()) {
+		foreach ($this->_fields as $field) {
+			$errors = $field->validate($options);
+			foreach ($errors as $error) {
+				$this->invalidate($field->field, $error);
+			}
+		}
+		return $this->validationErrors;
+	}
+
+/**
+ * Marks a field as invalid, optionally setting a message explaining
+ * why the rule failed
+ *
+ * @param string $field The name of the field to invalidate
+ * @param string $message Validation message explaining why the rule failed, defaults to true.
+ * @return void
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function invalidate($field, $message = true) {
+		$this->validationErrors[$field][] = $message;
+	}
+
 }

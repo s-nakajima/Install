@@ -95,7 +95,7 @@ class InstallUtilityInstallUtilInstallMigrationsTest extends NetCommonsCakeTestC
  * @return void
  */
 	public function testInstallMigrations() {
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 
 		//データ生成
 		$connection = 'test';
@@ -126,7 +126,7 @@ class InstallUtilityInstallUtilInstallMigrationsTest extends NetCommonsCakeTestC
  * @return void
  */
 	public function testFailurePlugin() {
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 
 		//データ生成
 		$connection = 'test';

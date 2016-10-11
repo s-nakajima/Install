@@ -27,6 +27,7 @@ class InstallShell extends AppShell {
  */
 	public $tasks = array(
 		'Install.InstallStart',
+		'Install.CheckLibVersion',
 		'Install.InstallPermission',
 		'Install.CreateDatabase',
 		'Install.InstallMigrations',
@@ -66,6 +67,7 @@ class InstallShell extends AppShell {
 		switch ($choice) {
 			case 's':
 				$this->InstallStart->execute();
+				$this->CheckLibVersion->execute();
 				$this->InstallPermission->execute();
 				$this->CreateDatabase->execute();
 				$this->InstallMigrations->execute();
@@ -101,8 +103,12 @@ class InstallShell extends AppShell {
 				'help' => __d('install', 'Install Step 1'),
 				'parser' => $this->InstallStart->getOptionParser(),
 			))
+			->addSubcommand('check_lib_version', array(
+				'help' => __d('install', 'Install Step 2(1)'),
+				'parser' => $this->CheckLibVersion->getOptionParser(),
+			))
 			->addSubcommand('install_permission', array(
-				'help' => __d('install', 'Install Step 2'),
+				'help' => __d('install', 'Install Step 2(2)'),
 				'parser' => $this->InstallPermission->getOptionParser(),
 			))
 			->addSubcommand('create_database', array(
