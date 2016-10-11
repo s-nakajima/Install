@@ -107,22 +107,29 @@ class InstallController extends InstallAppController {
 
 		//バージョンチェック
 		$messages = array();
-		$return = null;
+		$result = null;
 		exec(sprintf(
 			'cd %s && Console%scake Install.install check_lib_version 2>&1',
 			ROOT . DS . APP_DIR, DS
-		), $messages, $return);
+		), $messages, $result);
 
-		$ret = !(bool)$return;
-		array_shift($messages);
-		array_shift($messages);
-		array_shift($messages);
+		$ret = !(bool)$result;
 
 		$versions = array();
 		foreach ($messages as $message) {
+			if (substr($message, 0, 2) === '--' ||
+					$message === 'NetCommons Install' || ! $message || $message === 'NULL' ||
+					! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning/', $message)) {
+				continue;
+			}
+
+			$result = (bool)preg_match('/^Error|^Notice|^Fatal|^Warning/', $message);
+			if ($result) {
+				$ret = false;
+			}
 			$versions[] = array(
-				'message' => preg_replace('/^Error: /', '', $message),
-				'error' => (bool)preg_match('/^Error:/', $message),
+				'message' => preg_replace('/^Error:|^Success:/', '', $message),
+				'error' => $result,
 			);
 		}
 

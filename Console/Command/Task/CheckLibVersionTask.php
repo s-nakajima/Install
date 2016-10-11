@@ -38,7 +38,7 @@ class CheckLibVersionTask extends InstallAppTask {
 		$status = 0;
 		if (version_compare($this->phpVersion, '5.4.0') >= 0) {
 			$message = __d('install', '%s(%s) version success.', 'PHP', $this->phpVersion);
-			$this->out($message);
+			$this->out('<success>Success:</success> ' . $message);
 		} else {
 			$message = __d(
 				'install',
@@ -55,7 +55,7 @@ class CheckLibVersionTask extends InstallAppTask {
 			$status = parent::CODE_ERROR;
 		} else {
 			$message = __d('install', '%s(%s) version success.', 'pdo_mysql', $version);
-			$this->out($message);
+			$this->out('<success>Success:</success> ' . $message);
 		}
 
 		$this->_stop($status);
