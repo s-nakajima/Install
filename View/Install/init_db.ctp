@@ -23,13 +23,15 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 	</div>
 <?php endforeach; ?>
 <?php
-	echo $this->NetCommonsForm->create('DatabaseConfiguration',
+	echo $this->NetCommonsForm->create(false,
 		array(
 			'url' => array(
 				'plugin' => 'install',
 				'controller' => 'install',
-				'action' => 'init_db'
-			)
+				'action' => 'init_db',
+				'?' => ['language' => Configure::read('Config.language')]
+			),
+			'id' => 'InitDbForm'
 		)
 	);
 ?>
@@ -46,28 +48,69 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							),
 							'empty' => false,
 							'label' => __d('install', 'Datasource'),
-							'div' => false
+							'div' => false,
+							'error' => false,
 						)
 					); ?>
 			</div>
-			<?php echo $this->NetCommonsForm->input('host',
-					array(
-						'label' => __d('install', 'Host'),
-						'default' => $masterDB['host'],
-					)
-				); ?>
-			<?php echo $this->NetCommonsForm->input('port',
-					array(
-						'label' => __d('install', 'Port'),
-						'default' => $masterDB['port'],
-					)
-				); ?>
-			<?php echo $this->NetCommonsForm->input('database',
-					array(
-						'label' => __d('install', 'Database'),
-						'default' => 'nc3',
-					)
-				); ?>
+			<div class="form-group">
+				<?php echo $this->NetCommonsForm->input('host',
+						array(
+							'label' => __d('install', 'Host'),
+							'default' => $masterDB['host'],
+							'div' => false,
+							'error' => false,
+						)
+					); ?>
+				<?php if (Hash::get($validationErrors, 'host')) : ?>
+					<div class="has-error">
+						<?php foreach ($validationErrors['host'] as $message) : ?>
+							<div class="help-block">
+								<?php echo h($message); ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->NetCommonsForm->input('port',
+						array(
+							'label' => __d('install', 'Port'),
+							'default' => $masterDB['port'],
+							'div' => false,
+							'error' => false,
+						)
+					); ?>
+				<?php if (Hash::get($validationErrors, 'port')) : ?>
+					<div class="has-error">
+						<?php foreach ($validationErrors['port'] as $message) : ?>
+							<div class="help-block">
+								<?php echo h($message); ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->NetCommonsForm->input('database',
+						array(
+							'label' => __d('install', 'Database'),
+							'default' => 'nc3',
+							'div' => false,
+							'error' => false,
+						)
+					); ?>
+				<?php if (Hash::get($validationErrors, 'database')) : ?>
+					<div class="has-error">
+						<?php foreach ($validationErrors['database'] as $message) : ?>
+							<div class="help-block">
+								<?php echo h($message); ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<div class="form-group">
 
 			<?php echo $this->NetCommonsForm->hidden('schema',
 					array(
@@ -75,25 +118,64 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 					)
 				); ?>
 
-			<?php echo $this->NetCommonsForm->input('prefix',
-					array(
-						'label' => __d('install', 'Prefix'),
-						'placeholder' => 'nc3_',
-					)
-				); ?>
-			<?php echo $this->NetCommonsForm->input('login',
-					array(
-						'label' => __d('install', 'ID'),
-						'default' => $masterDB['login'],
-						'placeholder' => __d('install', 'Username'),
-					)
-				); ?>
-			<?php echo $this->NetCommonsForm->input('password',
-					array(
-						'label' => __d('install', 'Password'),
-						'placeholder' => __d('install', 'Password'),
-					)
-				); ?>
+			<div class="form-group">
+				<?php echo $this->NetCommonsForm->input('prefix',
+						array(
+							'label' => __d('install', 'Prefix'),
+							'placeholder' => 'nc3_',
+							'div' => false,
+							'error' => false,
+						)
+					); ?>
+				<?php if (Hash::get($validationErrors, 'prefix')) : ?>
+					<div class="has-error">
+						<?php foreach ($validationErrors['prefix'] as $message) : ?>
+							<div class="help-block">
+								<?php echo h($message); ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->NetCommonsForm->input('login',
+						array(
+							'label' => __d('install', 'ID'),
+							'default' => $masterDB['login'],
+							'placeholder' => __d('install', 'Username'),
+							'div' => false,
+							'error' => false,
+						)
+					); ?>
+				<?php if (Hash::get($validationErrors, 'login')) : ?>
+					<div class="has-error">
+						<?php foreach ($validationErrors['login'] as $message) : ?>
+							<div class="help-block">
+								<?php echo h($message); ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->NetCommonsForm->input('password',
+						array(
+							'label' => __d('install', 'Password'),
+							'placeholder' => __d('install', 'Password'),
+							'div' => false,
+							'error' => false,
+						)
+					); ?>
+				<?php if (Hash::get($validationErrors, 'password')) : ?>
+					<div class="has-error">
+						<?php foreach ($validationErrors['password'] as $message) : ?>
+							<div class="help-block">
+								<?php echo h($message); ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
 		</div>
 	</div>
 	<button class="btn btn-lg btn-primary btn-block" type="submit">

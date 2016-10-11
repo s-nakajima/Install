@@ -15,7 +15,12 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 <?php
 	echo $this->Form->create('User',
 		array(
-			'url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'init_admin_user'),
+			'url' => array(
+				'plugin' => 'install',
+				'controller' => 'install',
+				'action' => 'init_admin_user',
+				'?' => ['language' => Configure::read('Config.language')]
+			),
 			'novalidate' => true
 		)
 	);

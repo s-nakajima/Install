@@ -1,6 +1,6 @@
 <?php
 /**
- * DatabaseConfiguration::validate()のテスト
+ * InstallUtil::validatesDBConf()のテスト
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -10,22 +10,15 @@
  */
 
 App::uses('NetCommonsCakeTestCase', 'NetCommons.TestSuite');
-App::uses('DatabaseConfigurationFixture', 'Install.Test/Fixture');
+App::uses('InstallUtil', 'Install.Utility');
 
 /**
- * DatabaseConfiguration::validate()のテスト
+ * InstallUtil::validatesDBConf()のテスト
  *
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
- * @package NetCommons\Install\Test\Case\Model\DatabaseConfiguration
+ * @package NetCommons\Install\Test\Case\Utility\InstallUtil
  */
-class DatabaseConfigurationValidateTest extends NetCommonsCakeTestCase {
-
-/**
- * Fixture merge
- *
- * @var array
- */
-	protected $_isFixtureMerged = false;
+class InstallUtilityInstallUtilValidatesDBConfTest extends NetCommonsCakeTestCase {
 
 /**
  * Plugin name
@@ -33,20 +26,6 @@ class DatabaseConfigurationValidateTest extends NetCommonsCakeTestCase {
  * @var string
  */
 	public $plugin = 'install';
-
-/**
- * Model name
- *
- * @var string
- */
-	protected $_modelName = 'DatabaseConfiguration';
-
-/**
- * Method name
- *
- * @var string
- */
-	protected $_methodName = 'validates';
 
 /**
  * ValidationErrorのDataProvider
@@ -62,7 +41,7 @@ class DatabaseConfigurationValidateTest extends NetCommonsCakeTestCase {
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function dataProviderValidationError() {
-		$data['DatabaseConfiguration'] = array(
+		$data = array(
 			'datasource' => 'Database/Mysql',
 			'persistent' => '0',
 			'host' => 'localhost',
@@ -221,24 +200,22 @@ class DatabaseConfigurationValidateTest extends NetCommonsCakeTestCase {
  * @return void
  */
 	public function testValidationError($data, $field, $value, $message, $overwrite = array()) {
-		$model = $this->_modelName;
+		$instance = new InstallUtil(true);
 
 		if (is_null($value)) {
-			unset($data[$model][$field]);
+			unset($data[$field]);
 		} else {
-			$data[$model][$field] = $value;
+			$data[$field] = $value;
 		}
-		$data = Hash::merge($data, $overwrite);
 
 		//validate処理実行
-		$this->$model->set($data);
-		$result = $this->$model->validates();
+		$result = $instance->validatesDBConf($data);
 		if ($message === true) {
 			$this->assertTrue($result);
 		} else {
 			$this->assertFalse($result);
 			if ($message) {
-				$this->assertEquals($this->$model->validationErrors[$field][0], $message);
+				$this->assertEquals($instance->validationErrors[$field][0], $message);
 			}
 		}
 	}

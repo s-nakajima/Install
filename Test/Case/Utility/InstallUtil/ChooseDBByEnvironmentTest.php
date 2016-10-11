@@ -57,7 +57,7 @@ class InstallUtilityInstallUtilChooseDBByEnvironmentTest extends NetCommonsCakeT
 		$env = '';
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $instance->chooseDBByEnvironment($env);
 
 		//チェック
@@ -82,8 +82,8 @@ class InstallUtilityInstallUtilChooseDBByEnvironmentTest extends NetCommonsCakeT
 				'host' => 'localhost',
 				'port' => 3306,
 				'login' => 'root',
-				'password' => 'root',
-				'database' => 'nc3',
+				'password' => '',
+				'database' => '',
 				'prefix' => '',
 				'schema' => '',
 				'encoding' => 'utf8',
@@ -104,7 +104,7 @@ class InstallUtilityInstallUtilChooseDBByEnvironmentTest extends NetCommonsCakeT
 		$env = 'test';
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $instance->chooseDBByEnvironment($env);
 
 		//チェック

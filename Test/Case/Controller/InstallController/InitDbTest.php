@@ -77,14 +77,14 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 
 		//チェック
 		$this->assertInput('form', null, '/install/init_db', $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][datasource]', null, $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][host]', null, $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][port]', null, $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][database]', null, $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][schema]', null, $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][prefix]', null, $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][login]', null, $this->view);
-		$this->assertInput('input', 'data[DatabaseConfiguration][password]', null, $this->view);
+		$this->assertInput('input', 'data[datasource]', null, $this->view);
+		$this->assertInput('input', 'data[host]', null, $this->view);
+		$this->assertInput('input', 'data[port]', null, $this->view);
+		$this->assertInput('input', 'data[database]', null, $this->view);
+		$this->assertInput('input', 'data[schema]', null, $this->view);
+		$this->assertInput('input', 'data[prefix]', null, $this->view);
+		$this->assertInput('input', 'data[login]', null, $this->view);
+		$this->assertInput('input', 'data[password]', null, $this->view);
 	}
 
 /**
@@ -94,7 +94,7 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
  */
 	private function __postData() {
 		//テストデータ
-		$data = array('DatabaseConfiguration' => array(
+		$data = array(
 			'datasource' => 'Database/Mysql',
 			'persistent' => false,
 			'host' => 'localhost',
@@ -105,7 +105,7 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 			'prefix' => '',
 			'schema' => '',
 			'encoding' => 'utf8',
-		));
+		);
 
 		return $data;
 	}
@@ -138,7 +138,7 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 	public function testInitDbPost($testPrefix, $expectedPrefix) {
 		//テストデータ
 		$data = $this->__postData();
-		$data['DatabaseConfiguration']['prefix'] = $testPrefix;
+		$data['prefix'] = $testPrefix;
 
 		$expected = $data;
 
@@ -146,12 +146,12 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 			'InstallUtil', array('saveDBConf', 'createDB', 'installMigrations'), array('name' => 'InstallUtil')
 		);
 
-		$expected['DatabaseConfiguration']['prefix'] = $expectedPrefix;
+		$expected['prefix'] = $expectedPrefix;
 		$this->controller->InstallUtil->expects($this->once())->method('saveDBConf')
-			->with($expected['DatabaseConfiguration']);
+			->with($expected);
 
 		$this->controller->InstallUtil->expects($this->once())->method('createDB')
-			->with($expected['DatabaseConfiguration'])
+			->with($expected)
 			->will($this->returnValue(true));
 
 		$this->controller->InstallUtil->expects($this->once())->method('installMigrations')
@@ -191,7 +191,7 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 	public function testValidationError($debug) {
 		//テストデータ
 		$data = $this->__postData();
-		$data['DatabaseConfiguration']['database'] = '';
+		$data['database'] = '';
 
 		$this->controller->InstallUtil = $this->getMock(
 			'InstallUtil', array('saveDBConf', 'createDB', 'installMigrations'), ['name' => 'InstallUtil']
@@ -241,10 +241,10 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 		);
 
 		$this->controller->InstallUtil->expects($this->once())->method('saveDBConf')
-			->with($data['DatabaseConfiguration']);
+			->with($data);
 
 		$this->controller->InstallUtil->expects($this->once())->method('createDB')
-			->with($data['DatabaseConfiguration'])
+			->with($data)
 			->will($this->returnValue(false));
 
 		$this->controller->InstallUtil->expects($this->exactly(0))->method('installMigrations')
@@ -273,10 +273,10 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 		);
 
 		$this->controller->InstallUtil->expects($this->once())->method('saveDBConf')
-			->with($data['DatabaseConfiguration']);
+			->with($data);
 
 		$this->controller->InstallUtil->expects($this->once())->method('createDB')
-			->with($data['DatabaseConfiguration'])
+			->with($data)
 			->will($this->returnValue(true));
 
 		$this->controller->InstallUtil->expects($this->once())->method('installMigrations')

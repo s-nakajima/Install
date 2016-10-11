@@ -53,7 +53,7 @@ class InstallUtilityInstallUtilPrivateCommandOutputResultsTest extends NetCommon
  * @return void
  */
 	public function testCommandOutputResults() {
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 
 		//データ生成
 		Configure::write('debug', 1);
@@ -79,7 +79,7 @@ class InstallUtilityInstallUtilPrivateCommandOutputResultsTest extends NetCommon
  * @return void
  */
 	public function testNoCommandOutputResults() {
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 
 		//データ生成
 		Configure::write('debug', 0);

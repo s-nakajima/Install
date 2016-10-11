@@ -50,7 +50,7 @@ class InstallUtilityInstallUtilSaveAdminUserTest extends NetCommonsCakeTestCase 
  */
 	public function testSaveAdminUser() {
 		//事前準備
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$instance->User = $this->getMock(
 			'User', array('saveUser'), array(), '', false
 		);

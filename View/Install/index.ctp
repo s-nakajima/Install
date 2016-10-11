@@ -12,7 +12,21 @@ echo $this->NetCommonsHtml->script('/install/js/install.js');
 echo $this->NetCommonsHtml->css('/install/css/install.css');
 ?>
 
-<?php echo $this->Form->create(false, array('url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'index'))); ?>
+<?php if (isset($errors)) : ?>
+	<?php foreach ($errors as $error): ?>
+		<div class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<?php echo $error; ?>
+		</div>
+	<?php endforeach; ?>
+<?php endif; ?>
+
+<?php echo $this->Form->create(false, array('url' => array(
+		'plugin' => 'install',
+		'controller' => 'install',
+		'action' => 'index',
+		'?' => ['language' => Configure::read('Config.language')]
+	))); ?>
 
 	<div class="panel panel-default">
 		<div class="panel-heading"><?php echo __d('install', 'Term'); ?></div>

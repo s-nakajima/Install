@@ -60,7 +60,7 @@ class InstallUtilityInstallUtilSaveAppConfTest extends NetCommonsCakeTestCase {
  * @return void
  */
 	private function __prepare() {
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		if (file_exists(APP . 'Config' . DS . $instance->appYmlPrefix . 'application.yml')) {
 			unlink(APP . 'Config' . DS . $instance->appYmlPrefix . 'application.yml');
 		}
@@ -73,7 +73,7 @@ class InstallUtilityInstallUtilSaveAppConfTest extends NetCommonsCakeTestCase {
  */
 	public function testSaveAppConf() {
 		//事前準備
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$this->assertFalse(file_exists(APP . 'Config' . DS . $instance->appYmlPrefix . 'application.yml'));
 
 		//テスト実施

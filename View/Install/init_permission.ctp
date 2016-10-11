@@ -12,7 +12,12 @@ echo $this->NetCommonsHtml->script('/install/js/install.js');
 echo $this->NetCommonsHtml->css('/install/css/install.css');
 ?>
 
-<?php echo $this->Form->create(false, array('url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'init_permission'))); ?>
+<?php echo $this->Form->create(false, array('url' => array(
+		'plugin' => 'install',
+		'controller' => 'install',
+		'action' => 'init_permission',
+		'?' => ['language' => Configure::read('Config.language')]
+	))); ?>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">

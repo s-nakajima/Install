@@ -60,7 +60,7 @@ class InstallUtilityInstallUtilInstallApplicationYamlTest extends NetCommonsCake
  * @return void
  */
 	private function __prepare() {
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		if (file_exists(APP . 'Config' . DS . $instance->appYmlPrefix . 'application.yml')) {
 			unlink(APP . 'Config' . DS . $instance->appYmlPrefix . 'application.yml');
 		}
@@ -73,7 +73,7 @@ class InstallUtilityInstallUtilInstallApplicationYamlTest extends NetCommonsCake
  */
 	public function testEmptyData() {
 		//事前準備
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$this->assertFalse(file_exists(APP . 'Config' . DS . $instance->appYmlPrefix . 'application.yml'));
 
 		//テストデータ
@@ -98,7 +98,7 @@ class InstallUtilityInstallUtilInstallApplicationYamlTest extends NetCommonsCake
  */
 	public function testArgumentsData() {
 		//事前準備
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$this->assertFalse(file_exists(APP . 'Config' . DS . $instance->appYmlPrefix . 'application.yml'));
 
 		//テストデータ

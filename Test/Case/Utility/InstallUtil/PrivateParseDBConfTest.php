@@ -66,7 +66,7 @@ EOF;
 		$dbPrefix = 'test';
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 		$result = $this->_testReflectionMethod(
 			$instance, '__parseDBConf', array($conf, $params, $dbPrefix)
 		);

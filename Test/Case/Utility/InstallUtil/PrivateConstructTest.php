@@ -48,7 +48,7 @@ class InstallUtilityInstallUtilPrivateConstructTest extends NetCommonsCakeTestCa
 		$cipherSeed = Configure::read('Security.cipherSeed');
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 
 		//チェック
 		$this->assertEquals(get_class($instance), 'InstallUtil');
@@ -70,7 +70,7 @@ class InstallUtilityInstallUtilPrivateConstructTest extends NetCommonsCakeTestCa
 		$cipherSeed = Configure::read('Security.cipherSeed');
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 
 		//チェック
 		$this->assertEquals(get_class($instance), 'InstallUtil');
@@ -92,7 +92,7 @@ class InstallUtilityInstallUtilPrivateConstructTest extends NetCommonsCakeTestCa
 		$cipherSeed = Configure::read('Security.cipherSeed');
 
 		//テスト実施
-		$instance = new InstallUtil();
+		$instance = new InstallUtil(true);
 
 		//チェック
 		$this->assertEquals(get_class($instance), 'InstallUtil');
