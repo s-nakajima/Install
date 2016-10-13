@@ -603,20 +603,20 @@ EOF;
 			CakeLog::info('[migration] Failure migrated all plugins');
 		}
 
-//		$Plugin = ClassRegistry::init('PluginManager.Plugin');
-//		if ($Plugin->updateVersionByComposer()) {
-//			CakeLog::info('[migration] Successfully updated version of composer plugins.');
-//		} else {
-//			$result = false;
-//			CakeLog::info('[migration] Failure updated version of composer plugins.');
-//		}
-//
-//		if ($Plugin->updateVersionByBower()) {
-//			CakeLog::info('[migration] Successfully updated version of bower plugins.');
-//		} else {
-//			$result = false;
-//			CakeLog::info('[migration] Failure updated version of bower plugins.');
-//		}
+		$Plugin = ClassRegistry::init('PluginManager.Plugin');
+		if ($Plugin->updateVersionByComposer()) {
+			CakeLog::info('[migration] Successfully updated version of composer plugins.');
+		} else {
+			$result = false;
+			CakeLog::info('[migration] Failure updated version of composer plugins.');
+		}
+
+		if ($Plugin->updateVersionByBower()) {
+			CakeLog::info('[migration] Successfully updated version of bower plugins.');
+		} else {
+			$result = false;
+			CakeLog::info('[migration] Failure updated version of bower plugins.');
+		}
 
 		return $result;
 	}
