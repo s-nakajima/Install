@@ -516,6 +516,8 @@ EOF;
  * @param string $connection 接続先
  * @param array $addPlugins 追加するプラグイン
  * @return bool Install succeed or not
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function installMigrations($connection = 'master', $addPlugins = array()) {
 		$plugins = array_unique(array_merge(
@@ -530,7 +532,6 @@ EOF;
 		if ($this->useDbConfig === 'test') {
 			$connection = 'test';
 		}
-
 		try {
 			$SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
 			$count = $SiteSetting->find('count');
@@ -540,9 +541,7 @@ EOF;
 
 		// Invoke all available migrations
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
-
 		$result = true;
-
 		foreach ($plugins as $plugin) {
 			CakeLog::info(
 				sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection)
@@ -596,7 +595,6 @@ EOF;
 				);
 			}
 		}
-
 		if ($result) {
 			CakeLog::info('[migration] Successfully migrated all plugins');
 		} else {
@@ -610,12 +608,17 @@ EOF;
 			$result = false;
 			CakeLog::info('[migration] Failure updated version of composer plugins.');
 		}
-
 		if ($Plugin->updateVersionByBower()) {
 			CakeLog::info('[migration] Successfully updated version of bower plugins.');
 		} else {
 			$result = false;
 			CakeLog::info('[migration] Failure updated version of bower plugins.');
+		}
+		if ($Plugin->updateVersionByTheme()) {
+			CakeLog::info('[migration] Successfully updated version of themes.');
+		} else {
+			$result = false;
+			CakeLog::info('[migration] Failure updated version of themes.');
 		}
 
 		return $result;
@@ -713,11 +716,11 @@ EOF;
  */
 	private function __commandOutputResults($type, $messages) {
 		// Write logs
-		if (Configure::read('debug')) {
+		//if (Configure::read('debug')) {
 			foreach ($messages as $message) {
 				CakeLog::info(sprintf('[' . $type . ']   %s', $message));
 			}
-		}
+		//}
 	}
 
 }
