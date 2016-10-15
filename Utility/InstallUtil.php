@@ -564,9 +564,12 @@ EOF;
 					);
 					$result = false;
 				} else {
+					//@codeCoverageIgnoreStart
+					//Migrationの戻り値が0になって処理が通らなくなったが、念のため処理として残しておく
 					CakeLog::info(
 						sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
 					);
+					//@codeCoverageIgnoreEnd
 				}
 			} else {
 				CakeLog::info(
