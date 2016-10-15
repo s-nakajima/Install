@@ -553,6 +553,7 @@ EOF;
 				'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
 				ROOT . DS . APP_DIR, DS, escapeshellcmd($plugin), $connection, $connection
 			), $messages, $ret);
+			$this->__commandOutputResults('migration', $messages);
 
 			// Write logs
 			if ($ret) {
@@ -572,7 +573,6 @@ EOF;
 					sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
 				);
 			}
-			$this->__commandOutputResults('migration', $messages);
 		}
 
 		if (! $count) {
@@ -586,19 +586,14 @@ EOF;
 			);
 			if (! $SiteSetting->updateAll($update, $conditions)) {
 				CakeLog::info(
-					sprintf('[migration] Failure `Config.language` update.', $plugin, $connection)
+					sprintf('[migration] Failure "Config.language" update.', $plugin, $connection)
 				);
 				$result = false;
 			} else {
 				CakeLog::info(
-					sprintf('[migration] Successfully `Config.language` update.', $plugin, $connection)
+					sprintf('[migration] Successfully "Config.language" update.', $plugin, $connection)
 				);
 			}
-		}
-		if ($result) {
-			CakeLog::info('[migration] Successfully migrated all plugins');
-		} else {
-			CakeLog::info('[migration] Failure migrated all plugins');
 		}
 
 		$Plugin = ClassRegistry::init('PluginManager.Plugin');
@@ -619,6 +614,12 @@ EOF;
 		} else {
 			$result = false;
 			CakeLog::info('[migration] Failure updated version of themes.');
+		}
+
+		if ($result) {
+			CakeLog::info('[migration] Successfully migrated all plugins');
+		} else {
+			CakeLog::info('[migration] Failure migrated all plugins');
 		}
 
 		return $result;
