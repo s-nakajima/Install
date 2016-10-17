@@ -22,6 +22,7 @@ App::uses('InstallValidatorUtil', 'Install.Utility');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Install\Utility
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class InstallUtil {
 
@@ -516,6 +517,9 @@ EOF;
  * @param string $connection 接続先
  * @param array $addPlugins 追加するプラグイン
  * @return bool Install succeed or not
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function installMigrations($connection = 'master', $addPlugins = array()) {
 		$plugins = array_unique(array_merge(
@@ -530,7 +534,6 @@ EOF;
 		if ($this->useDbConfig === 'test') {
 			$connection = 'test';
 		}
-
 		try {
 			$SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
 			$count = $SiteSetting->find('count');
@@ -540,9 +543,7 @@ EOF;
 
 		// Invoke all available migrations
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
-
 		$result = true;
-
 		foreach ($plugins as $plugin) {
 			CakeLog::info(
 				sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection)
@@ -554,6 +555,7 @@ EOF;
 				'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
 				ROOT . DS . APP_DIR, DS, escapeshellcmd($plugin), $connection, $connection
 			), $messages, $ret);
+			$this->__commandOutputResults('migration', $messages);
 
 			// Write logs
 			if ($ret) {
@@ -564,16 +566,18 @@ EOF;
 					);
 					$result = false;
 				} else {
+					//@codeCoverageIgnoreStart
+					//Migrationの戻り値が0になって処理が通らなくなったが、念のため処理として残しておく
 					CakeLog::info(
 						sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
 					);
+					//@codeCoverageIgnoreEnd
 				}
 			} else {
 				CakeLog::info(
 					sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
 				);
 			}
-			$this->__commandOutputResults('migration', $messages);
 		}
 
 		if (! $count) {
@@ -587,14 +591,34 @@ EOF;
 			);
 			if (! $SiteSetting->updateAll($update, $conditions)) {
 				CakeLog::info(
-					sprintf('[migration] Failure `Config.language` update.', $plugin, $connection)
+					sprintf('[migration] Failure "Config.language" update.', $plugin, $connection)
 				);
 				$result = false;
 			} else {
 				CakeLog::info(
-					sprintf('[migration] Successfully `Config.language` update.', $plugin, $connection)
+					sprintf('[migration] Successfully "Config.language" update.', $plugin, $connection)
 				);
 			}
+		}
+
+		$Plugin = ClassRegistry::init('PluginManager.Plugin');
+		if ($Plugin->updateVersionByComposer()) {
+			CakeLog::info('[migration] Successfully updated version of composer plugins.');
+		} else {
+			$result = false;
+			CakeLog::info('[migration] Failure updated version of composer plugins.');
+		}
+		if ($Plugin->updateVersionByBower()) {
+			CakeLog::info('[migration] Successfully updated version of bower plugins.');
+		} else {
+			$result = false;
+			CakeLog::info('[migration] Failure updated version of bower plugins.');
+		}
+		if ($Plugin->updateVersionByTheme()) {
+			CakeLog::info('[migration] Successfully updated version of themes.');
+		} else {
+			$result = false;
+			CakeLog::info('[migration] Failure updated version of themes.');
 		}
 
 		if ($result) {
@@ -698,11 +722,11 @@ EOF;
  */
 	private function __commandOutputResults($type, $messages) {
 		// Write logs
-		if (Configure::read('debug')) {
+		//if (Configure::read('debug')) {
 			foreach ($messages as $message) {
 				CakeLog::info(sprintf('[' . $type . ']   %s', $message));
 			}
-		}
+		//}
 	}
 
 }

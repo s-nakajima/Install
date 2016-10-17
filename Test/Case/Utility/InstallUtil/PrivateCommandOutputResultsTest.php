@@ -56,7 +56,6 @@ class InstallUtilityInstallUtilPrivateCommandOutputResultsTest extends NetCommon
 		$instance = new InstallUtil(true);
 
 		//データ生成
-		Configure::write('debug', 1);
 		$type = 'unit test';
 		$messages = ['Unit test InstallUtil::__commandOutputResults().'];
 
@@ -71,29 +70,6 @@ class InstallUtilityInstallUtilPrivateCommandOutputResultsTest extends NetCommon
 			'Info: [unit test]   Unit test InstallUtil::__commandOutputResults().',
 		);
 		$this->assertEquals($expected, $logger->output);
-	}
-
-/**
- * __commandOutputResults()のdebug=0テスト
- *
- * @return void
- */
-	public function testNoCommandOutputResults() {
-		$instance = new InstallUtil(true);
-
-		//データ生成
-		Configure::write('debug', 0);
-		$type = 'unit test';
-		$messages = ['Unit test InstallUtil::__commandOutputResults().'];
-
-		//テスト実施
-		$this->_testReflectionMethod(
-			$instance, '__commandOutputResults', array($type, $messages)
-		);
-
-		//チェック
-		$logger = CakeLog::stream('TestMockLog');
-		$this->assertCount(0, $logger->output);
 	}
 
 }
