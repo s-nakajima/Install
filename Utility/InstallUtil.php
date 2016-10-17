@@ -22,6 +22,7 @@ App::uses('InstallValidatorUtil', 'Install.Utility');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Install\Utility
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class InstallUtil {
 
@@ -518,6 +519,7 @@ EOF;
  * @return bool Install succeed or not
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function installMigrations($connection = 'master', $addPlugins = array()) {
 		$plugins = array_unique(array_merge(
