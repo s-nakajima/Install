@@ -115,6 +115,7 @@ class InstallController extends InstallAppController {
  * パーミッションのチェック
  *
  * @return void
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function init_permission() {
 		$this->set('pageTitle', __d('install', 'Permissions'));
@@ -147,6 +148,7 @@ class InstallController extends InstallAppController {
 			);
 		}
 		if (! $versions) {
+			$ret = false;
 			$versions[] = array(
 				'message' => __d(
 					'install',
