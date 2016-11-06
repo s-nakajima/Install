@@ -146,6 +146,17 @@ class InstallController extends InstallAppController {
 				'error' => $result,
 			);
 		}
+		if (! $versions) {
+			$versions[] = array(
+				'message' => __d(
+					'install',
+					'Failed of version check. ' .
+						'Please setting "debug: 2" of "%sConfig/application.yml" file and retry.',
+					APP
+				),
+				'error' => true
+			);
+		}
 
 		// Check permissions
 		$permissions = array();
