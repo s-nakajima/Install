@@ -239,7 +239,7 @@ class InstallValidatorUtil {
 					continue;
 				}
 
-				$result = (bool)preg_match('/^Error|^Notice|^Fatal|^Warning/', $message);
+				$result = (bool)preg_match('/^Error|^Notice|^Fatal|^Warning|^Console/', $message);
 				$versions[] = array(
 					'message' => preg_replace('/^Error:|^Success:/', '', $message),
 					'error' => $result,
@@ -266,7 +266,7 @@ class InstallValidatorUtil {
 	private function __displayVersionMessage($message) {
 		if (substr($message, 0, 2) === '--' ||
 				$message === 'NetCommons Install' || ! $message || $message === 'NULL' ||
-				! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning/', $message)) {
+				! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning|^Console/', $message)) {
 			return false;
 		} else {
 			return true;
