@@ -11,6 +11,7 @@
 
 App::uses('InstallAppController', 'Install.Controller');
 App::uses('InstallUtil', 'Install.Utility');
+App::uses('InstallValidatorUtil', 'Install.Utility');
 
 /**
  * Install Controller
@@ -95,22 +96,6 @@ class InstallController extends InstallAppController {
 	}
 
 /**
- * バージョンチェックを出力するかどうか
- *
- * @param string $message メッセージ
- * @return bool
- */
-	private function __displayVersionMessage($message) {
-		if (substr($message, 0, 2) === '--' ||
-				$message === 'NetCommons Install' || ! $message || $message === 'NULL' ||
-				! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning/', $message)) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-/**
  * ステップ 2
  * パーミッションのチェック
  *
@@ -119,54 +104,16 @@ class InstallController extends InstallAppController {
 	public function init_permission() {
 		$this->set('pageTitle', __d('install', 'Permissions'));
 
+		$validator = new InstallValidatorUtil();
 		$ret = true;
 
-		//バージョンチェック
-		$messages = array();
-		$result = null;
-		exec(sprintf(
-			'cd %s && Console%scake Install.install check_lib_version 2>&1',
-			ROOT . DS . APP_DIR, DS
-		), $messages, $result);
-
-		$ret = !(bool)$result;
-
-		$versions = array();
+		$versions = $validator->versions();
+		$permissions = $validator->permissions();
+		$messages = array_merge($versions, $permissions);
 		foreach ($messages as $message) {
-			if (! $this->__displayVersionMessage($message)) {
-				continue;
-			}
-
-			$result = (bool)preg_match('/^Error|^Notice|^Fatal|^Warning/', $message);
-			if ($result) {
+			if ($message['error']) {
 				$ret = false;
-			}
-			$versions[] = array(
-				'message' => preg_replace('/^Error:|^Success:/', '', $message),
-				'error' => $result,
-			);
-		}
-
-		// Check permissions
-		$permissions = array();
-		// Actually we don't have to check app/Config and app/tmp here,
-		// since cakephp itself cannot handle requests w/o these directories with proper permission.
-		// Just a stub action for future release.
-		$writables = [APP . 'Config', APP . 'tmp', APP . 'webroot' . DS . 'files'];
-		foreach ($writables as $path) {
-			if (is_writable($path)) {
-				$permissions[] = array(
-					'message' => __d('install', '%s is writable', array($path)),
-					'error' => false,
-				);
-			} else {
-				$ret = false;
-				$permissions[] = array(
-					'message' => __d(
-						'install', 'Failed to write %s. Please check permission.', array($path)
-					),
-					'error' => true,
-				);
+				break;
 			}
 		}
 
@@ -176,8 +123,7 @@ class InstallController extends InstallAppController {
 		$this->set('canInstall', $ret);
 
 		if (! $ret) {
-			$outputs = array_merge($versions, $permissions);
-			foreach ($outputs as $output) {
+			foreach ($messages as $output) {
 				CakeLog::error($output['message']);
 			}
 			return;

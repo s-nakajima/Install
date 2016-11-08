@@ -69,7 +69,7 @@ class InstallUtilityInstallUtilSaveAdminUserTest extends NetCommonsCakeTestCase 
 				array('id' => null, 'language_id' => '2', 'name' => 'Test User'),
 			)
 		));
-		$instance->Language = ClassRegistry::init('M17n.Language');
+		$instance->Language = ClassRegistry::init('M17n.Language', true);
 
 		//データ生成
 		$data = array(

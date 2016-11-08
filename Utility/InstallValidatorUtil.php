@@ -28,14 +28,6 @@ class InstallValidatorUtil {
 	protected $_fields = array();
 
 /**
- * The validators $validate property, used for checking whether validation
- * rules definition changed in the model and should be refreshed in this class
- *
- * @var array
- */
-	protected $_validates = array();
-
-/**
  * List of validation errors.
  *
  * @var array
@@ -43,13 +35,17 @@ class InstallValidatorUtil {
 	public $validationErrors = array();
 
 /**
- * コンストラクタ
+ * Returns true if all fields pass validation. Will validate hasAndBelongsToMany associations
+ * that use the 'with' key as well. Since `Model::_saveMulti` is incapable of exiting a save operation.
  *
- * @return void
+ * Will validate the currently set data. Use `Model::set()` or `Model::create()` to set the active data.
+ *
+ * @param array $options An optional array of custom options to be made available in the beforeValidate callback
+ * @return bool True if there are no errors
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-	public function __construct() {
-		$this->_validates = array(
+	public function validates($options = array()) {
+		$validates = array(
 			'datasource' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
@@ -112,13 +108,6 @@ class InstallValidatorUtil {
 					'message' => __d('install', 'Only alphabets and numbers are allowed.'),
 				),
 			),
-			//'schema' => array(
-			//	'regex' => array(
-			//		'rule' => array('custom', '/^[\w]+$/'),
-			//		'message' => __d('net_commons', 'Only alphabets and numbers are allowed.'),
-			//		'allowEmpty' => true,
-			//	),
-			//),
 			'prefix' => array(
 				'regex' => array(
 					'rule' => array('custom', '/^[\w]+$/'),
@@ -155,20 +144,9 @@ class InstallValidatorUtil {
 				),
 			),
 		);
-	}
 
-/**
- * Returns true if all fields pass validation. Will validate hasAndBelongsToMany associations
- * that use the 'with' key as well. Since `Model::_saveMulti` is incapable of exiting a save operation.
- *
- * Will validate the currently set data. Use `Model::set()` or `Model::create()` to set the active data.
- *
- * @param array $options An optional array of custom options to be made available in the beforeValidate callback
- * @return bool True if there are no errors
- */
-	public function validates($options = array()) {
 		$this->_fields = array();
-		foreach ($this->_validates as $fieldName => $ruleSet) {
+		foreach ($validates as $fieldName => $ruleSet) {
 			$this->_fields[$fieldName] = new CakeValidationSet($fieldName, $ruleSet);
 		}
 
@@ -209,6 +187,90 @@ class InstallValidatorUtil {
  */
 	public function invalidate($field, $message = true) {
 		$this->validationErrors[$field][] = $message;
+	}
+
+/**
+ * パーミッションチェック
+ *
+ * @return array
+ */
+	public function permissions() {
+		$permissions = array();
+
+		$writables = [APP . 'Config', APP . 'tmp', APP . 'webroot' . DS . 'files'];
+		foreach ($writables as $path) {
+			if (is_writable($path)) {
+				$permissions[] = array(
+					'message' => __d('install', '%s is writable', array($path)),
+					'error' => false,
+				);
+			} else {
+				$permissions[] = array(
+					'message' => __d(
+						'install', 'Failed to write %s. Please check permission.', array($path)
+					),
+					'error' => true,
+				);
+			}
+		}
+
+		return $permissions;
+	}
+
+/**
+ * バージョンチェック
+ *
+ * @return array
+ */
+	public function versions() {
+		$versions = array();
+
+		if (is_executable(APP . 'Console' . DS . 'cake')) {
+			$messages = array();
+			$result = null;
+			exec(sprintf(
+				'cd %s && Console%scake Install.install check_lib_version 2>&1',
+				ROOT . DS . APP_DIR, DS
+			), $messages, $result);
+
+			$versions = array();
+			foreach ($messages as $message) {
+				if (! $this->__displayVersionMessage($message)) {
+					continue;
+				}
+
+				$result = (bool)preg_match('/^Error|^Notice|^Fatal|^Warning|^Console/', $message);
+				$versions[] = array(
+					'message' => preg_replace('/^Error:|^Success:/', '', $message),
+					'error' => $result,
+				);
+			}
+		} else {
+			$versions[] = array(
+				'message' => __d(
+					'install', 'Failed to execute %s. Please check permission.', APP . 'Console' . DS . 'cake'
+				),
+				'error' => true,
+			);
+		}
+
+		return $versions;
+	}
+
+/**
+ * バージョンチェックを出力するかどうか
+ *
+ * @param string $message メッセージ
+ * @return bool
+ */
+	private function __displayVersionMessage($message) {
+		if (substr($message, 0, 2) === '--' ||
+				$message === 'NetCommons Install' || ! $message || $message === 'NULL' ||
+				! preg_match('/^Error|^Notice|^Fatal|^Success|^Warning|^Console/', $message)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }

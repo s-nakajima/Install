@@ -26,6 +26,14 @@ msgstr "%s に書き込みができません。パーミッションを確認し
 msgid "%s is writable"
 msgstr "%s 書き込み可"
 
+#: Controller/InstallController.php:120;132
+msgid "%s is executable"
+msgstr "%s 実行可"
+
+#: Controller/InstallController.php:54
+msgid "Failed to execute %s. Please check permission."
+msgstr "%s が実行権限がありません。パーミッションを確認してください。"
+
 msgid "%s(%s) version error. Please more than \"%s\" version."
 msgstr "%s(%s)のバージョンが違っています。%s以上にしてください。"
 
@@ -185,3 +193,6 @@ msgstr "テーブルの生成（マイグレーション）に失敗しました
 
 msgid "Only alphabets and numbers are allowed."
 msgstr "半角英数字または記号(_のみ利用可)を入力してください。"
+
+msgid "Failed to execute \"%sConsole/cake\". Please setting executable."
+msgstr "%sConsole/cakeが実行できません。ファイルのパーミッション、もしくは、CLIモードでPHPが実行できるように設定してください。"
