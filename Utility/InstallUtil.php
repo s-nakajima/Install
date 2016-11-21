@@ -525,7 +525,7 @@ EOF;
 		$plugins = array_unique(array_merge(
 			array(
 				'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
-				'Roles', 'Mails', 'SiteManager', 'Blocks'
+				'Roles', 'Mails', 'SiteManager', 'Blocks', 'Boxes'
 			),
 			$addPlugins
 		));
