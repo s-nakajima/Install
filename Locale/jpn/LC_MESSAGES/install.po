@@ -14,74 +14,343 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: Poedit 1.7.5\n"
 
-#: Controller/InstallController.php:120;132
-msgid "Install"
-msgstr "インストール"
+#: Install/Console/Command/InstallShell.php:46;100
+#: Install/Test/Case/Console/Command/InstallShell/StartupTest.php:61
+msgid "NetCommons Install"
+msgstr ""
 
-#: Controller/InstallController.php:54
-msgid "Failed to write %s. Please check permission."
-msgstr "%s に書き込みができません。パーミッションを確認してください。"
+#: Install/Console/Command/InstallShell.php:57
+#: Install/Test/Case/Console/Command/InstallShell/MainTest.php:98
+msgid "Already installed."
+msgstr ""
 
-#: Controller/InstallController.php:120;132
-msgid "%s is writable"
-msgstr "%s 書き込み可"
+#: Install/Console/Command/InstallShell.php:60
+#: Install/Test/Case/Console/Command/InstallShell/MainTest.php:79
+msgid "[S]tart"
+msgstr ""
 
-#: Controller/InstallController.php:120;132
-msgid "%s is executable"
-msgstr "%s 実行可"
+#: Install/Console/Command/InstallShell.php:61
+#: Install/Test/Case/Console/Command/InstallShell/MainTest.php:81
+msgid "[H]elp"
+msgstr ""
 
-#: Controller/InstallController.php:54
-msgid "Failed to execute %s. Please check permission."
-msgstr "%s が実行権限がありません。パーミッションを確認してください。"
+#: Install/Console/Command/InstallShell.php:62
+#: Install/Test/Case/Console/Command/InstallShell/MainTest.php:83
+msgid "[Q]uit"
+msgstr ""
 
-msgid "%s(%s) version error. Please more than \"%s\" version."
-msgstr "%s(%s)のバージョンが違っています。%s以上にしてください。"
+#: Install/Console/Command/InstallShell.php:78
+#: Install/Test/Case/Console/Command/InstallShell/MainTest.php:173
+msgid "Install success."
+msgstr ""
 
+#: Install/Console/Command/InstallShell.php:102
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:81
+msgid "Install Step 1"
+msgstr ""
+
+#: Install/Console/Command/InstallShell.php:106
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:82
+msgid "Install Step 2(1)"
+msgstr ""
+
+#: Install/Console/Command/InstallShell.php:110
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:83
+msgid "Install Step 2(2)"
+msgstr ""
+
+#: Install/Console/Command/InstallShell.php:114
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:84
+msgid "Install Step 3"
+msgstr ""
+
+#: Install/Console/Command/InstallShell.php:118
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:85
+msgid "Install Step 4"
+msgstr ""
+
+#: Install/Console/Command/InstallShell.php:122
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:86
+msgid "Install Step 5"
+msgstr ""
+
+#: Install/Console/Command/InstallShell.php:126
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:87
+msgid "Install Step 6"
+msgstr ""
+
+#: Install/Console/Command/InstallShell.php:130
+#: Install/Test/Case/Console/Command/InstallShell/GetOptionParserTest.php:88
+msgid "Install End"
+msgstr ""
+
+#: Install/Console/Command/Task/CheckLibVersionTask.php:40;57
 msgid "%s(%s) version success."
 msgstr "%s(%s) 正常"
 
+#: Install/Console/Command/Task/CheckLibVersionTask.php:43
+msgid "%s(%s) version error. Please more than \"%s\" version."
+msgstr "%s(%s)のバージョンが違っています。%s以上にしてください。"
+
+#: Install/Console/Command/Task/CheckLibVersionTask.php:53
 msgid "Not found the %s. Please install the %s."
 msgstr "%sが見つかりません。%sをインストールしてください。"
 
-#: Controller/InstallController.php:160
+#: Install/Console/Command/Task/CheckLibVersionTask.php:72
+#: Install/Console/Command/Task/InstallPermissionTask.php:64
+msgid "NetCommons Install Step 2"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:92
+#: Install/Controller/InstallController.php:182
+#: Install/Test/Case/Controller/InstallController/InitDbTest.php:257
+msgid "Failed to create database."
+msgstr "データベースが作成できませんでした。"
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:110
+msgid "Database configuration's datasource?"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:120
+msgid "Database configuration's host?"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:129
+msgid "Database configuration's port?"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:138
+msgid "Database configuration's database?"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:147
+msgid "Database configuration's prefix?"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:156
+msgid "Database configuration's login?"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:165
+msgid "Database configuration's password?"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:178
+msgid "NetCommons Install Step 3"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:180
+#: Install/Test/Case/Console/Command/Task/CreateDatabaseTask/GetOptionParserTest.php:71
+msgid "Database configuration's datasource. (Mysql) [Mysql]"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:184
+#: Install/Test/Case/Console/Command/Task/CreateDatabaseTask/GetOptionParserTest.php:73
+msgid "Database configuration's host. [localhost]"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:188
+#: Install/Test/Case/Console/Command/Task/CreateDatabaseTask/GetOptionParserTest.php:75
+msgid "Database configuration's port. [3306]"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:192
+#: Install/Test/Case/Console/Command/Task/CreateDatabaseTask/GetOptionParserTest.php:77
+msgid "Database configuration's database. [nc3]"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:196
+#: Install/Test/Case/Console/Command/Task/CreateDatabaseTask/GetOptionParserTest.php:79
+msgid "Database configuration's prefix. ['']"
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:200
+#: Install/Test/Case/Console/Command/Task/CreateDatabaseTask/GetOptionParserTest.php:81
+msgid "Database configuration's login."
+msgstr ""
+
+#: Install/Console/Command/Task/CreateDatabaseTask.php:204
+#: Install/Test/Case/Console/Command/Task/CreateDatabaseTask/GetOptionParserTest.php:83
+msgid "Database configuration's password."
+msgstr ""
+
+#: Install/Console/Command/Task/InstallBowerTask.php:31
+msgid "Failed to install bower packages."
+msgstr ""
+
+#: Install/Console/Command/Task/InstallFinishTask.php:88
+msgid "NetCommons Install End"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallFinishTask.php:90
+#: Install/Console/Command/Task/InstallPermissionTask.php:66
+msgid "Apache owner"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallFinishTask.php:94
+msgid "Release type. Deleting \".git\" and \".chef\" directory"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallMigrationsTask.php:49
+#: Install/Controller/InstallController.php:194
+#: Install/Test/Case/Controller/InstallController/InitDbTest.php:289
+msgid "Failed to install migrations."
+msgstr "テーブルの生成（マイグレーション）に失敗しました。"
+
+#: Install/Console/Command/Task/InstallMigrationsTask.php:61
+msgid "NetCommons Install Step 4"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallMigrationsTask.php:64
+msgid "Database connection."
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:55
+msgid "Please entry base url."
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:58
+msgid "Failed to base url."
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:70
+msgid "Enable languages?"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:77
+msgid "Current language?"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:84;95
+#: Install/Controller/InstallController.php:81
+#: Install/Utility/InstallValidatorUtil.php:209
+msgid "Failed to write %s. Please check permission."
+msgstr "%s に書き込みができません。パーミッションを確認してください。"
+
+#: Install/Console/Command/Task/InstallStartTask.php:112
+msgid "NetCommons Install Step 1"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:114
+msgid "Full base url. e.g.) http://localhost"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:118
+msgid "Current language. (en/ja)"
+msgstr ""
+
+#: Install/Console/Command/Task/InstallStartTask.php:122
+msgid "Enable languages. (en,ja/en/ja)"
+msgstr ""
+
+#: Install/Console/Command/Task/SaveAdministratorTask.php:50;101
+msgid "NetCommons Install Step 6"
+msgstr ""
+
+#: Install/Console/Command/Task/SaveAdministratorTask.php:70
+msgid "NetCommons Login id?"
+msgstr ""
+
+#: Install/Console/Command/Task/SaveAdministratorTask.php:79
+msgid "NetCommons Login password?"
+msgstr ""
+
+#: Install/Console/Command/Task/SaveAdministratorTask.php:85
+#: Install/View/Install/init_admin_user.ctp:77
+msgid "System administrator"
+msgstr "システム管理者"
+
+#: Install/Console/Command/Task/SaveAdministratorTask.php:89
+#: Install/Controller/InstallController.php:217
 msgid "The user could not be saved. Please try again."
 msgstr "ユーザを保存できませんでした。暫くしてから再度お試しください。"
 
-#: View/Install/finish.ctp:2
-msgid "Installed"
-msgstr "インストール完了"
+#: Install/Console/Command/Task/SaveAdministratorTask.php:103
+#: Install/View/Install/init_admin_user.ctp:37
+#: Install/View/Install/init_db.ctp:145
+msgid "Username"
+msgstr "ログインID"
 
-#: View/Install/finish.ctp:4
-msgid "Install Failed"
-msgstr "インストール失敗"
+#: Install/Console/Command/Task/SaveAdministratorTask.php:107
+#: Install/Test/Case/Utility/InstallUtil/ValidatesDBConfTest.php:177;182
+#: Install/Utility/InstallValidatorUtil.php:136
+#: Install/View/Install/init_admin_user.ctp:50;64
+#: Install/View/Install/init_db.ctp:163;164
+msgid "Password"
+msgstr "パスワード"
 
-#: View/Install/finish.ctp:4
-msgid "Home"
-msgstr "ホーム"
-
-#: View/Install/finish.ctp:8
-msgid "By clicking the button, you can jump to the home."
-msgstr "下記ボタンをクリックすると、ホーム画面へ移動します。"
-
-#: View/Install/index.ctp:9
+#: Install/Controller/InstallController.php:66
+#: Install/View/Install/index.ctp:32
 msgid "Term"
 msgstr "利用規約"
 
-msgid "Language"
-msgstr "言語"
+#: Install/Controller/InstallController.php:105
+#: Install/View/Install/init_permission.ctp:45
+msgid "Permissions"
+msgstr "パーミッションチェック"
 
-msgid "Japanese"
-msgstr "日本語"
+#: Install/Controller/InstallController.php:148
+#: Install/View/Install/init_db.ctp:39
+msgid "Database Settings"
+msgstr "データベース設定"
 
-msgid "English"
-msgstr "英語"
+#: Install/Controller/InstallController.php:212
+#: Install/View/Install/init_admin_user.ctp:30
+msgid "Create an Administrator"
+msgstr "管理者ユーザ作成"
 
-msgid "Chinese"
-msgstr "中国語"
+#: Install/Controller/InstallController.php:236
+#: Install/View/Install/finish.ctp:12
+msgid "Installed"
+msgstr "インストール完了"
 
-#: View/Install/index.ctp:17
-msgid ""
-"The terms & conditions for using the contents of this site is governed\n"
+#: Install/Test/Case/Controller/InstallController/InitDbTest.php:218
+#: Install/Test/Case/Utility/InstallUtil/ValidatesDBConfTest.php:136;141
+#: Install/Utility/InstallValidatorUtil.php:102
+#: Install/View/Install/init_db.ctp:97
+msgid "Database"
+msgstr "データベース"
+
+#: Install/Test/Case/Utility/InstallUtil/ValidatesDBConfTest.php:82;87
+#: Install/Utility/InstallValidatorUtil.php:70
+#: Install/View/Install/init_db.ctp:59
+msgid "Host"
+msgstr "ホスト名"
+
+#: Install/Test/Case/Utility/InstallUtil/ValidatesDBConfTest.php:100;105;111;119;127
+#: Install/Utility/InstallValidatorUtil.php:84;92
+#: Install/View/Install/init_db.ctp:78
+msgid "Port"
+msgstr "ポート番号"
+
+#: Install/Test/Case/Utility/InstallUtil/ValidatesDBConfTest.php:145;148;153;156
+#: Install/Utility/InstallValidatorUtil.php:108;114
+msgid "Only alphabets and numbers are allowed."
+msgstr "半角英数字または記号(_のみ利用可)を入力してください。"
+
+#: Install/Test/Case/Utility/InstallUtil/ValidatesDBConfTest.php:162;167
+#: Install/Utility/InstallValidatorUtil.php:122
+msgid "Login"
+msgstr ""
+
+#: Install/Utility/InstallValidatorUtil.php:204
+msgid "%s is writable"
+msgstr "%s 書き込み可"
+
+#: Install/Utility/InstallValidatorUtil.php:250
+msgid "Failed to execute %s. Please check permission."
+msgstr "%s が実行権限がありません。パーミッションを確認してください。"
+
+#: Install/View/Install/finish.ctp:14
+msgid "By clicking the button, you can jump to the home."
+msgstr "下記ボタンをクリックすると、ホーム画面へ移動します。"
+
+#: Install/View/Install/finish.ctp:16
+msgid "Home"
+msgstr "ホーム"
+
+#: Install/View/Install/index.ctp:44
+msgid "The terms & conditions for using the contents of this site is governed\n"
 "by this agreement. Please read carefully the following conditions, and\n"
 "register only if you agree to them.\n"
 "\n"
@@ -126,73 +395,38 @@ msgstr ""
 "\n"
 "利用者が当サイト及び当サイトに関連するコンテンツ、リンク先サイトにおける一切のサービス等をご利用されたことに起因または関連して生じた一切の損害（間接的であると直接的であるとを問わない）について、当サイトは責任を負いません。"
 
-#: View/Install/index.ctp:45
+#: Install/View/Install/index.ctp:74
 msgid "By clicking the button, you agree to the terms above."
 msgstr "ボタンをクリックすることで、上記利用規約に同意したものとします。"
 
-#: View/Install/index.ctp:46 View/Install/init_db.ctp:35
-#: View/Install/init_permission.ctp:13
+#: Install/View/Install/index.ctp:77
+#: Install/View/Install/init_admin_user.ctp:90
+#: Install/View/Install/init_db.ctp:182
+#: Install/View/Install/init_permission.ctp:65
 msgid "Next"
 msgstr "次へ"
 
-#: View/Install/init_db.ctp:8
-msgid "Database Settings"
-msgstr "データベース設定"
-
-msgid "Host"
-msgstr "ホスト名"
-
-msgid "Port"
-msgstr "ポート番号"
-
-msgid "Database"
-msgstr "データベース"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Prefix"
-msgstr "プレフィックス"
-
-msgid "Datasource"
-msgstr "データベース種別"
-
-msgid "Failed to create database."
-msgstr "データベースが作成できませんでした。"
-
-#: View/Install/init_db.ctp:27
-msgid "Username"
-msgstr "ログインID"
-
+#: Install/View/Install/init_admin_user.ctp:76;79
 msgid "Handle Name"
 msgstr "ハンドル名"
 
-msgid "System administrator"
-msgstr "システム管理者"
+#: Install/View/Install/init_db.ctp:50
+msgid "Datasource"
+msgstr "データベース種別"
 
-#: View/Install/init_db.ctp:31
-msgid "Password"
-msgstr "パスワード"
+#: Install/View/Install/init_db.ctp:124
+msgid "Prefix"
+msgstr "プレフィックス"
 
-msgid "Password Again"
-msgstr "パスワード確認"
+#: Install/View/Install/init_db.ctp:143
+msgid "ID"
+msgstr ""
 
-msgid "Create an Administrator"
-msgstr "管理者ユーザ作成"
-
-#: View/Install/init_permission.ctp:8
-msgid "Permissions"
-msgstr "パーミッションチェック"
-
-#: View/Install/init_permission.ctp:8
+#: Install/View/Install/init_permission.ctp:24
 msgid "Versions"
 msgstr "バージョンチェック"
 
-msgid "Failed to install migrations."
-msgstr "テーブルの生成（マイグレーション）に失敗しました。"
+#: Install/View/Layouts/default.ctp:21
+msgid "Install"
+msgstr "インストール"
 
-msgid "Only alphabets and numbers are allowed."
-msgstr "半角英数字または記号(_のみ利用可)を入力してください。"
-
-msgid "Failed to execute \"%sConsole/cake\". Please setting executable."
-msgstr "%sConsole/cakeが実行できません。ファイルのパーミッション、もしくは、CLIモードでPHPが実行できるように設定してください。"
