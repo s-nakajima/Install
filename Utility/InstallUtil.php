@@ -23,6 +23,8 @@ App::uses('InstallValidatorUtil', 'Install.Utility');
  * @package NetCommons\Install\Utility
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class InstallUtil {
 
@@ -242,8 +244,6 @@ class InstallUtil {
 			Configure::write('Security.salt', Security::generateAuthKey());
 			Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
 		}
-
-		$this->validator = new InstallValidatorUtil();
 	}
 
 /**
