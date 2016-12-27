@@ -442,3 +442,15 @@ msgstr "バージョンチェック(CLI)"
 msgid "Install"
 msgstr "インストール"
 
+#: Install/View
+msgid "Please select the language to use."
+msgstr "利用する言語を選択してください"
+
+#: Install/View
+msgid "Use languages"
+msgstr "利用する言語"
+
+#: Install/View
+msgid "Site Setting"
+msgstr "サイト設定"
+

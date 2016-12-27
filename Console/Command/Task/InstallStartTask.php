@@ -117,11 +117,11 @@ class InstallStartTask extends InstallAppTask {
 			->addOption(self::KEY_LANGUAGE, array(
 				'help' => __d('install', 'Current language. (en/ja)'),
 				'required' => false
-			))
-			->addOption(self::KEY_ENABLE_LANGUAGES, array(
-				'help' => __d('install', 'Enable languages. (en,ja/en/ja)'),
-				'required' => false
 			));
+			//->addOption(self::KEY_ENABLE_LANGUAGES, array(
+			//	'help' => __d('install', 'Enable languages. (en,ja/en/ja)'),
+			//	'required' => false
+			//));
 
 		return $parser;
 	}

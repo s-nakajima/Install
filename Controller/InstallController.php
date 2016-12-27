@@ -206,7 +206,7 @@ class InstallController extends InstallAppController {
 
 /**
  * ステップ 4
- * 管理者アカウントの登録
+ * 管理者アカウントの登録、
  *
  * @return void
  */
@@ -222,7 +222,7 @@ class InstallController extends InstallAppController {
 			}
 
 			$this->redirect(array(
-				'action' => 'finish',
+				'action' => 'init_site_setting',
 				'?' => ['language' => Configure::read('Config.language')]
 			));
 		}
@@ -230,6 +230,53 @@ class InstallController extends InstallAppController {
 
 /**
  * ステップ 5
+ * サイト設定
+ *
+ * @return void
+ */
+	public function init_site_setting() {
+		App::uses('M17nHelper', 'M17n.View/Helper');
+
+		$this->set('pageTitle', __d('install', 'Site Setting'));
+
+		$this->set('errors', array());
+
+		$this->Language = ClassRegistry::init('M17n.Language');
+		$languages = $this->Language->find('list', array(
+			'fields' => array('code', 'is_active'),
+			'recursive' => -1,
+		));
+
+		$activeLangs = array();
+		$defaultLangs = array_intersect_key(M17nHelper::$languages, $languages);
+		foreach ($defaultLangs as $code => $value) {
+			if ($languages[$code]) {
+				$activeLangs[] = $code;
+			}
+			$defaultLangs[$code] = __d('m17n', $value);
+		}
+
+		$this->set('activeLangs', $activeLangs);
+		$this->set('defaultLangs', $defaultLangs);
+
+		if ($this->request->is('post')) {
+			if (! $this->InstallUtil->saveSiteSetting($this->request->data)) {
+				$this->set('validationErrors', $this->InstallUtil->validationErrors);
+				$this->set('errors', [
+					__d('net_commons', 'Failed on validation errors. Please check the input data.')
+				]);
+			} else {
+				$this->redirect(array(
+					'action' => 'finish',
+					'?' => ['language' => Configure::read('Config.language')]
+				));
+			}
+			return;
+		}
+	}
+
+/**
+ * ステップ 6
  * インストール終了
  *
  * @return void

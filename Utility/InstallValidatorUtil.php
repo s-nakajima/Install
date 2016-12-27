@@ -52,7 +52,7 @@ class InstallValidatorUtil {
  * @return bool True if there are no errors
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-	public function validates($options = array()) {
+	public function validatesDBConf($options = array()) {
 		$validates = array(
 			'datasource' => array(
 				'notBlank' => array(
@@ -249,7 +249,7 @@ class InstallValidatorUtil {
 			);
 			$error = true;
 		}
-		$versions[] = array('message' => $message, 'error' => $error);
+		$versions[] = array('message' => $message, 'error' => $error, 'warning' => false);
 
 		if (! $libraries) {
 			$libraries = array(
@@ -390,6 +390,23 @@ class InstallValidatorUtil {
 		} else {
 			return true;
 		}
+	}
+
+/**
+ * サイト設定の入力チェック
+ *
+ * @param array $data リクエストパラメータ
+ * @return bool
+ */
+	public function validatesSiteSetting($data) {
+		$this->_fields = array();
+
+		$fieldName = 'Language.code';
+		if (! isset($data['Language']['code']) || count($data['Language']['code']) === 0) {
+			$this->invalidate($fieldName, __d('install', 'Please select the language to use.'));
+		}
+
+		return count($this->validationErrors) === 0;
 	}
 
 }
