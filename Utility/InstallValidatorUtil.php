@@ -21,6 +21,14 @@ App::uses('CakeValidationSet', 'Model/Validator');
 class InstallValidatorUtil {
 
 /**
+ * PHPバージョン
+ * ※テストで変更できるようにメンバー変数にする
+ *
+ * @var array
+ */
+	public static $phpVersion = PHP_VERSION;
+
+/**
  * Holds the CakeValidationSet objects array
  *
  * @var CakeValidationSet[]
@@ -44,7 +52,7 @@ class InstallValidatorUtil {
  * @return bool True if there are no errors
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-	public function validates($options = array()) {
+	public function validatesDBConf($options = array()) {
 		$validates = array(
 			'datasource' => array(
 				'notBlank' => array(
@@ -197,7 +205,11 @@ class InstallValidatorUtil {
 	public function permissions() {
 		$permissions = array();
 
-		$writables = [APP . 'Config', APP . 'tmp', APP . 'webroot' . DS . 'files'];
+		$writables = array(
+			APP . 'Config',
+			APP . 'tmp',
+			APP . 'webroot' . DS . 'files'
+		);
 		foreach ($writables as $path) {
 			if (is_writable($path)) {
 				$permissions[] = array(
@@ -220,9 +232,114 @@ class InstallValidatorUtil {
 /**
  * バージョンチェック
  *
+ * @param array $libraries チェックするライブラリ群(テストで使用)
  * @return array
  */
-	public function versions() {
+	public function versions($libraries = array()) {
+		$versions = array();
+
+		//PHPのバージョンチェック
+		$error = false;
+		if (version_compare(self::$phpVersion, '5.4.0') >= 0) {
+			$message = __d('install', '%s(%s) version success.', 'PHP', self::$phpVersion);
+		} else {
+			$message = __d(
+				'install',
+				'%s(%s) version error. Please more than "%s" version.', 'PHP', self::$phpVersion, 'PHP 5.4'
+			);
+			$error = true;
+		}
+		$versions[] = array('message' => $message, 'error' => $error, 'warning' => false);
+
+		if (! $libraries) {
+			$libraries = array(
+				'dom' => array(
+					'type' => 'function', 'name' => 'phpversion', 'asError' => true,
+				),
+				'imagick' => array(
+					'type' => 'function', 'name' => 'phpversion', 'asError' => false,
+				),
+				'json' => array(
+					'type' => 'function', 'name' => 'phpversion', 'asError' => true,
+				),
+				'libxml' => array(
+					'type' => 'constant', 'name' => 'LIBXML_DOTTED_VERSION', 'asError' => true,
+				),
+				'mbstring' => array(
+					'type' => 'function_no_argument', 'name' => 'mb_get_info', 'asError' => true,
+				),
+				'PDO' => array(
+					'type' => 'function', 'name' => 'phpversion', 'asError' => true,
+				),
+				'pdo_mysql' => array(
+					'type' => 'function', 'name' => 'phpversion', 'asError' => true,
+				),
+			);
+		}
+		foreach ($libraries as $key => $library) {
+			$versions[] = $this->__checkVersion($key, $library);
+		}
+
+		return $versions;
+	}
+
+/**
+ * バージョンチェック
+ *
+ * @param string $key ライブラリ名
+ * @param array $library ライブラリ情報
+ * @return array
+ */
+	private function __checkVersion($key, $library) {
+		$error = false;
+		$warning = false;
+		if ($library['type'] === 'function') {
+			$version = call_user_func($library['name'], $key);
+		} elseif ($library['type'] === 'function_no_argument') {
+			$version = call_user_func($library['name']);
+		} elseif ($library['type'] === 'constant' && defined($library['name'])) {
+			$version = constant($library['name']);
+		} else {
+			$version = false;
+		}
+
+		if (! $version) {
+			if ($library['asError']) {
+				$message = Hash::get(
+					$library, 'errorMessage',
+					__d('install', 'Not found the %s. Please install the %s.', $key, $key)
+				);
+				$error = true;
+			} else {
+				$message = Hash::get(
+					$library, 'errorMessage',
+					__d('install', 'Not found the %s. Some functions can not be used.', $key)
+				);
+				$warning = true;
+			}
+		} else {
+			if (is_array($version)) {
+				$message = Hash::get(
+					$library, 'successMessage',
+					__d('install', '%s version success.', $key)
+				);
+			} else {
+				$message = Hash::get(
+					$library, 'successMessage',
+					__d('install', '%s(%s) version success.', $key, $version)
+				);
+			}
+		}
+
+		return array('message' => $message, 'error' => $error, 'warning' => $warning);
+	}
+
+/**
+ * バージョン(CLI)チェック
+ *
+ * @return array
+ */
+	public function cliVersions() {
 		$versions = array();
 
 		if (is_executable(APP . 'Console' . DS . 'cake')) {
@@ -243,6 +360,7 @@ class InstallValidatorUtil {
 				$versions[] = array(
 					'message' => preg_replace('/^Error:|^Success:/', '', $message),
 					'error' => $result,
+					'warning' => false,
 				);
 			}
 		} else {
@@ -251,6 +369,7 @@ class InstallValidatorUtil {
 					'install', 'Failed to execute %s. Please check permission.', APP . 'Console' . DS . 'cake'
 				),
 				'error' => true,
+				'warning' => false,
 			);
 		}
 
@@ -271,6 +390,23 @@ class InstallValidatorUtil {
 		} else {
 			return true;
 		}
+	}
+
+/**
+ * サイト設定の入力チェック
+ *
+ * @param array $data リクエストパラメータ
+ * @return bool
+ */
+	public function validatesSiteSetting($data) {
+		$this->_fields = array();
+
+		$fieldName = 'Language.code';
+		if (! isset($data['Language']['code']) || count($data['Language']['code']) === 0) {
+			$this->invalidate($fieldName, __d('install', 'Please select the language to use.'));
+		}
+
+		return count($this->validationErrors) === 0;
 	}
 
 }

@@ -88,6 +88,10 @@ msgstr ""
 msgid "%s(%s) version success."
 msgstr "%s(%s) 正常"
 
+#: Install/Console/Command/Task/CheckLibVersionTask.php:40;57
+msgid "%s version success."
+msgstr "%s 正常"
+
 #: Install/Console/Command/Task/CheckLibVersionTask.php:43
 msgid "%s(%s) version error. Please more than \"%s\" version."
 msgstr "%s(%s)のバージョンが違っています。%s以上にしてください。"
@@ -95,6 +99,10 @@ msgstr "%s(%s)のバージョンが違っています。%s以上にしてくだ�
 #: Install/Console/Command/Task/CheckLibVersionTask.php:53
 msgid "Not found the %s. Please install the %s."
 msgstr "%sが見つかりません。%sをインストールしてください。"
+
+#: Install/Console/Command/Task/CheckLibVersionTask.php:53
+msgid "Not found the %s. Some functions can not be used."
+msgstr "%sが見つかりません。一部機能が使えません。"
 
 #: Install/Console/Command/Task/CheckLibVersionTask.php:72
 #: Install/Console/Command/Task/InstallPermissionTask.php:64
@@ -426,7 +434,23 @@ msgstr ""
 msgid "Versions"
 msgstr "バージョンチェック"
 
+#: Install/View/Install/init_permission.ctp:45
+msgid "Versions(CLI)"
+msgstr "バージョンチェック(CLI)"
+
 #: Install/View/Layouts/default.ctp:21
 msgid "Install"
 msgstr "インストール"
+
+#: Install/View
+msgid "Please select the language to use."
+msgstr "利用する言語を選択してください"
+
+#: Install/View
+msgid "Use languages"
+msgstr "利用する言語"
+
+#: Install/View
+msgid "Site Setting"
+msgstr "サイト設定"
 

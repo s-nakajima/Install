@@ -23,6 +23,8 @@ App::uses('InstallValidatorUtil', 'Install.Utility');
  * @package NetCommons\Install\Utility
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class InstallUtil {
 
@@ -202,6 +204,13 @@ class InstallUtil {
 	);
 
 /**
+ * validator
+ *
+ * @var array
+ */
+	public $validator = null;
+
+/**
  * List of validation errors.
  *
  * @var array
@@ -235,6 +244,22 @@ class InstallUtil {
 			Configure::write('Security.salt', Security::generateAuthKey());
 			Configure::write('Security.cipherSeed', mt_rand() . mt_rand());
 		}
+	}
+
+/**
+ * InstallValidatorUtilラップ用マジックメソッド。
+ *
+ * @param string $method メソッド
+ * @param array $params パラメータ
+ * @return string
+ */
+	public function __call($method, $params) {
+		$validator = new InstallValidatorUtil();
+
+		$result = call_user_func_array(array($validator, $method), $params);
+		$this->validationErrors = $validator->validationErrors;
+
+		return $result;
 	}
 
 /**
@@ -317,20 +342,6 @@ class InstallUtil {
 
 		$file = new File(APP . 'Config' . DS . $this->appYmlPrefix . 'database.php', true);
 		return $file->write($conf);
-	}
-
-/**
- * database.phpの入力チェック
- *
- * @param array $data configs
- * @return bool File written or not
- */
-	public function validatesDBConf($data = array()) {
-		$validator = new InstallValidatorUtil();
-		$result = $validator->validates($data);
-
-		$this->validationErrors = $validator->validationErrors;
-		return $result;
 	}
 
 /**
@@ -727,6 +738,66 @@ EOF;
 				CakeLog::info(sprintf('[' . $type . ']   %s', $message));
 			}
 		//}
+	}
+
+/**
+ * サイト設定
+ *
+ * @param array $data リクエストパラメータ
+ * @return bool
+ * @throws InternalErrorException
+ */
+	public function saveSiteSetting($data = array()) {
+		$this->Language = ClassRegistry::init('M17n.Language');
+		$this->SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
+
+		if (! $this->validatesSiteSetting($data)) {
+			return false;
+		}
+
+		try {
+			$update = array(
+				'is_active' => true,
+			);
+			$conditions = array(
+				'code' => $data['Language']['code']
+			);
+			if (! $this->Language->updateAll($update, $conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			$update = array(
+				'is_active' => false,
+			);
+			$conditions = array(
+				'code NOT IN' => $data['Language']['code']
+			);
+			if (! $this->Language->updateAll($update, $conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			if (! in_array(Configure::read('Config.language'), $data['Language']['code'], true)) {
+				Configure::write('Config.language', $data['Language']['code'][0]);
+				$update = array(
+					'value' => '\'' . $data['Language']['code'][0] . ' \'',
+				);
+				$conditions = array(
+					'key' => 'Config.language'
+				);
+				if (! $this->SiteSetting->updateAll($update, $conditions)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+				$this->saveAppConf();
+			}
+
+			$this->Language->commit();
+
+		} catch (Exception $ex) {
+			$this->Language->rollback($ex);
+			throw $ex;
+		}
+
+		return true;
 	}
 
 }

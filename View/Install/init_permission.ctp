@@ -27,12 +27,43 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 			<?php foreach ($versions as $version): ?>
 				<?php if ($version['error']): ?>
 					<p class="bg-danger message text-danger">
-						<span class="glyphicon glyphicon-remove"></span>
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						<?php echo h($version['message']); ?>
+					</p>
+				<?php elseif ($version['warning']): ?>
+					<p class="bg-warning message text-warning">
+						<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 						<?php echo h($version['message']); ?>
 					</p>
 				<?php else: ?>
 					<p class="bg-success message text-success">
-						<span class="glyphicon glyphicon-ok"></span>
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						<?php echo h($version['message']); ?>
+					</p>
+				<?php endif; ?>
+			<?php endforeach ?>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<?php echo __d('install', 'Versions(CLI)'); ?>
+		</div>
+		<div>
+			<?php foreach ($cliVersions as $version): ?>
+				<?php if ($version['error']): ?>
+					<p class="bg-danger message text-danger">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						<?php echo h($version['message']); ?>
+					</p>
+				<?php elseif ($version['warning']): ?>
+					<p class="bg-warning message text-warning">
+						<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+						<?php echo h($version['message']); ?>
+					</p>
+				<?php else: ?>
+					<p class="bg-success message text-success">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 						<?php echo h($version['message']); ?>
 					</p>
 				<?php endif; ?>
@@ -48,12 +79,12 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 			<?php foreach ($permissions as $permission): ?>
 				<?php if ($permission['error']): ?>
 					<p class="bg-danger message text-danger">
-						<span class="glyphicon glyphicon-remove"></span>
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 						<?php echo h($permission['message']); ?>
 					</p>
 				<?php else: ?>
 					<p class="bg-success message text-success">
-						<span class="glyphicon glyphicon-ok"></span>
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 						<?php echo h($permission['message']); ?>
 					</p>
 				<?php endif; ?>
