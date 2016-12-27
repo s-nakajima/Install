@@ -10,6 +10,7 @@
  */
 
 App::uses('InstallAppTask', 'Install.Console/Command');
+App::uses('InstallValidatorUtil', 'Install.Utility');
 
 /**
  * Installのパーミッション設定
@@ -20,20 +21,14 @@ App::uses('InstallAppTask', 'Install.Console/Command');
 class CheckLibVersionTask extends InstallAppTask {
 
 /**
- * PHPバージョン
- * ※テストで変更できるようにメンバー変数にする
- *
- * @var array
- */
-	public $phpVersion = PHP_VERSION;
-
-/**
  * Execution method always used for tasks
  *
  * @return void
  */
 	public function execute() {
 		parent::execute();
+
+		$this->phpVersion = InstallValidatorUtil::$phpVersion;
 
 		$status = 0;
 		if (version_compare($this->phpVersion, '5.4.0') >= 0) {

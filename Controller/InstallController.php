@@ -108,8 +108,9 @@ class InstallController extends InstallAppController {
 		$ret = true;
 
 		$versions = $validator->versions();
+		$cliVersions = $validator->cliVersions();
 		$permissions = $validator->permissions();
-		$messages = array_merge($versions, $permissions);
+		$messages = array_merge($versions, $cliVersions, $permissions);
 		foreach ($messages as $message) {
 			if ($message['error']) {
 				$ret = false;
@@ -118,6 +119,7 @@ class InstallController extends InstallAppController {
 		}
 
 		// Show current page on failure
+		$this->set('cliVersions', $cliVersions);
 		$this->set('versions', $versions);
 		$this->set('permissions', $permissions);
 		$this->set('canInstall', $ret);
