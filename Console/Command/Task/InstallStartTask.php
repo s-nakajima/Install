@@ -63,13 +63,13 @@ class InstallStartTask extends InstallAppTask {
 		}
 		Configure::write('App.fullBaseUrl', $fullBaseUrl);
 
-		if (array_key_exists(self::KEY_ENABLE_LANGUAGES, $this->params)) {
-			$languageEnabled = Hash::get($this->params, self::KEY_ENABLE_LANGUAGES, 'en,ja');
-		} else {
-			$languageEnabled = $this->in(
-				__d('install', 'Enable languages?'), ['en,ja', 'en', 'ja'], 'en,ja'
-			);
-		}
+		//if (array_key_exists(self::KEY_ENABLE_LANGUAGES, $this->params)) {
+			$languageEnabled = 'en,ja';
+		//} else {
+		//	$languageEnabled = $this->in(
+		//		__d('install', 'Enable languages?'), ['en,ja', 'en', 'ja'], 'en,ja'
+		//	);
+		//}
 
 		if (array_key_exists(self::KEY_LANGUAGE, $this->params)) {
 			$currentLanguage = Hash::get($this->params, self::KEY_LANGUAGE, 'ja');
