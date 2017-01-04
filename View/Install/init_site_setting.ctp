@@ -34,7 +34,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 ?>
 
 	<div class="panel panel-default">
-		<div class="panel-heading"><?php echo __d('install', 'Please select the language to use.'); ?></div>
+		<div class="panel-heading"><?php echo __d('site_manager', 'Please select the language to use.'); ?></div>
 		<div class="panel-body">
 			<?php echo $this->NetCommonsForm->input('Language.code', array(
 				'type' => 'checkbox',
