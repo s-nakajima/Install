@@ -399,11 +399,11 @@ class InstallValidatorUtil {
  * @return bool
  */
 	public function validatesSiteSetting($data) {
+		$this->Language = ClassRegistry::init('M17n.Language');
 		$this->_fields = array();
 
-		$fieldName = 'Language.code';
-		if (! isset($data['Language']['code']) || count($data['Language']['code']) === 0) {
-			$this->invalidate($fieldName, __d('install', 'Please select the language to use.'));
+		if (! $this->Language->validateActive($data)) {
+			$this->validationErrors = $this->Language->validationErrors;
 		}
 
 		return count($this->validationErrors) === 0;

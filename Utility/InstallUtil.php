@@ -749,31 +749,17 @@ EOF;
  */
 	public function saveSiteSetting($data = array()) {
 		$this->Language = ClassRegistry::init('M17n.Language');
-		$this->SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
-
-		if (! $this->validatesSiteSetting($data)) {
-			return false;
-		}
+		$this->SiteSetting = ClassRegistry::init('SitManager.SiteSetting');
 
 		try {
-			$update = array(
-				'is_active' => true,
-			);
-			$conditions = array(
-				'code' => $data['Language']['code']
-			);
-			if (! $this->Language->updateAll($update, $conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			$this->Language->begin();
+
+			if (! $this->validatesSiteSetting($data)) {
+				return false;
 			}
 
-			$update = array(
-				'is_active' => false,
-			);
-			$conditions = array(
-				'code NOT IN' => $data['Language']['code']
-			);
-			if (! $this->Language->updateAll($update, $conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			if (! $this->Language->saveActive($data)) {
+				return false;
 			}
 
 			if (! in_array(Configure::read('Config.language'), $data['Language']['code'], true)) {
@@ -787,6 +773,9 @@ EOF;
 				if (! $this->SiteSetting->updateAll($update, $conditions)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
+			}
+
+			if (! in_array(Configure::read('Config.language'), $data['Language']['code'], true)) {
 				$this->saveAppConf();
 			}
 
@@ -794,7 +783,6 @@ EOF;
 
 		} catch (Exception $ex) {
 			$this->Language->rollback($ex);
-			throw $ex;
 		}
 
 		return true;
