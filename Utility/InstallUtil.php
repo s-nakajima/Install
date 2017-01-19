@@ -753,6 +753,7 @@ EOF;
 
 		try {
 			$this->Language->begin();
+			$this->SiteSetting->begin();
 
 			if (! $this->validatesSiteSetting($data)) {
 				return false;
@@ -780,8 +781,10 @@ EOF;
 			}
 
 			$this->Language->commit();
+			$this->SiteSetting->commit();
 
 		} catch (Exception $ex) {
+			$this->SiteSetting->rollback();
 			$this->Language->rollback($ex);
 		}
 
