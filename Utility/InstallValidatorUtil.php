@@ -284,6 +284,29 @@ class InstallValidatorUtil {
 	}
 
 /**
+ * Console/cakeの実行チェック
+ *
+ * @return bool
+ */
+	private function __checkCakeConsole() {
+		$messages = array();
+		$result = null;
+		exec(sprintf(
+			'cd %s && Console%scake 2>&1',
+			ROOT . DS . APP_DIR, DS
+		), $messages, $result);
+
+		foreach ($messages as $message) {
+			$result = (bool)preg_match('/^Welcome to CakePHP/', $message);
+			if ($result) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+/**
  * バージョンチェック
  *
  * @param string $key ライブラリ名
@@ -342,7 +365,7 @@ class InstallValidatorUtil {
 	public function cliVersions() {
 		$versions = array();
 
-		if (is_executable(APP . 'Console' . DS . 'cake')) {
+		if ($this->__checkCakeConsole()) {
 			$messages = array();
 			$result = null;
 			exec(sprintf(
