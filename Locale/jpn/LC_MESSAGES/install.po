@@ -347,7 +347,7 @@ msgstr "%s 書き込み可"
 
 #: Install/Utility/InstallValidatorUtil.php:250
 msgid "Failed to execute %s. Please check permission."
-msgstr "%s が実行権限がありません。パーミッションを確認してください。"
+msgstr "%s に実行権限がありません。パーミッションを確認してください。"
 
 #: Install/View/Install/finish.ctp:14
 msgid "By clicking the button, you can jump to the home."
