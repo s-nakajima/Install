@@ -749,7 +749,7 @@ EOF;
  */
 	public function saveSiteSetting($data = array()) {
 		$this->Language = ClassRegistry::init('M17n.Language');
-		$this->SiteSetting = ClassRegistry::init('SitManager.SiteSetting');
+		$this->SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
 
 		try {
 			$this->Language->begin();
