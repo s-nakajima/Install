@@ -11,6 +11,9 @@
             "homepage": "http://www.netcommons.org"
         }
     ],
+    "repositories": [
+        {"type": "vcs", "url": "https://github.com/s-nakajima/Mails.git"}
+    ],
     "extra": {
         "installer-paths": {
             "app/Plugin/{$name}": ["type:cakephp-plugin"]
