@@ -647,6 +647,11 @@ var_dump('installMigrations=' . $plugin);
 			CakeLog::info(sprintf('[migration]   %s', $message));
 		}
 var_dump('staticRunMigration');
+var_dump($connection);
+var_dump(sprintf(
+			'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
+			ROOT . DS . APP_DIR, DS, escapeshellcmd($plugin), $connection, $connection
+		));
 var_export($messages);
 var_dump($ret);
 
