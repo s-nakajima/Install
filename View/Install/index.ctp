@@ -22,8 +22,8 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 <?php endif; ?>
 
 <?php echo $this->Form->create(false, array('url' => array(
-		'plugin' => 'install',
-		'controller' => 'install',
+		//'plugin' => 'install',
+		//'controller' => 'install',
 		'action' => 'index',
 		'?' => ['language' => Configure::read('Config.language')]
 	))); ?>

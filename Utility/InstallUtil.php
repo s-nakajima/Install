@@ -204,6 +204,16 @@ class InstallUtil {
 	);
 
 /**
+ * migrationP
+ *
+ * @return array
+ */
+	public $migrationPriorityPlugins = array(
+		'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
+		'Roles', 'Mails', 'SiteManager', 'Blocks', 'Boxes'
+	);
+
+/**
  * validator
  *
  * @var array
@@ -534,10 +544,7 @@ EOF;
  */
 	public function installMigrations($connection = 'master', $addPlugins = array()) {
 		$plugins = array_unique(array_merge(
-			array(
-				'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
-				'Roles', 'Mails', 'SiteManager', 'Blocks', 'Boxes'
-			),
+			$this->migrationPriorityPlugins,
 			$addPlugins
 		));
 
