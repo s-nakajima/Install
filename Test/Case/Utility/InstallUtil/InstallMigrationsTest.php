@@ -109,6 +109,7 @@ class InstallUtilityInstallUtilInstallMigrationsTest extends NetCommonsCakeTestC
 		$db = ConnectionManager::getDataSource('test');
 		$tables = $db->query('SHOW TABLES');
 		$this->assertCount($this->__initTableCount, $tables);
+var_export($addPlugins);
 
 		$result = $instance->installMigrations($connection, $addPlugins);
 
