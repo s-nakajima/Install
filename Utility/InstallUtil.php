@@ -646,7 +646,8 @@ var_dump('installMigrations=' . $plugin);
 		foreach ($messages as $message) {
 			CakeLog::info(sprintf('[migration]   %s', $message));
 		}
-var_dump($messages);
+var_dump('staticRunMigration');
+var_export($messages);
 
 		$result = true;
 		if ($ret) {
