@@ -648,10 +648,12 @@ var_dump('installMigrations=' . $plugin);
 		}
 var_dump('staticRunMigration');
 var_export($messages);
+var_dump($ret);
 
 		$result = true;
 		if ($ret) {
 			$matches = preg_grep('/No migrations/', $messages);
+var_dump($matches);
 			if (count($matches) === 0) {
 				CakeLog::info(
 					sprintf('[migration] Failure migrated "%s" for %s connection', $plugin, $connection)
@@ -667,6 +669,7 @@ var_export($messages);
 			}
 		} else {
 			$matches = preg_grep('/Error: |SQLSTATE/', $messages);
+var_dump($matches);
 			if (count($matches) === 0) {
 				CakeLog::info(
 					sprintf('[migration] Successfully migrated "%s" for %s connection', $plugin, $connection)
