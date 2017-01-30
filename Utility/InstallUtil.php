@@ -566,6 +566,7 @@ EOF;
 		$result = true;
 		foreach ($plugins as $plugin) {
 			if (! PluginBehavior::staticRunMigration($plugin, $connection)) {
+var_dump('installMigrations=' . $plugin);
 				$result = false;
 			}
 		}
