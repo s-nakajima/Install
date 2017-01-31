@@ -33,7 +33,25 @@ class InstallShell extends AppShell {
 		'Install.InstallMigrations',
 		'Install.InstallBower',
 		'Install.SaveAdministrator',
+		'Install.InstallSiteSetting',
 		'Install.InstallFinish'
+	);
+
+/**
+ * Contains tasks to load and instantiate
+ *
+ * @var array
+ */
+	public $executeWeight = array(
+		'InstallStart',
+		'CheckLibVersion',
+		'InstallPermission',
+		'CreateDatabase',
+		'InstallMigrations',
+		'InstallBower',
+		'SaveAdministrator',
+		'InstallSiteSetting',
+		'InstallFinish'
 	);
 
 /**
@@ -66,14 +84,9 @@ class InstallShell extends AppShell {
 		);
 		switch ($choice) {
 			case 's':
-				$this->InstallStart->execute();
-				$this->CheckLibVersion->execute();
-				$this->InstallPermission->execute();
-				$this->CreateDatabase->execute();
-				$this->InstallMigrations->execute();
-				$this->InstallBower->execute();
-				$this->SaveAdministrator->execute();
-				$this->InstallFinish->execute();
+				foreach ($this->executeWeight as $task) {
+					$this->$task->execute();
+				}
 
 				$this->out('<success>' . __d('install', 'Install success.') . '</success>');
 				return $this->_stop();
@@ -125,6 +138,10 @@ class InstallShell extends AppShell {
 			->addSubcommand('save_administrator', array(
 				'help' => __d('install', 'Install Step 6'),
 				'parser' => $this->SaveAdministrator->getOptionParser(),
+			))
+			->addSubcommand('install_site_setting', array(
+				'help' => __d('install', 'Install Step 7'),
+				'parser' => $this->InstallSiteSetting->getOptionParser(),
 			))
 			->addSubcommand('install_finish', array(
 				'help' => __d('install', 'Install End'),
