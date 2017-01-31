@@ -204,6 +204,16 @@ class InstallUtil {
 	);
 
 /**
+ * migrationP
+ *
+ * @return array
+ */
+	public $migrationPriorityPlugins = array(
+		'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
+		'Roles', 'Mails', 'SiteManager', 'Blocks', 'Boxes'
+	);
+
+/**
  * validator
  *
  * @var array
@@ -533,11 +543,10 @@ EOF;
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function installMigrations($connection = 'master', $addPlugins = array()) {
+		App::uses('PluginBehavior', 'PluginManager.Model/Behavior');
+
 		$plugins = array_unique(array_merge(
-			array(
-				'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
-				'Roles', 'Mails', 'SiteManager', 'Blocks', 'Boxes'
-			),
+			$this->migrationPriorityPlugins,
 			$addPlugins
 		));
 
@@ -556,38 +565,8 @@ EOF;
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
 		$result = true;
 		foreach ($plugins as $plugin) {
-			CakeLog::info(
-				sprintf('[migration] Start migrating %s for %s connection', $plugin, $connection)
-			);
-
-			$messages = array();
-			$ret = null;
-			exec(sprintf(
-				'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
-				ROOT . DS . APP_DIR, DS, escapeshellcmd($plugin), $connection, $connection
-			), $messages, $ret);
-			$this->__commandOutputResults('migration', $messages);
-
-			// Write logs
-			if ($ret) {
-				$matches = preg_grep('/No migrations/', $messages);
-				if (count($matches) === 0) {
-					CakeLog::info(
-						sprintf('[migration] Failure migrated %s for %s connection', $plugin, $connection)
-					);
-					$result = false;
-				} else {
-					//@codeCoverageIgnoreStart
-					//Migrationの戻り値が0になって処理が通らなくなったが、念のため処理として残しておく
-					CakeLog::info(
-						sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
-					);
-					//@codeCoverageIgnoreEnd
-				}
-			} else {
-				CakeLog::info(
-					sprintf('[migration] Successfully migrated %s for %s connection', $plugin, $connection)
-				);
+			if (! PluginBehavior::staticRunMigration($plugin, $connection)) {
+				$result = false;
 			}
 		}
 
