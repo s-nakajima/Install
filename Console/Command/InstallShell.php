@@ -38,6 +38,23 @@ class InstallShell extends AppShell {
 	);
 
 /**
+ * Contains tasks to load and instantiate
+ *
+ * @var array
+ */
+	public $executeWeight = array(
+		'InstallStart',
+		'CheckLibVersion',
+		'InstallPermission',
+		'CreateDatabase',
+		'InstallMigrations',
+		'InstallBower',
+		'SaveAdministrator',
+		'InstallSiteSetting',
+		'InstallFinish'
+	);
+
+/**
  * Override startup
  *
  * @return void
@@ -67,15 +84,9 @@ class InstallShell extends AppShell {
 		);
 		switch ($choice) {
 			case 's':
-				$this->InstallStart->execute();
-				$this->CheckLibVersion->execute();
-				$this->InstallPermission->execute();
-				$this->CreateDatabase->execute();
-				$this->InstallMigrations->execute();
-				$this->InstallBower->execute();
-				$this->SaveAdministrator->execute();
-				$this->InstallSiteSetting->execute();
-				$this->InstallFinish->execute();
+				foreach ($this->executeWeight as $task) {
+					$this->$task->execute();
+				}
 
 				$this->out('<success>' . __d('install', 'Install success.') . '</success>');
 				return $this->_stop();
