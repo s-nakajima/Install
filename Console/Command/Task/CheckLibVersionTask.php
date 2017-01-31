@@ -53,7 +53,9 @@ class CheckLibVersionTask extends InstallAppTask {
 			$this->out('<success>Success:</success> ' . $message);
 		}
 
-		$this->_stop($status);
+		if ($status !== 0) {
+			$this->_stop($status);
+		}
 	}
 
 /**

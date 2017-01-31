@@ -33,6 +33,7 @@ class InstallShell extends AppShell {
 		'Install.InstallMigrations',
 		'Install.InstallBower',
 		'Install.SaveAdministrator',
+		'Install.InstallSiteSetting',
 		'Install.InstallFinish'
 	);
 
@@ -73,6 +74,7 @@ class InstallShell extends AppShell {
 				$this->InstallMigrations->execute();
 				$this->InstallBower->execute();
 				$this->SaveAdministrator->execute();
+				$this->InstallSiteSetting->execute();
 				$this->InstallFinish->execute();
 
 				$this->out('<success>' . __d('install', 'Install success.') . '</success>');
@@ -125,6 +127,10 @@ class InstallShell extends AppShell {
 			->addSubcommand('save_administrator', array(
 				'help' => __d('install', 'Install Step 6'),
 				'parser' => $this->SaveAdministrator->getOptionParser(),
+			))
+			->addSubcommand('install_site_setting', array(
+				'help' => __d('install', 'Install Step 7'),
+				'parser' => $this->InstallSiteSetting->getOptionParser(),
 			))
 			->addSubcommand('install_finish', array(
 				'help' => __d('install', 'Install End'),
