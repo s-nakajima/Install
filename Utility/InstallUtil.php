@@ -565,8 +565,7 @@ EOF;
 		CakeLog::info('[Migrations.migration] Start migrating all plugins');
 		$result = true;
 		foreach ($plugins as $plugin) {
-			if (! self::staticRunMigration($plugin, $connection)) {
-var_dump('installMigrations=' . $plugin);
+			if (! PluginBehavior::staticRunMigration($plugin, $connection)) {
 				$result = false;
 			}
 		}
@@ -616,75 +615,6 @@ var_dump('installMigrations=' . $plugin);
 			CakeLog::info('[migration] Successfully migrated all plugins');
 		} else {
 			CakeLog::info('[migration] Failure migrated all plugins');
-		}
-
-		return $result;
-	}
-
-/**
- * Migrationの実行処理
- *
- * @param string $plugin Plugin key
- * @param string|null $connection DB接続先
- * @return bool True on success
- */
-	public static function staticRunMigration($plugin, $connection = null) {
-		$plugin = Inflector::camelize($plugin);
-
-		CakeLog::info(
-			sprintf('[migration] Start migrating "%s" for %s connection', $plugin, $connection)
-		);
-
-		$messages = array();
-		$ret = null;
-		exec(sprintf(
-			'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
-			ROOT . DS . APP_DIR, DS, escapeshellcmd($plugin), $connection, $connection
-		), $messages, $ret);
-
-		// Write logs
-		foreach ($messages as $message) {
-			CakeLog::info(sprintf('[migration]   %s', $message));
-		}
-var_dump('staticRunMigration');
-var_dump($connection);
-var_dump(sprintf(
-			'cd %s && Console%scake Migrations.migration run all -p %s -c %s -i %s 2>&1',
-			ROOT . DS . APP_DIR, DS, escapeshellcmd($plugin), $connection, $connection
-		));
-var_export($messages);
-var_dump($ret);
-
-		$result = true;
-		if ($ret) {
-			$matches = preg_grep('/No migrations/', $messages);
-var_dump($matches);
-			if (count($matches) === 0) {
-				CakeLog::info(
-					sprintf('[migration] Failure migrated "%s" for %s connection', $plugin, $connection)
-				);
-				$result = false;
-			} else {
-				//@codeCoverageIgnoreStart
-				//Migrationの戻り値が0になって処理が通らなくなったが、念のため処理として残しておく
-				CakeLog::info(
-					sprintf('[migration] Successfully migrated "%s" for %s connection', $plugin, $connection)
-				);
-				//@codeCoverageIgnoreEnd
-			}
-		} else {
-			$matches = preg_grep('/Error: |SQLSTATE/', $messages);
-var_dump($matches);
-			if (count($matches) === 0) {
-				CakeLog::info(
-					sprintf('[migration] Successfully migrated "%s" for %s connection', $plugin, $connection)
-				);
-			} else {
-				CakeLog::info(
-					sprintf('[migration] Failure migrated "%s" for %s connection', $plugin, $connection)
-				);
-				$result = false;
-			}
 		}
 
 		return $result;
