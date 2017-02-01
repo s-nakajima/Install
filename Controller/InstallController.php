@@ -267,7 +267,7 @@ class InstallController extends InstallAppController {
 				]);
 			} else {
 				$this->redirect(array(
-					'action' => 'finish',
+					'action' => 'save_init_data',
 					'?' => ['language' => Configure::read('Config.language')]
 				));
 			}
@@ -277,6 +277,29 @@ class InstallController extends InstallAppController {
 
 /**
  * ステップ 6
+ * 初期データの登録
+ *
+ * @return void
+ */
+	public function save_init_data() {
+		if (! $this->InstallUtil->saveInitData()) {
+			$this->set('errors', [
+				__d('net_commons', 'Internal Error.')
+			]);
+			$this->redirect(array(
+				'action' => 'init_site_setting',
+				'?' => ['language' => Configure::read('Config.language')]
+			));
+		} else {
+			$this->redirect(array(
+				'action' => 'finish',
+				'?' => ['language' => Configure::read('Config.language')]
+			));
+		}
+	}
+
+/**
+ * ステップ 7
  * インストール終了
  *
  * @return void
