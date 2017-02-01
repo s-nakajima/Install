@@ -297,7 +297,7 @@ class InstallValidatorUtil {
 		), $messages, $result);
 
 		foreach ($messages as $message) {
-			$result = (bool)preg_match('/^Welcome to CakePHP/', $message);
+			$result = (bool)preg_match('/Welcome to CakePHP/', $message);
 			if ($result) {
 				return true;
 			}
