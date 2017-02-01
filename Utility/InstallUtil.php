@@ -204,7 +204,7 @@ class InstallUtil {
 	);
 
 /**
- * migrationP
+ * Migrationで優先の高いプラグイン
  *
  * @return array
  */
@@ -212,6 +212,13 @@ class InstallUtil {
 		'Files', 'Users', 'NetCommons', 'M17n', 'DataTypes', 'PluginManager',
 		'Roles', 'Mails', 'SiteManager', 'Blocks', 'Boxes'
 	);
+
+/**
+ * 初期データ生成処理
+ *
+ * @return array
+ */
+	public $InstallInitData = 'Install.InstallInitData';
 
 /**
  * validator
@@ -264,10 +271,27 @@ class InstallUtil {
  * @return string
  */
 	public function __call($method, $params) {
-		$validator = new InstallValidatorUtil();
+		if ($method === 'saveInitData') {
+			if (is_string($this->InstallInitData)) {
+				list($plugin, $name) = pluginSplit($this->InstallInitData);
+				$path = 'Utility';
 
-		$result = call_user_func_array(array($validator, $method), $params);
-		$this->validationErrors = $validator->validationErrors;
+			} elseif (is_array($this->InstallInitData)) {
+				$plugin = $this->InstallInitData['plugin'];
+				$name = $this->InstallInitData['name'];
+				$path = $this->InstallInitData['path'];
+			}
+
+			if (! is_object($this->InstallInitData)) {
+				App::uses($name, $plugin . '.' . $path);
+				$this->InstallInitData = new $name();
+			}
+			$result = call_user_func_array(array($this->InstallInitData, 'save'), $params);
+		} else {
+			$validator = new InstallValidatorUtil();
+			$result = call_user_func_array(array($validator, $method), $params);
+			$this->validationErrors = $validator->validationErrors;
+		}
 
 		return $result;
 	}
