@@ -36,7 +36,11 @@ class InstallSiteSettingTask extends InstallAppTask {
 
 		//引数のセット
 		if (array_key_exists(self::KEY_ACTIVAL_LANGUAGES, $this->params)) {
-			$languageActive = 'ja';
+			if ($this->params[self::KEY_ACTIVAL_LANGUAGES]) {
+				$languageActive = $this->params[self::KEY_ACTIVAL_LANGUAGES];
+			} else {
+				$languageActive = 'ja';
+			}
 		} else {
 			$languageActive = $this->in(
 				__d('install', 'Actival languages?'), ['en,ja', 'en', 'ja'], 'ja'
