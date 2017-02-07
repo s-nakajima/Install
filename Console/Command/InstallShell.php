@@ -34,6 +34,7 @@ class InstallShell extends AppShell {
 		'Install.InstallBower',
 		'Install.SaveAdministrator',
 		'Install.InstallSiteSetting',
+		'Install.SaveInitData',
 		'Install.InstallFinish'
 	);
 
@@ -51,6 +52,7 @@ class InstallShell extends AppShell {
 		'InstallBower',
 		'SaveAdministrator',
 		'InstallSiteSetting',
+		'SaveInitData',
 		'InstallFinish'
 	);
 
@@ -142,6 +144,10 @@ class InstallShell extends AppShell {
 			->addSubcommand('install_site_setting', array(
 				'help' => __d('install', 'Install Step 7'),
 				'parser' => $this->InstallSiteSetting->getOptionParser(),
+			))
+			->addSubcommand('save_init_data', array(
+				'help' => __d('install', 'Install Step 8'),
+				'parser' => $this->SaveInitData->getOptionParser(),
 			))
 			->addSubcommand('install_finish', array(
 				'help' => __d('install', 'Install End'),
