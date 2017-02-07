@@ -169,6 +169,11 @@ class InstallConsoleCommandInstallShellMainTest extends NetCommonsConsoleTestCas
 		$this->$shell->InstallSiteSetting->expects($this->once())->method('execute')
 			->will($this->returnValue(true));
 
+		$this->$shell->SaveInitData = $this->getMock('SaveInitData',
+				array('execute'), array(), '', false);
+		$this->$shell->SaveInitData->expects($this->once())->method('execute')
+			->will($this->returnValue(true));
+
 		$this->$shell->InstallFinish = $this->getMock('InstallFinish',
 				array('execute'), array(), '', false);
 		$this->$shell->InstallFinish->expects($this->once())->method('execute')
@@ -234,6 +239,11 @@ class InstallConsoleCommandInstallShellMainTest extends NetCommonsConsoleTestCas
 		$this->$shell->InstallSiteSetting = $this->getMock('InstallSiteSetting',
 				array('getOptionParser'), array(), '', false);
 		$this->$shell->InstallSiteSetting->expects($this->once())->method('getOptionParser')
+			->will($this->returnValue(true));
+
+		$this->$shell->SaveInitData = $this->getMock('SaveInitData',
+				array('getOptionParser'), array(), '', false);
+		$this->$shell->SaveInitData->expects($this->once())->method('getOptionParser')
 			->will($this->returnValue(true));
 
 		$this->$shell->InstallFinish = $this->getMock('InstallFinish',
