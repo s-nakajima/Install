@@ -30,6 +30,7 @@
         "netcommons/iframes": "@dev",
         "netcommons/links": "@dev",
         "netcommons/menus": "@dev",
+        "netcommons/multidatabases": "@dev",
         "netcommons/net-commons": "@dev",
         "netcommons/photo-albums": "@dev",
         "netcommons/plugin-manager": "@dev",
