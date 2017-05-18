@@ -37,6 +37,7 @@
         "netcommons/questionnaires": "@dev",
         "netcommons/quizzes": "@dev",
         "netcommons/registrations": "@dev",
+        "netcommons/reservations": "@dev",
         "netcommons/rooms": "@dev",
         "netcommons/rss-readers": "@dev",
         "netcommons/searches": "@dev",
