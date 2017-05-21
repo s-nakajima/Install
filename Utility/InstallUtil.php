@@ -596,7 +596,8 @@ EOF;
 
 		if (! $count) {
 			$SiteSetting = ClassRegistry::init('SiteManager.SiteSetting');
-			$SiteSetting->useDbConfig = 'master';
+			$SiteSetting->setDataSource($connection);
+
 			$conditions = array(
 				'key' => 'Config.language'
 			);
