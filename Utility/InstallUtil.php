@@ -668,7 +668,13 @@ EOF;
 		$this->__installRootBower();
 
 		foreach ($plugins as $plugin) {
-			$pluginPath = ROOT . DS . 'app' . DS . 'Plugin' . DS . Inflector::camelize($plugin) . DS;
+			foreach (App::path('plugins') as $path) {
+				if (! is_dir($path . $plugin)) {
+					continue;
+				}
+				$pluginPath = $path . $plugin . DS;
+				break;
+			}
 			if (! file_exists($pluginPath . 'bower.json')) {
 				continue;
 			}
