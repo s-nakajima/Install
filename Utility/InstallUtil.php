@@ -561,12 +561,13 @@ EOF;
  *
  * @param string $connection 接続先
  * @param array $addPlugins 追加するプラグイン
+ * @param array $options オプション(PluginModelを指定)
  * @return bool Install succeed or not
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-	public function installMigrations($connection = 'master', $addPlugins = array()) {
+	public function installMigrations($connection = 'master', $addPlugins = [], $options = []) {
 		App::uses('PluginBehavior', 'PluginManager.Model/Behavior');
 
 		$plugins = array_unique(array_merge(
@@ -616,7 +617,7 @@ EOF;
 			}
 		}
 
-		$Plugin = ClassRegistry::init('PluginManager.Plugin');
+		$Plugin = ClassRegistry::init(Hash::get($options, 'PluginModel', 'PluginManager.Plugin'));
 		if ($Plugin->updateVersionByComposer()) {
 			CakeLog::info('[migration] Successfully updated version of composer plugins.');
 		} else {
