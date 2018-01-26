@@ -1,58 +1,64 @@
 {
-	"name" : "netcommons/install",
-	"description" : "Install Plugin for NetCommons3",
-	"type" : "cakephp-plugin",
-    "keywords":    ["cakephp", "install"],
-	"homepage" : "http://www.netcommons.org/",
-	"license" : "NetCommons License",
+    "name": "netcommons/install",
+    "description": "Install Plugin for NetCommons3",
+    "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "install"
+    ],
+    "homepage": "http://www.netcommons.org/",
+    "license": "LicenseRef-NetCommons",
+    "license-ref-net-commons": "https://raw.githubusercontent.com/NetCommons3/NetCommons3/master/license.txt",
     "installors": [
         {
-			"name" : "NetCommons Community",
-			"homepage" : "http://www.netcommons.org"
-		}
-	],
-	"extra" : {
-		"installer-paths" : {
-            "app/Plugin/{$name}": ["type:cakephp-plugin"]
-		}
-	},
-	"require" : {
-		"cakedc/migrations" : "~2.2",
-		"netcommons/access-counters" : "@dev",
-		"netcommons/announcements" : "@dev",
-		"netcommons/auth-general" : "@dev",
-		"netcommons/bbses" : "@dev",
-		"netcommons/blogs" : "@dev",
-		"netcommons/cabinets" : "@dev",
-		"netcommons/calendars" : "@dev",
-		"netcommons/circular-notices" : "@dev",
-		"netcommons/faqs" : "@dev",
-		"netcommons/iframes" : "@dev",
-		"netcommons/links" : "@dev",
-		"netcommons/menus" : "@dev",
-		"netcommons/multidatabases" : "@dev",
-		"netcommons/net-commons" : "@dev",
-		"netcommons/photo-albums" : "@dev",
-		"netcommons/plugin-manager" : "@dev",
-		"netcommons/questionnaires" : "@dev",
-		"netcommons/quizzes" : "@dev",
-		"netcommons/registrations" : "@dev",
-		"netcommons/reservations" : "@dev",
-		"netcommons/rooms" : "@dev",
-		"netcommons/rss-readers" : "@dev",
-		"netcommons/searches" : "@dev",
-		"netcommons/site-manager" : "@dev",
-		"netcommons/system-manager" : "@dev",
-		"netcommons/tasks" : "@dev",
-		"netcommons/topics" : "@dev",
-		"netcommons/user-attributes" : "@dev",
-		"netcommons/user-manager" : "@dev",
-		"netcommons/user-roles" : "@dev",
-		"netcommons/videos" : "@dev",
-		"netcommons/nc2-to-nc3" : "@dev"
-	},
-	"config" : {
-		"vendor-dir" : "vendors",
-		"process-timeout" : 3000
-	}
+            "name": "NetCommons Community",
+            "homepage": "http://www.netcommons.org"
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "app/Plugin/{$name}": [
+                "type:cakephp-plugin"
+            ]
+        }
+    },
+    "require": {
+        "cakedc/migrations": "~2.2",
+        "netcommons/access-counters": "@dev",
+        "netcommons/announcements": "@dev",
+        "netcommons/auth-general": "@dev",
+        "netcommons/bbses": "@dev",
+        "netcommons/blogs": "@dev",
+        "netcommons/cabinets": "@dev",
+        "netcommons/calendars": "@dev",
+        "netcommons/circular-notices": "@dev",
+        "netcommons/faqs": "@dev",
+        "netcommons/iframes": "@dev",
+        "netcommons/links": "@dev",
+        "netcommons/menus": "@dev",
+        "netcommons/multidatabases": "@dev",
+        "netcommons/net-commons": "@dev",
+        "netcommons/photo-albums": "@dev",
+        "netcommons/plugin-manager": "@dev",
+        "netcommons/questionnaires": "@dev",
+        "netcommons/quizzes": "@dev",
+        "netcommons/registrations": "@dev",
+        "netcommons/reservations": "@dev",
+        "netcommons/rooms": "@dev",
+        "netcommons/rss-readers": "@dev",
+        "netcommons/searches": "@dev",
+        "netcommons/site-manager": "@dev",
+        "netcommons/system-manager": "@dev",
+        "netcommons/tasks": "@dev",
+        "netcommons/topics": "@dev",
+        "netcommons/user-attributes": "@dev",
+        "netcommons/user-manager": "@dev",
+        "netcommons/user-roles": "@dev",
+        "netcommons/videos": "@dev",
+        "netcommons/nc2-to-nc3": "@dev"
+    },
+    "config": {
+        "vendor-dir": "vendors",
+        "process-timeout": 3000
+    }
 }
