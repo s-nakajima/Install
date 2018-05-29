@@ -250,6 +250,7 @@ class InstallUtil {
 
 		//デフォルトの言語
 		Configure::write('Config.language', 'ja');
+		Configure::write('Config.languageEnabled', ['en', 'ja']);
 		Configure::write('ManagerPlugins', $this->managerPlugins);
 		Configure::write('debug', 0);
 
@@ -319,15 +320,23 @@ class InstallUtil {
  */
 	public function saveAppConf() {
 		$file = new File(APP . 'Config' . DS . $this->appYmlPrefix . 'application.yml', true);
-		$conf = $this->__arrayFilterRecursive(Configure::read(), function ($val) {
-			return !is_object($val);
-		});
 
-		//不要な設定値削除
-		$conf = Hash::remove($conf, 'Error.consoleHandler');
-		$conf = Hash::remove($conf, 'Exception.consoleHandler');
+		$applicationYmlKeys = [
+			'debug', 'App', 'Security', 'ManagerPlugins', 'PhpDocumentor', 'Config', 'NetCommons'
+		];
 
-		return $file->write(Spyc::YAMLDump($conf));
+		$writedConfig = [];
+		foreach ($applicationYmlKeys as $key) {
+			$conf = Configure::read($key);
+			if (isset($conf)) {
+				$writedConfig[$key] = $conf;
+			}
+		}
+		if (isset($writedConfig['Config']['languageEnabled'])) {
+			unset($writedConfig['Config']['languageEnabled']);
+		}
+
+		return $file->write(Spyc::YAMLDump($writedConfig));
 	}
 
 /**
@@ -428,7 +437,6 @@ EOF;
 		Configure::write('Security.salt', Security::generateAuthKey());
 		Configure::write('Security.cipherSeed', mt_rand() . mt_rand() . mt_rand() . mt_rand());
 
-		Configure::write('Config.languageEnabled', Hash::get($data, 'languageEnabled', ['en', 'ja']));
 		Configure::write('Config.language', Hash::get($data, 'language', 'ja'));
 		Configure::write('NetCommons.installed', false);
 

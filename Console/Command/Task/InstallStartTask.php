@@ -64,7 +64,7 @@ class InstallStartTask extends InstallAppTask {
 		Configure::write('App.fullBaseUrl', $fullBaseUrl);
 
 		//if (array_key_exists(self::KEY_ENABLE_LANGUAGES, $this->params)) {
-			$languageEnabled = 'en,ja';
+		//	$languageEnabled = 'en,ja';
 		//} else {
 		//	$languageEnabled = $this->in(
 		//		__d('install', 'Enable languages?'), ['en,ja', 'en', 'ja'], 'en,ja'
@@ -79,7 +79,7 @@ class InstallStartTask extends InstallAppTask {
 
 		//application.ymlの初期化処理
 		$data['language'] = strtolower($currentLanguage);
-		$data['languageEnabled'] = explode(',', strtolower($languageEnabled));
+		//$data['languageEnabled'] = explode(',', strtolower($languageEnabled));
 		if (! $this->InstallUtil->installApplicationYaml($data)) {
 			$message = __d(
 				'install',
