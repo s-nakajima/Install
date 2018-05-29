@@ -84,7 +84,7 @@ class InstallUtilityInstallUtilInstallApplicationYamlTest extends NetCommonsCake
 
 		//チェック
 		$this->assertEquals(Configure::read('Config.language'), 'ja');
-		$this->assertEquals(Configure::read('Config.languageEnabled'), ['en', 'ja']);
+		//$this->assertEquals(Configure::read('Config.languageEnabled'), ['en', 'ja']);
 		$this->assertEquals(Configure::read('NetCommons.installed'), false);
 
 		$this->assertTrue($result);
@@ -104,7 +104,7 @@ class InstallUtilityInstallUtilInstallApplicationYamlTest extends NetCommonsCake
 		//テストデータ
 		$data = array(
 			'language' => 'en',
-			'languageEnabled' => ['ja'],
+			//'languageEnabled' => ['ja'],
 		);
 
 		//テスト実施
@@ -112,7 +112,7 @@ class InstallUtilityInstallUtilInstallApplicationYamlTest extends NetCommonsCake
 
 		//チェック
 		$this->assertEquals(Configure::read('Config.language'), 'en');
-		$this->assertEquals(Configure::read('Config.languageEnabled'), ['ja']);
+		//$this->assertEquals(Configure::read('Config.languageEnabled'), ['ja']);
 		$this->assertEquals(Configure::read('NetCommons.installed'), false);
 
 		$this->assertTrue($result);
