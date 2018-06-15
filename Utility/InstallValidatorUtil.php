@@ -112,7 +112,7 @@ class InstallValidatorUtil {
 					'required' => true,
 				),
 				'regex' => array(
-					'rule' => array('custom', '/^[\w]+$/'),
+					'rule' => array('custom', '/^[\w-]+$/'),
 					'message' => __d('install', 'Only alphabets and numbers are allowed.'),
 				),
 			),
