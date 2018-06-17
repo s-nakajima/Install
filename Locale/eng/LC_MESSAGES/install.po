@@ -327,6 +327,9 @@ msgstr ""
 msgid "Only alphabets and numbers are allowed."
 msgstr ""
 
+msgid "Only alphabets, numbers, \"-\" and \"_\" are allowed."
+msgstr ""
+
 #: Install/Test/Case/Utility/InstallUtil/ValidatesDBConfTest.php:162;167
 #: Install/Utility/InstallValidatorUtil.php:122
 msgid "Login"
