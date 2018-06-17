@@ -113,7 +113,7 @@ class InstallValidatorUtil {
 				),
 				'regex' => array(
 					'rule' => array('custom', '/^[\w-]+$/'),
-					'message' => __d('install', 'Only alphabets and numbers are allowed.'),
+					'message' => __d('install', "Only alphabets, numbers, \"-\" and \"_\" are allowed."),
 				),
 			),
 			'prefix' => array(

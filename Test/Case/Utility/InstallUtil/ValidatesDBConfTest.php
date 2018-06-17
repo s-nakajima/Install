@@ -142,10 +142,13 @@ class InstallUtilityInstallUtilValidatesDBConfTest extends NetCommonsCakeTestCas
 				),
 			),
 			array('data' => $data, 'field' => 'database', 'value' => 'あ',
-				'message' => __d('install', 'Only alphabets and numbers are allowed.')
+				'message' => __d('install', "Only alphabets, numbers, \"-\" and \"_\" are allowed.")
 			),
-			array('data' => $data, 'field' => 'database', 'value' => 'a-b',
-				'message' => __d('install', 'Only alphabets and numbers are allowed.')
+			array('data' => $data, 'field' => 'database', 'value' => 'a_b',
+				'message' => true
+			),
+			array('data' => $data, 'field' => 'database', 'value' => 'a*b',
+				'message' => __d('install', "Only alphabets, numbers, \"-\" and \"_\" are allowed.")
 			),
 
 			//prefix
