@@ -390,3 +390,23 @@ msgstr ""
 msgid "Install"
 msgstr ""
 
+msgid "Select the type of database server to use."
+msgstr ""
+
+msgid "Enter the host name of the database server to use. If you do not understand well, there is almost no problem as 'localhost'."
+msgstr ""
+
+msgid "Enter the port number of the database server to use. If you do not understand well, there is almost no problem as '3306'."
+msgstr ""
+
+msgid "Enter the database name to use."
+msgstr ""
+
+msgid "Table prefix of the database. This prefix is added to each table name to prevent duplication of names with existing tables. If you do not understand well, it is 'blank' and there is almost no problem."
+msgstr ""
+
+msgid "User name of the database. Please enter the user account name in the above database."
+msgstr ""
+
+msgid "Enter the password with the above ID."
+msgstr ""
