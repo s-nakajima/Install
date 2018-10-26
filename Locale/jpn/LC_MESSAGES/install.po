@@ -454,3 +454,23 @@ msgstr "利用する言語"
 msgid "Site Setting"
 msgstr "サイト設定"
 
+msgid "Select the type of database server to use."
+msgstr "使用するデータベースサーバの種類を選択してください。"
+
+msgid "Enter the host name of the database server to use. If you do not understand well, there is almost no problem as 'localhost'."
+msgstr "使用するデータベースサーバのホスト名を入力してください。よく分からない場合は、「localhost」として、ほぼ問題はありません。"
+
+msgid "Enter the port number of the database server to use. If you do not understand well, there is almost no problem as '3306'."
+msgstr "使用するデータベースサーバのポート番号を入力してください。よく分からない場合は、「3306」として、ほぼ問題はありません。"
+
+msgid "Enter the database name to use."
+msgstr "使用するデータベース名を入力してください。"
+
+msgid "Table prefix of the database. This prefix is added to each table name to prevent duplication of names with existing tables. If you do not understand well, it is 'blank' and there is almost no problem."
+msgstr "データベースのテーブル接頭語です。各テーブル名にこの接頭語を付加し、既存テーブルとの名称の重複を防ぎます。よく分からない場合は、「空」のままで、ほぼ問題はありません。"
+
+msgid "User name of the database. Please enter the user account name in the above database."
+msgstr "データベースのユーザ名です。上記データベースにおけるユーザアカウント名を入力してください。"
+
+msgid "Enter the password with the above ID."
+msgstr "上記IDのパスワードを入力してください。"
