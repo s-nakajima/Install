@@ -208,7 +208,10 @@ class InstallValidatorUtil {
 		$writables = array(
 			APP . 'Config',
 			APP . 'tmp',
-			APP . 'Uploads'
+			APP . 'Uploads',
+			APP . 'webroot' . DS . 'css',
+			APP . 'webroot' . DS . 'js',
+			APP . 'webroot' . DS . 'img'
 		);
 		foreach ($writables as $path) {
 			if (is_writable($path)) {

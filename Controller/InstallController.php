@@ -197,6 +197,13 @@ class InstallController extends InstallAppController {
 				return;
 			}
 
+			//Webrootへのコピー処理
+			if (! $this->InstallUtil->installWebrootCopy()) {
+				$this->response->statusCode(400);
+				CakeLog::error('Failed to install webroot copies css,js,img');
+				$this->set('errors', [__d('install', 'Failed to install webroot copies css,js,img')]);
+			}
+
 			$this->redirect(array(
 				'action' => 'init_admin_user',
 				'?' => ['language' => Configure::read('Config.language')]
