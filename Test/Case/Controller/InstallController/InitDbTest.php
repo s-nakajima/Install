@@ -143,7 +143,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 		$expected = $data;
 
 		$this->controller->InstallUtil = $this->getMock(
-			'InstallUtil', array('saveDBConf', 'createDB', 'installMigrations'), array('name' => 'InstallUtil')
+			'InstallUtil',
+			array('saveDBConf', 'createDB', 'installMigrations', 'installWebrootCopy'),
+			array('name' => 'InstallUtil')
 		);
 
 		$expected['prefix'] = $expectedPrefix;
@@ -155,6 +157,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 			->will($this->returnValue(true));
 
 		$this->controller->InstallUtil->expects($this->once())->method('installMigrations')
+			->will($this->returnValue(true));
+
+		$this->controller->InstallUtil->expects($this->once())->method('installWebrootCopy')
 			->will($this->returnValue(true));
 
 		//テスト実行
