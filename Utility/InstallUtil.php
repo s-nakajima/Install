@@ -719,11 +719,10 @@ EOF;
 /**
  * 各プラグインにあるimg(css,js)をapp/webroot/img(css,js)にコピーする
  *
- * @param array $plugins プラグイン
  * @param array $options オプション(PluginModelを指定)
  * @return bool Install succeed or not
  */
-	public function installWebrootCopy() {
+	public function installWebrootCopy($options = []) {
 		$Plugin = ClassRegistry::init(Hash::get($options, 'PluginModel', 'PluginManager.Plugin'));
 
 		CakeLog::info('[webroot copy] Start all plugins');
