@@ -717,6 +717,33 @@ EOF;
 	}
 
 /**
+ * 各プラグインにあるimg(css,js)をapp/webroot/img(css,js)にコピーする
+ *
+ * @param array $plugins プラグイン
+ * @param array $options オプション(PluginModelを指定)
+ * @return bool Install succeed or not
+ */
+	public function installWebrootCopy() {
+		$Plugin = ClassRegistry::init(Hash::get($options, 'PluginModel', 'PluginManager.Plugin'));
+
+		CakeLog::info('[webroot copy] Start all plugins');
+
+		//pluginsテーブルの取得
+		$plugins = $Plugin->find('all', array(
+			'recursive' => -1,
+		));
+		$plugins = $Plugin->convertSerializeData($plugins);
+
+		foreach ($plugins as $plugin) {
+			$Plugin->copyToWebroot($plugin);
+		}
+
+		CakeLog::info('[webroot copy] Successfully all plugins');
+
+		return true;
+	}
+
+/**
  * bower packagesのインストール
  *
  * @return bool Install succeed or not
