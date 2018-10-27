@@ -199,7 +199,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 		$data['database'] = '';
 
 		$this->controller->InstallUtil = $this->getMock(
-			'InstallUtil', array('saveDBConf', 'createDB', 'installMigrations'), ['name' => 'InstallUtil']
+			'InstallUtil',
+			array('saveDBConf', 'createDB', 'installMigrations', 'installWebrootCopy'),
+			array('name' => 'InstallUtil')
 		);
 
 		$this->controller->InstallUtil->expects($this->exactly(0))->method('saveDBConf')
@@ -209,6 +211,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 			->will($this->returnValue(true));
 
 		$this->controller->InstallUtil->expects($this->exactly(0))->method('installMigrations')
+			->will($this->returnValue(true));
+
+		$this->controller->InstallUtil->expects($this->exactly(0))->method('installWebrootCopy')
 			->will($this->returnValue(true));
 
 		//テスト実行
@@ -242,7 +247,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 		$data = $this->__postData();
 
 		$this->controller->InstallUtil = $this->getMock(
-			'InstallUtil', array('saveDBConf', 'createDB', 'installMigrations'), array('name' => 'InstallUtil')
+			'InstallUtil',
+			array('saveDBConf', 'createDB', 'installMigrations', 'installWebrootCopy'),
+			array('name' => 'InstallUtil')
 		);
 
 		$this->controller->InstallUtil->expects($this->once())->method('saveDBConf')
@@ -253,6 +260,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 			->will($this->returnValue(false));
 
 		$this->controller->InstallUtil->expects($this->exactly(0))->method('installMigrations')
+			->will($this->returnValue(true));
+
+		$this->controller->InstallUtil->expects($this->exactly(0))->method('installWebrootCopy')
 			->will($this->returnValue(true));
 
 		//テスト実行
@@ -274,7 +284,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 		$data = $this->__postData();
 
 		$this->controller->InstallUtil = $this->getMock(
-			'InstallUtil', array('saveDBConf', 'createDB', 'installMigrations'), array('name' => 'InstallUtil')
+			'InstallUtil',
+			array('saveDBConf', 'createDB', 'installMigrations', 'installWebrootCopy'),
+			array('name' => 'InstallUtil')
 		);
 
 		$this->controller->InstallUtil->expects($this->once())->method('saveDBConf')
@@ -286,6 +298,9 @@ class InstallControllerInitDbTest extends NetCommonsControllerTestCase {
 
 		$this->controller->InstallUtil->expects($this->once())->method('installMigrations')
 			->will($this->returnValue(false));
+
+		$this->controller->InstallUtil->expects($this->exactly(0))->method('installWebrootCopy')
+			->will($this->returnValue(true));
 
 		//テスト実行
 		$this->_testPostAction('post', $data, array('action' => 'init_db'), null, 'view');
