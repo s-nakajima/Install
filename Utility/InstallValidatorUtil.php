@@ -211,7 +211,8 @@ class InstallValidatorUtil {
 			APP . 'Uploads',
 			APP . 'webroot' . DS . 'css',
 			APP . 'webroot' . DS . 'js',
-			APP . 'webroot' . DS . 'img'
+			APP . 'webroot' . DS . 'img',
+			APP . 'webroot' . DS . 'theme'
 		);
 		foreach ($writables as $path) {
 			if (is_writable($path)) {
