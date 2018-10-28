@@ -48,6 +48,11 @@ class InstallMigrationsTask extends InstallAppTask {
 		if (! $this->InstallUtil->installMigrations($connection, $plugins)) {
 			return $this->error(__d('install', 'Failed to install migrations.'));
 		}
+
+		//Webrootへのコピー処理
+		if (! $this->InstallUtil->installWebrootCopy()) {
+			return $this->error(__d('install', 'Failed to install webroot copies css,js,img'));
+		}
 	}
 
 /**
