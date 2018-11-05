@@ -50,6 +50,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							'label' => __d('install', 'Datasource'),
 							'div' => false,
 							'error' => false,
+							'help' => __d('install', 'Select the type of database server to use.'),
 						)
 					); ?>
 			</div>
@@ -60,6 +61,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							'default' => $masterDB['host'],
 							'div' => false,
 							'error' => false,
+							'help' => __d('install', "Enter the host name of the database server to use. If you do not understand well, there is almost no problem as 'localhost'."),
 						)
 					); ?>
 				<?php if (Hash::get($validationErrors, 'host')) : ?>
@@ -79,6 +81,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							'default' => $masterDB['port'],
 							'div' => false,
 							'error' => false,
+							'help' => __d('install', "Enter the port number of the database server to use. If you do not understand well, there is almost no problem as '3306'."),
 						)
 					); ?>
 				<?php if (Hash::get($validationErrors, 'port')) : ?>
@@ -98,6 +101,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							'default' => 'nc3',
 							'div' => false,
 							'error' => false,
+							'help' => __d('install', 'Enter the database name to use.'),
 						)
 					); ?>
 				<?php if (Hash::get($validationErrors, 'database')) : ?>
@@ -125,6 +129,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							'placeholder' => 'nc3_',
 							'div' => false,
 							'error' => false,
+							'help' => __d('install', "Table prefix of the database. This prefix is added to each table name to prevent duplication of names with existing tables. If you do not understand well, it is 'blank' and there is almost no problem."),
 						)
 					); ?>
 				<?php if (Hash::get($validationErrors, 'prefix')) : ?>
@@ -145,6 +150,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							'placeholder' => __d('install', 'Username'),
 							'div' => false,
 							'error' => false,
+							'help' => __d('install', 'User name of the database. Please enter the user account name in the above database.'),
 						)
 					); ?>
 				<?php if (Hash::get($validationErrors, 'login')) : ?>
@@ -164,6 +170,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 							'placeholder' => __d('install', 'Password'),
 							'div' => false,
 							'error' => false,
+							'help' => __d('install', 'Enter the password with the above ID.'),
 						)
 					); ?>
 				<?php if (Hash::get($validationErrors, 'password')) : ?>
