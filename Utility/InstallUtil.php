@@ -693,22 +693,27 @@ EOF;
 			$file->close();
 
 			foreach ($bower['dependencies'] as $package => $version) {
+				if (strpos($version,'#') !== false) {
+					$install = $version;
+				} else {
+					$install = $package . '#' .  $version;
+				}
 				CakeLog::info(
-					sprintf('[bower] Start bower install %s#%s for %s', $package, $version, $plugin)
+					sprintf('[bower] Start bower install %s for %s', $install, $plugin)
 				);
 
 				$messages = array();
 				$ret = null;
 				exec(sprintf(
-					'cd %s && `which bower` --allow-root install %s#%s --save',
-					ROOT, escapeshellcmd($package), escapeshellcmd($version)
+					'cd %s && `which bower` --allow-root install %s --save',
+					ROOT, escapeshellcmd($install)
 				), $messages, $ret);
 
 				// Write logs
 				$this->__commandOutputResults('bower', $messages);
 
 				CakeLog::info(
-					sprintf('[bower] Successfully bower install %s#%s for %s', $package, $version, $plugin)
+					sprintf('[bower] Successfully bower install %s for %s', $install, $plugin)
 				);
 			}
 		}
