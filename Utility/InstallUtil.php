@@ -693,10 +693,10 @@ EOF;
 			$file->close();
 
 			foreach ($bower['dependencies'] as $package => $version) {
-				if (strpos($version,'#') !== false) {
+				if (strpos($version, '#') !== false) {
 					$install = $version;
 				} else {
-					$install = $package . '#' .  $version;
+					$install = $package . '#' . $version;
 				}
 				CakeLog::info(
 					sprintf('[bower] Start bower install %s for %s', $install, $plugin)
