@@ -12,6 +12,7 @@
 App::uses('InstallAppController', 'Install.Controller');
 App::uses('InstallUtil', 'Install.Utility');
 App::uses('InstallValidatorUtil', 'Install.Utility');
+App::uses('NetCommonsCache', 'NetCommons.Utility');
 
 /**
  * Install Controller
@@ -313,6 +314,11 @@ class InstallController extends InstallAppController {
  */
 	public function finish() {
 		$this->set('pageTitle', __d('install', 'Installed'));
+
+		if (file_exists(APP . 'VERSION')) {
+			$ncCache = new NetCommonsCache('version', false, 'netcommons_core');
+			$ncCache->write(trim(file_get_contents(APP . 'VERSION')));
+		}
 
 		Configure::write('NetCommons.installed', true);
 		/* Configure::write('NetCommons.installed', false); */
