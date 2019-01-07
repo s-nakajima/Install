@@ -11,6 +11,7 @@
 
 App::uses('InstallAppTask', 'Install.Console/Command');
 App::uses('Folder', 'Utility');
+App::uses('NetCommonsCache', 'NetCommons.Utility');
 
 /**
  * Installの終了
@@ -71,6 +72,11 @@ class InstallFinishTask extends InstallAppTask {
 			}
 			$folder->delete(ROOT . DS . '.git');
 			$folder->delete(ROOT . DS . '.chef');
+		}
+
+		if (file_exists(APP . 'VERSION')) {
+			$ncCache = new NetCommonsCache('version', false, 'netcommons_core');
+			$ncCache->write(trim(file_get_contents(APP . 'VERSION')));
 		}
 
 		Configure::write('NetCommons.installed', true);
