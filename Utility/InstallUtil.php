@@ -625,6 +625,14 @@ EOF;
 			}
 		}
 
+		//キャッシュの削除
+		Cache::clear(false, '_cake_model_');
+		Cache::clear(false, '_cake_core_');
+
+		//DataSourceの中にあるlistSources()の$this->_sources変数を初期化することができないため、reconnect()する。
+		$dataSource = ConnectionManager::getDataSource($connection);
+		$dataSource->reconnect();
+
 		$Plugin = ClassRegistry::init(Hash::get($options, 'PluginModel', 'PluginManager.Plugin'));
 		if ($Plugin->updateVersionByComposer()) {
 			CakeLog::info('[migration] Successfully updated version of composer plugins.');
