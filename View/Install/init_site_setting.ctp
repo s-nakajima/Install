@@ -20,7 +20,7 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 <?php endforeach; ?>
 
 <?php
-	echo $this->Form->create(false,
+	echo $this->NetCommonsForm->create(false,
 		array(
 			'url' => array(
 				//'plugin' => 'install',
@@ -57,4 +57,4 @@ echo $this->NetCommonsHtml->css('/install/css/install.css');
 		</div>
 	</div>
 	<button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo __d('install', 'Next'); ?></button>
-<?php echo $this->Form->end();
+<?php echo $this->NetCommonsForm->end();
